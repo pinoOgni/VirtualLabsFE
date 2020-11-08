@@ -9,7 +9,7 @@ AI project 2019/2020 Polytechnic of Turin
 
 * Rhaouati Hamza: 
 
-* Tolomei Leonardo:
+* Tolomei Leonardo: tolomei.leonardo@gmail.com
 
 
 
