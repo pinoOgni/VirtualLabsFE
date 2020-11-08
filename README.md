@@ -7,7 +7,7 @@ AI project 2019/2020 Polytechnic of Turin
 
 * Pagano Alessandro: alenihilist@gmail.com
 
-* Rhaouati Hamza: 
+* Rhaouati Hamza: hamza.rhaouati@gmail.com
 
 * Tolomei Leonardo: tolomei.leonardo@gmail.com
 
