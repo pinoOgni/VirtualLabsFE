@@ -1,0 +1,49 @@
+<!--
+<h2 mat-dialog-title>Login Form</h2>
+<mat-dialog-content class="md-dialog-container">
+<form (ngSubmit)="submit($event)">
+  <mat-form-field class="md-form-dialog-container">
+    <label for="email">Email</label>
+    <input type="email" matInput id="email"  name="email" placeholder="Email" required email [(ngModel)]="model.email" #email="ngModel" >
+    <mat-error *ngIf="email.invalid && email.touched">Email non valida</mat-error>
+  </mat-form-field>
+  <br>
+  <mat-form-field class="md-form-dialog-container">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" matInput required pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$" [(ngModel)]="model.password" #password="ngModel">
+    <mat-error *ngIf="password.invalid && password.touched">Password non valida</mat-error>
+  </mat-form-field>
+  <br>
+  <mat-error *ngIf="serverErrors">{{serverErrors}}</mat-error>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cancel</button>
+    <span></span>
+    <button type="submit" mat-button [mat-dialog-close]="true">Login</button>
+  </mat-dialog-actions>
+</form>
+</mat-dialog-content>
+-->
+
+<h2 mat-dialog-title>Login Form</h2>
+<mat-dialog-content  class="md-dialog-container">
+  <form [formGroup]="loginForm" (ngSubmit)="submit()">
+    <mat-form-field class="md-form-dialog-container">
+    <input autocomplete="on" formControlName="email" type="email" matInput id="email" name="email" placeholder="Email" required email >
+    <mat-error *ngIf="loginForm.controls['email'].hasError('required')">Email is required</mat-error>
+    <mat-error *ngIf="loginForm.controls['email'].hasError('email')">Email is not valid</mat-error>
+  </mat-form-field>
+  <br>
+    <mat-form-field class="md-form-dialog-container">
+    <input autocomplete="on" formControlName="password" type="password" id="password" name="password" matInput placeholder="Password" required password >
+    <mat-error *ngIf="loginForm.controls['password'].hasError('required')">Password is required</mat-error>
+    <mat-error *ngIf="loginForm.controls['password'].hasError('pattern')">Password is not valid</mat-error>
+  </mat-form-field>
+  <br>
+  <mat-dialog-actions class="example-button-row">
+    <button color="primary" type="submit" [disabled]="!loginForm.valid" mat-raised-button >Login</button>
+    <button type="reset" mat-raised-button [mat-dialog-close]="false">Cancel</button>
+  </mat-dialog-actions>
+    <br>
+  <mat-error *ngIf="serverErrors">{{serverErrors}}</mat-error>
+</form>
+</mat-dialog-content>

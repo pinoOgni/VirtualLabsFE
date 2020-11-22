@@ -1,0 +1,120 @@
+{
+  "users": [
+    {
+      "email": "olivier@mail.com",
+      "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
+      "id": 1
+    }
+  ],
+  "students": [
+    {
+      "serial": "100010",
+      "firstName": "Alessandro",
+      "name": "Pagano",
+      "courseId": 0,
+      "id": "1",
+      "groupId": 1
+    },
+    {
+      "serial": "100011",
+      "firstName": "Giuseppe",
+      "name": "Ognibene",
+      "courseId": 0,
+      "id": "2",
+      "groupId": 1
+    },
+    {
+      "serial": "100012",
+      "firstName": "Leonardo",
+      "name": "Tolomei",
+      "courseId": 0,
+      "id": "3",
+      "groupId": 1
+    },
+    {
+      "serial": "100013",
+      "firstName": "Hamza",
+      "name": "Rhaouati",
+      "courseId": 0,
+      "id": "4",
+      "groupId": 1
+    },
+    {
+      "serial": "101010",
+      "firstName": "Jack",
+      "name": "Amoruso",
+      "courseId": 0,
+      "id": "5",
+      "groupId": 0
+    },
+    {
+      "serial": "101011",
+      "firstName": "Giacomo",
+      "name": "Amoruso",
+      "courseId": 0,
+      "id": "6",
+      "groupId": 0
+    },
+    {
+      "serial": "202020",
+      "firstName": "Al",
+      "name": "Caruso",
+      "courseId": 0,
+      "id": "7",
+      "groupId": 0
+    },
+    {
+      "serial": "202021",
+      "firstName": "Alessandro",
+      "name": "Caruso",
+      "courseId": 0,
+      "id": "8",
+      "groupId": 0
+    },
+    {
+      "serial": "303031",
+      "firstName": "Johnny",
+      "name": "Gresko",
+      "courseId": 0,
+      "id": "9",
+      "groupId": 0
+    },
+    {
+      "serial": "303032",
+      "firstName": "Giovanni",
+      "name": "Gresko",
+      "courseId": 0,
+      "id": "10",
+      "groupId": 0
+    },
+    {
+      "serial": "404041",
+      "firstName": "Sam",
+      "name": "Genovese",
+      "courseId": 0,
+      "id": "11",
+      "groupId": 0
+    },
+    {
+      "serial": "404042",
+      "firstName": "Samuele",
+      "name": "Genovese",
+      "courseId": 0,
+      "id": "12",
+      "groupId": 0
+    }
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "name": "Applicazioni Internet",
+      "path": "applicazioni-internet"
+    }
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "name": "Argonauti"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+<mat-toolbar color="primary">
+     <button mat-icon-button (click)="toggleForMenuClick()">
+      <mat-icon>menu</mat-icon>
+     </button>
+  <span routerLink="/home">
+     VirtualLabs
+  </span>
+
+  <!-- This fills the remaining space of the current row -->
+  <span class="example-fill-remaining-space"></span>
+  <span *ngIf="isLogged(); else notLogged" >
+    {{email}}
+  <button mat-button (click)="logout()">Logout</button>
+  </span>
+  <ng-template #notLogged>
+    <span>
+  <button mat-button routerLink="home" [queryParams]="{dialog: true}">Login</button>
+  </span>
+  </ng-template>
+</mat-toolbar>
+<mat-toolbar>
+  Applicazioni Internet
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" opened position="start" class="sidenav">
+    <div class=“container-small”>
+      <mat-nav-list>
+        <mat-list-item> <a routerLink="teacher/course/applicazioni-internet/students"> Applicazioni Internet </a> </mat-list-item>
+        <mat-list-item> Programmazione di Sistema </mat-list-item>
+      </mat-nav-list>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link routerLinkActive #rla="routerLinkActive"
+         [active]="rla.isActive" [routerLink]="['/teacher/course/applicazioni-internet/students']" label="Students">
+        <div class="container">
+          <h3>Students</h3>
+        </div>
+      </a>
+      <a mat-tab-link routerLinkActive #rla="routerLinkActive"
+         [active]="rla.isActive" [routerLink]="['/teacher/course/applicazioni-internet/vms']" label="Vms">
+        <div class="container">
+          <h3>Vms</h3>
+        </div>
+      </a>
+      <a mat-tab-link routerLinkActive #rla="routerLinkActive"
+         [active]="rla.isActive" [routerLink]="['/teacher/course/applicazioni-internet/assignments']" label="Assignments">
+        <div class="container">
+          <h3>Assignments</h3>
+        </div>
+      </a>
+    </nav>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

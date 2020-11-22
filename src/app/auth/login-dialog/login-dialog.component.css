@@ -1,0 +1,12 @@
+.md-dialog-container {
+  width: 400px;
+}
+
+.md-form-dialog-container {
+  width: 90%;
+}
+
+.example-button-row button {
+  display: table-cell;
+  margin-right: 8px;
+}
