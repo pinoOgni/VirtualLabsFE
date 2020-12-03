@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "email": "olivier@mail.com",
+      "email": "pino@polito.it",
       "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
       "id": 1
     }
@@ -11,7 +11,7 @@
       "serial": "100010",
       "firstName": "Alessandro",
       "name": "Pagano",
-      "courseId": 0,
+      "courseId": 1,
       "id": "1",
       "groupId": 1
     },
@@ -19,7 +19,7 @@
       "serial": "100011",
       "firstName": "Giuseppe",
       "name": "Ognibene",
-      "courseId": 0,
+      "courseId": 1,
       "id": "2",
       "groupId": 1
     },
@@ -27,7 +27,7 @@
       "serial": "100012",
       "firstName": "Leonardo",
       "name": "Tolomei",
-      "courseId": 0,
+      "courseId": 1,
       "id": "3",
       "groupId": 1
     },
@@ -43,7 +43,7 @@
       "serial": "101010",
       "firstName": "Jack",
       "name": "Amoruso",
-      "courseId": 0,
+      "courseId": 1,
       "id": "5",
       "groupId": 0
     },
@@ -75,7 +75,7 @@
       "serial": "303031",
       "firstName": "Johnny",
       "name": "Gresko",
-      "courseId": 0,
+      "courseId": 1,
       "id": "9",
       "groupId": 0
     },

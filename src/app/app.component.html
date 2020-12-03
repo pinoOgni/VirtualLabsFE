@@ -13,8 +13,11 @@
   <button mat-button (click)="logout()">Logout</button>
   </span>
   <ng-template #notLogged>
-    <span>
-  <button mat-button routerLink="home" [queryParams]="{dialog: true}">Login</button>
+  <span>
+  <button mat-button routerLink="home" [queryParams]="{doLogin: true}">Login</button>
+  </span>
+  <span>
+    <button mat-button routerLink="home" [queryParams]="{doRegister: true}">Register</button>
   </span>
   </ng-template>
 </mat-toolbar>

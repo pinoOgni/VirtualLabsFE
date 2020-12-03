@@ -19,7 +19,7 @@ export class LoginDialogComponent implements OnInit {
   constructor(private auth: AuthService, private router: Router, private dialogRef: MatDialogRef<LoginDialogComponent>) {
     this.model = {email: '', password: ''};
     this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(polito|studenti.polito)\.it$/)]),
       password: new FormControl('', [Validators.required,
         Validators.pattern(/^((?=.*[0-9])|(?=.*[@#$%^&+!=]))((?=.*[a-z])|(?=.*[A-Z]))(?=\S+$).{8,}$/)])
     });

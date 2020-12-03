@@ -30,6 +30,7 @@ import {FormsModule} from "@angular/forms";
 import {ReactiveFormsModule} from "@angular/forms";
 import {AuthInterceptor} from "./helpers/auth.interceptor";
 import {ErrorInterceptor} from "./helpers/error.interceptor";
+import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import {ErrorInterceptor} from "./helpers/error.interceptor";
     HomeComponent,
     VmsContComponent,
     LoginDialogComponent,
+    RegisterDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +71,6 @@ import {ErrorInterceptor} from "./helpers/error.interceptor";
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [LoginDialogComponent]
+  entryComponents: [LoginDialogComponent, RegisterDialogComponent]
 })
 export class AppModule { }

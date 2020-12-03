@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {LoginModel} from "./model";
+import {LoginModel, RegisterModel} from "./model";
 import {tap} from "rxjs/operators";
 // @ts-ignore
 import * as moment from 'moment';
@@ -28,6 +28,10 @@ export class AuthService{
   login(model: LoginModel) {
     //usare shareplay?
     return this.httpClient.post(this.base_URL + 'login',model).pipe(tap(res => this.setUserSession(res)));
+  }
+
+  register(model: RegisterModel) {
+    
   }
 
   private setUserSession(authResult) {

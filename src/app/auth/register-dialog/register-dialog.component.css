@@ -1,0 +1,18 @@
+.md-dialog-container {
+    width: 600px;
+    height: 450px;
+  }
+  
+.md-form-dialog-container {
+    width: 90%;
+    height: 90%;
+  }
+  
+  .example-button-row button {
+    display: table-cell;
+    margin-right: 8px;
+  }
+  
+
+
+  

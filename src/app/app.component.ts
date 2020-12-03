@@ -5,6 +5,7 @@ import {LoginDialogComponent} from "./auth/login-dialog/login-dialog.component";
 import {AuthService} from "./auth/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subscription} from "rxjs";
+import {RegisterDialogComponent} from './auth/register-dialog/register-dialog.component';
 
 
 @Component({
@@ -24,8 +25,11 @@ export class AppComponent implements OnDestroy{
 
   constructor(public dialog: MatDialog, private authService: AuthService, private router: Router, private route: ActivatedRoute) {
     this.routeQueryParams$ = route.queryParams.subscribe(params => {
-      if (params['dialog']) {
-        this.openDialog();
+      if (params['doLogin']) {
+        this.openDialogLogin();
+      }
+      else if (params['doRegister']) {
+        this.openDialogRegister();
       }
     });
     if(this.isLogged())
@@ -44,7 +48,7 @@ export class AppComponent implements OnDestroy{
     return this.authService.isUserLogged();
   }
 
-  openDialog() {
+  openDialogLogin() {
     const dialogRef = this.dialog.open(LoginDialogComponent); // {disableClose: true}
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed ' + result);
@@ -58,7 +62,24 @@ export class AppComponent implements OnDestroy{
       }
       else {
         localStorage.removeItem('to_url');
-        //else, the user click out of the form, so result is undefined. I need to gp to /home
+        //else, the user click out of the form, so result is undefined. I need to go to /home
+        this.router.navigate(['.'], {relativeTo: this.route});
+      }
+    });
+  }
+
+  openDialogRegister() {
+    const dialogRef = this.dialog.open(RegisterDialogComponent); // {disableClose: true}
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed ' + result);
+      //when the dialog form is closed with cancel
+      if(result===false) {
+        localStorage.removeItem('to_url');
+        this.router.navigate(['.'], {relativeTo: this.route});
+      }
+      else {
+        localStorage.removeItem('to_url');
+        //else, the user click out of the form, so result is undefined. I need to go to /home
         this.router.navigate(['.'], {relativeTo: this.route});
       }
     });

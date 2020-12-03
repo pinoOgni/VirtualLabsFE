@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Register</h2>
+<mat-dialog-content class="md-dialog-container">
+    <form [formGroup]="registerForm" (ngSubmit)="submit()">
+        <mat-form-field class="md-form-dialog-container">
+            <input autocomplete="off" formControlName="serialNumber" type="text" id="serialNumber" name="serialNumber" matInput
+                placeholder="Serial number" required>
+            <mat-error *ngIf="registerForm.controls['serialNumber'].hasError('required')">Serial number is required</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="md-form-dialog-container">
+            <input autocomplete="off" formControlName="firstName" type="text" id="firstName" name="firstName" matInput
+                placeholder="First name" required>
+            <mat-error *ngIf="registerForm.controls['firstName'].hasError('required')">First name is required</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="md-form-dialog-container">
+            <input autocomplete="off" formControlName="lastName" type="text" id="lastName" name="lastName" matInput
+                placeholder="Last name" required>
+            <mat-error *ngIf="registerForm.controls['lastName'].hasError('required')">Last name is required</mat-error>
+        </mat-form-field> 
+        <br>
+        <mat-form-field class="md-form-dialog-container">
+            <input autocomplete="off" formControlName="email" type="email" matInput id="email" name="email"
+                placeholder="Email" required email>
+            <mat-error *ngIf="registerForm.controls['email'].hasError('required')">Email is required</mat-error>
+            <mat-error *ngIf="registerForm.controls['email'].hasError('email')">Email is not valid (enabled domains
+                @polito.it, @studenti.polito.it)</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="md-form-dialog-container">
+            <input autocomplete="off" formControlName="password" type="password" id="password" name="password" matInput
+                placeholder="Password" required password>
+            <mat-error *ngIf="registerForm.controls['password'].hasError('required')">Password is required</mat-error>
+            <mat-error *ngIf="registerForm.controls['password'].hasError('pattern')">Password is not valid</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="md-form-dialog-container">
+            <input autocomplete="off" formControlName="password2" type="password" id="password2" name="password2" matInput
+                placeholder="Repeat password" required password>
+            <mat-error *ngIf="registerForm.controls['password2'].hasError('required')">Password is required</mat-error>
+            <mat-error *ngIf="registerForm.controls['password2'].hasError('pattern')">Password is not valid</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-dialog-actions class="example-button-row">
+            <button color="primary" type="submit" [disabled]="!registerForm.valid" mat-raised-button>Register</button>
+            <button type="reset" mat-raised-button [mat-dialog-close]="false">Cancel</button>
+        </mat-dialog-actions>
+
+        <br>
+        <mat-error *ngIf="serverErrors">{{serverErrors}}</mat-error>
+    </form>
+</mat-dialog-content>
