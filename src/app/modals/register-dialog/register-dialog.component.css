@@ -1,6 +1,6 @@
 .md-dialog-container {
     width: 600px;
-    height: 450px;
+    height: 460px;
   }
   
 .md-form-dialog-container {
@@ -13,6 +13,10 @@
     margin-right: 8px;
   }
   
+  input[type="text"] {
+    width: 150px;
+    display: inline-block;
+}
 
 
   

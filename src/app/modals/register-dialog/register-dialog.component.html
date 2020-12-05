@@ -22,23 +22,20 @@
         <mat-form-field class="md-form-dialog-container">
             <input autocomplete="off" formControlName="email" type="email" matInput id="email" name="email"
                 placeholder="Email" required email>
-            <mat-error *ngIf="registerForm.controls['email'].hasError('required')">Email is required</mat-error>
-            <mat-error *ngIf="registerForm.controls['email'].hasError('email')">Email is not valid (enabled domains
+            <mat-error *ngIf="registerForm.controls['email'].hasError('pattern')">Email is not valid (enabled domains
                 @polito.it, @studenti.polito.it)</mat-error>
         </mat-form-field>
         <br>
         <mat-form-field class="md-form-dialog-container">
             <input autocomplete="off" formControlName="password" type="password" id="password" name="password" matInput
-                placeholder="Password" required password>
-            <mat-error *ngIf="registerForm.controls['password'].hasError('required')">Password is required</mat-error>
-            <mat-error *ngIf="registerForm.controls['password'].hasError('pattern')">Password is not valid</mat-error>
-        </mat-form-field>
+                placeholder="Password" required>
+                <mat-error *ngIf="registerForm.controls['password'].hasError('pattern')">Password is not valid (min 1 number or 1 special character, 1 capital letter, minimum length 8 </mat-error>
+            </mat-form-field>
         <br>
         <mat-form-field class="md-form-dialog-container">
             <input autocomplete="off" formControlName="password2" type="password" id="password2" name="password2" matInput
-                placeholder="Repeat password" required password>
-            <mat-error *ngIf="registerForm.controls['password2'].hasError('required')">Password is required</mat-error>
-            <mat-error *ngIf="registerForm.controls['password2'].hasError('pattern')">Password is not valid</mat-error>
+                placeholder="Repeat password" required>
+                <mat-error>The two passwords must be the same</mat-error>
         </mat-form-field>
         <br>
         <mat-dialog-actions class="example-button-row">
