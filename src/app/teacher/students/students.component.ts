@@ -1,6 +1,6 @@
 import {Component, ViewChild, AfterViewInit, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
-import {StudentModel} from '../student.model';
+import {StudentModel} from '../../models/student.model';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 
 import {SelectionModel} from '@angular/cdk/collections';

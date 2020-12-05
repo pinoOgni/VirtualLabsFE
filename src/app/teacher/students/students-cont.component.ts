@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {StudentModel} from "../student.model";
-import {StudentService} from "../services/student.service";
+import {StudentModel} from "../../models/student.model";
+import {StudentService} from "../../services/student.service";
 
 
 @Component({

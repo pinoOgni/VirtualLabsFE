@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { RegisterModel } from '../model';
+import { RegisterModel } from '../../models/form-models';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatDialogRef} from "@angular/material/dialog";
-import {AuthService} from "../auth.service";
+import {AuthService} from "../../auth/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 
 
