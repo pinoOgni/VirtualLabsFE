@@ -35,6 +35,7 @@ import { RegisterDialogComponent } from './modals/register-dialog/register-dialo
 import { VmsResourcesComponent } from './teacher/vms/vms-resources.component';
 import { AssignmentsComponent } from './teacher/assignments/assignments.component';
 import { AssignmentsContComponent } from './teacher/assignments/assignments-cont.component';
+import { TeacherComponent } from './teacher/teacher.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { AssignmentsContComponent } from './teacher/assignments/assignments-cont
     VmsResourcesComponent,
     AssignmentsComponent,
     AssignmentsContComponent,
+    TeacherComponent,
   ],
   imports: [
     BrowserModule,
