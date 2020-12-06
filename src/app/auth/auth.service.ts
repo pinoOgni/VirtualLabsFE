@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {LoginModel, RegisterModel} from "./model";
+import {LoginModel, RegisterModel} from "../models/form-models";
 import {tap} from "rxjs/operators";
 // @ts-ignore
 import * as moment from 'moment';

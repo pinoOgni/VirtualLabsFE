@@ -1,11 +1,11 @@
 import {Component, ViewChild, AfterViewInit, OnInit, OnDestroy} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {MatDialog} from "@angular/material/dialog";
-import {LoginDialogComponent} from "./auth/login-dialog/login-dialog.component";
+import {LoginDialogComponent} from "./modals/login-dialog/login-dialog.component";
 import {AuthService} from "./auth/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subscription} from "rxjs";
-import {RegisterDialogComponent} from './auth/register-dialog/register-dialog.component';
+import {RegisterDialogComponent} from './modals/register-dialog/register-dialog.component';
 
 
 @Component({
