@@ -26,7 +26,7 @@ export class StudentService {
   }
 
   getEnrolled(courseId: number): Observable<StudentModel[]> {
-    const url = `${this.base_URL}course/${courseId}/students?_expand=group`;
+    const url = `${this.base_URL}courses/${courseId}/students?_expand=group`;
     return this.http.get<StudentModel[]>(url)
       .pipe(
         catchError(this.handleError<StudentModel[]>('getEnrolled', []))
