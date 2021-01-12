@@ -1,1 +1,10 @@
-<p>vms works!</p>
+<mat-selection-list #vms [multiple]="false">
+    <mat-list-option *ngFor="let vm of vms" [value]="vm">
+      {{vm.name}}
+    </mat-list-option>
+  </mat-selection-list>
+  
+  <p>
+    Option selected: {{vms.selectedOptions.selected[0]?.value}}
+  </p>
+  

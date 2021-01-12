@@ -23,8 +23,8 @@ export class StudentModel {
     }
   }
 
-  toString() {
-    return this.firstName + ' ' + this.name + ' ' + this.serial;
+  static toString(s: StudentModel): string {
+    return s.firstName + ' ' + s.name + ' ' + s.serial;
   }
 }
 

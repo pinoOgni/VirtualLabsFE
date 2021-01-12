@@ -4,6 +4,11 @@
       "email": "pino@polito.it",
       "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
       "id": 1
+    },
+    {
+      "email": "ale@polito.it",
+      "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
+      "id": 2
     }
   ],
   "students": [
@@ -75,7 +80,7 @@
       "serial": "303031",
       "firstName": "Johnny",
       "name": "Gresko",
-      "courseId": 1,
+      "courseId": 0,
       "id": "9",
       "groupId": 0
     },
