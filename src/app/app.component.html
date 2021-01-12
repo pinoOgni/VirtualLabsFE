@@ -28,33 +28,12 @@
   <mat-sidenav #sidenav mode="side" opened position="start" class="sidenav">
     <div class=“container-small”>
       <mat-nav-list>
-        <mat-list-item> <a routerLink="teacher/course/applicazioni-internet/students"> Applicazioni Internet </a> </mat-list-item>
+        <mat-list-item> <a routerLink="teacher/courses/applicazioni-internet/students"> Applicazioni Internet </a> </mat-list-item>
         <mat-list-item> Programmazione di Sistema </mat-list-item>
       </mat-nav-list>
     </div>
   </mat-sidenav>
-
-  <mat-sidenav-content>
-    <nav mat-tab-nav-bar>
-      <a mat-tab-link routerLinkActive #rla="routerLinkActive"
-         [active]="rla.isActive" [routerLink]="['/teacher/course/applicazioni-internet/students']" label="Students">
-        <div class="container">
-          <h3>Students</h3>
-        </div>
-      </a>
-      <a mat-tab-link routerLinkActive #rla="routerLinkActive"
-         [active]="rla.isActive" [routerLink]="['/teacher/course/applicazioni-internet/vms']" label="Vms">
-        <div class="container">
-          <h3>Vms</h3>
-        </div>
-      </a>
-      <a mat-tab-link routerLinkActive #rla="routerLinkActive"
-         [active]="rla.isActive" [routerLink]="['/teacher/course/applicazioni-internet/assignments']" label="Assignments">
-        <div class="container">
-          <h3>Assignments</h3>
-        </div>
-      </a>
-    </nav>
+    <mat-sidenav-content>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

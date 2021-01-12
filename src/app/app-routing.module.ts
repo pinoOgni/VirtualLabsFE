@@ -6,11 +6,13 @@ import {VmsContComponent} from "./teacher/vms/vms-cont.component";
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {AuthGuard} from "./auth/auth.guard";
 import { AssignmentsContComponent } from './teacher/assignments/assignments-cont.component';
+import { TeacherComponent } from './teacher/teacher.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent},
-  { path: 'teacher/course/applicazioni-internet', 
+  { path: 'teacher/courses/applicazioni-internet', //TODO :coursename 
+    component: TeacherComponent, 
     canActivateChild: [AuthGuard],
     children: [
       { path: '', redirectTo: 'students', pathMatch: 'full'},
