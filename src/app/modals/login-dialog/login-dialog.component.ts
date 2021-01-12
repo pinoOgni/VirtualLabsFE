@@ -41,7 +41,7 @@ export class LoginDialogComponent implements OnInit {
         if(route)
           localStorage.removeItem('to_url');
         else
-          route = "teacher/course/applicazioni-internet/students";
+          route = "teacher/courses/applicazioni-internet/students";
         this.router.navigate([route]);
         this.close(true);
       },  error => {
