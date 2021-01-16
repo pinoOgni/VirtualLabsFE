@@ -1,0 +1,4 @@
+<app--team *ngIf="team; else elseBlock" [team]="team"></app-team>
+<ng-template #elseBlock>
+  <app-no-team></app-no-team>
+</ng-template>

@@ -36,6 +36,14 @@ import { VmsResourcesComponent } from './teacher/vms/vms-resources.component';
 import { AssignmentsComponent } from './teacher/assignments/assignments.component';
 import { AssignmentsContComponent } from './teacher/assignments/assignments-cont.component';
 import { TeacherComponent } from './teacher/teacher.component';
+import { StudentNoTeamComponent } from './student/team/student-no-team.component';
+import { StudentTeamComponent } from './student/team/student-team.component';
+import { StudentTeamContComponent } from './student/team/student-team.container';
+import { StudentVmsComponent } from './student/vms/student-vms.component';
+import { StudentVmsContComponent } from './student/vms/student-vms.container';
+import { StudentAssignmentsComponent } from './student/assignments/student-assignments.component';
+import { StudentAssignmentsContComponent } from './student/assignments/student-assignments.container';
+
 
 @NgModule({
   declarations: [
@@ -52,6 +60,13 @@ import { TeacherComponent } from './teacher/teacher.component';
     AssignmentsComponent,
     AssignmentsContComponent,
     TeacherComponent,
+    StudentNoTeamComponent,
+    StudentTeamComponent,
+    StudentVmsComponent,
+    StudentAssignmentsContComponent,
+    StudentAssignmentsComponent,
+    StudentVmsContComponent,
+    StudentTeamContComponent
   ],
   imports: [
     BrowserModule,

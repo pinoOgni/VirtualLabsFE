@@ -7,18 +7,34 @@ import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {AuthGuard} from "./auth/auth.guard";
 import { AssignmentsContComponent } from './teacher/assignments/assignments-cont.component';
 import { TeacherComponent } from './teacher/teacher.component';
-
+import { StudentComponent } from './student/student.component';
+import { StudentAssignmentsContComponent } from './student/assignments/student-assignments.container';
+import { StudentVmsContComponent } from './student/vms/student-vms.container';
+import { StudentTeamContComponent } from './student/team/student-team.container';
+import {Role} from './models/role.model'
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent},
   { path: 'teacher/courses/applicazioni-internet', //TODO :coursename 
     component: TeacherComponent, 
+    data: { roles: [Role.Teacher] },
     canActivateChild: [AuthGuard],
     children: [
       { path: '', redirectTo: 'students', pathMatch: 'full'},
       { path: 'students', component: StudentsContComponent},
       { path: 'vms', component: VmsContComponent},
       { path: 'assignments', component: AssignmentsContComponent}
+      ]
+    },
+    { path: 'student/courses/applicazioni-internet', //TODO :coursename 
+    component: StudentComponent, 
+    data: { roles: [Role.Student] },
+    canActivateChild: [AuthGuard],
+    children: [
+      { path: '', redirectTo: 'team', pathMatch: 'full'},
+      { path: 'team', component: StudentTeamContComponent},
+      { path: 'vms', component: StudentVmsContComponent},
+      { path: 'assignments', component: StudentAssignmentsContComponent}
       ]
     },
   { path: '**', component: PageNotFoundComponent},

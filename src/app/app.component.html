@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-     <button mat-icon-button (click)="toggleForMenuClick()">
+     <button *ngIf="isLogged();" mat-icon-button (click)="toggleForMenuClick()">
       <mat-icon>menu</mat-icon>
      </button>
   <span routerLink="/home">
@@ -21,11 +21,11 @@
   </span>
   </ng-template>
 </mat-toolbar>
-<mat-toolbar>
+<mat-toolbar *ngIf="isLogged();">
   Applicazioni Internet
 </mat-toolbar>
-<mat-sidenav-container>
-  <mat-sidenav #sidenav mode="side" opened position="start" class="sidenav">
+<mat-sidenav-container >
+  <mat-sidenav *ngIf="isLogged();" #sidenav mode="side" opened position="start" class="sidenav">
     <div class=“container-small”>
       <mat-nav-list>
         <mat-list-item> <a routerLink="teacher/courses/applicazioni-internet/students"> Applicazioni Internet </a> </mat-list-item>

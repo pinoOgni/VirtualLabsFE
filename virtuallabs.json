@@ -3,12 +3,14 @@
     {
       "email": "pino@polito.it",
       "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
-      "id": 1
+      "id": 1,
+      "role": "teacher"
     },
     {
       "email": "ale@polito.it",
       "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
-      "id": 2
+      "id": 2,
+      "role": "student"
     }
   ],
   "students": [
@@ -48,7 +50,7 @@
       "serial": "101010",
       "firstName": "Jack",
       "name": "Amoruso",
-      "courseId": 1,
+      "courseId": 0,
       "id": "5",
       "groupId": 0
     },
