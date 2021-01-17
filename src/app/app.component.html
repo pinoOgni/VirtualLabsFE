@@ -28,8 +28,37 @@
   <mat-sidenav #sidenav mode="side" opened position="start" class="sidenav">
     <div class=“container-small”>
       <mat-nav-list>
-        <mat-list-item> <a routerLink="teacher/courses/applicazioni-internet/students"> Applicazioni Internet </a> </mat-list-item>
-        <mat-list-item> Programmazione di Sistema </mat-list-item>
+        <mat-list-item *ngFor="let course of coursesHeldOrAttendend; index as i ">
+          {{course.fullName}}
+          <button  [matMenuTriggerFor]="menu" mat-icon-button mat-button >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item routerLink="home" [queryParams]="{doEditCourse: true, courseIndex:i }">Edit</button>
+            <button mat-menu-item >Delete</button>
+          </mat-menu>
+
+
+
+        </mat-list-item>
+        <mat-list-item>
+          <a routerLink="teacher/courses/applicazioni-internet/students"> Applicazioni Internet </a>
+          <button  [matMenuTriggerFor]="menu" mat-icon-button mat-button >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item routerLink="home" [queryParams]="{doEditCourse: true}">Edit</button>
+            <button mat-menu-item >Delete</button>
+          </mat-menu>
+
+        </mat-list-item>
+        <mat-list-item>
+          Programmazione di Sistema
+          <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </mat-list-item>
+
       </mat-nav-list>
     </div>
   </mat-sidenav>

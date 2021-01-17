@@ -3,13 +3,13 @@ AI project 2019/2020 Polytechnic of Turin
 
 ## Developers
 
-* Ognibene Giuseppe: ognibenegiuseppe8@gmail.com
+* Giuseppe Ognibene: ognibenegiuseppe8@gmail.com
 
-* Pagano Alessandro: alenihilist@gmail.com
+* Alessandro Pagano: alenihilist@gmail.com
 
-* Rhaouati Hamza: hamza.rhaouati@gmail.com
+* Hamza Rhaouati: hamza.rhaouati@gmail.com
 
-* Tolomei Leonardo: tolomei.leonardo@gmail.com
+* Leonardo Tolomei: tolomei.leonardo@gmail.com
 
 
 

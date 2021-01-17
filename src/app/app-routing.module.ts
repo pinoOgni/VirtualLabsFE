@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent},
   { path: 'teacher/courses/applicazioni-internet', //TODO :coursename 
-    component: TeacherComponent, 
+    component: TeacherComponent,
     canActivateChild: [AuthGuard],
     children: [
       { path: '', redirectTo: 'students', pathMatch: 'full'},

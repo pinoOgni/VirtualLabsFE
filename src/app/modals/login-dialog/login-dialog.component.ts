@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {LoginModel} from "../../models/form-models";
-import {AuthService} from "../../auth/auth.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {MatDialogRef} from "@angular/material/dialog";
+import {LoginModel} from '../../models/form-models';
+import {AuthService} from '../../auth/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login-dialog',
@@ -38,18 +38,22 @@ export class LoginDialogComponent implements OnInit {
       this.model.password = this.loginForm.controls.password.value;
       this.auth.login(this.model).subscribe(response => {
         let route = localStorage.getItem('to_url');
-        if(route)
+        if (route){
           localStorage.removeItem('to_url');
-        else
-          route = "teacher/courses/applicazioni-internet/students";
+        }
+        else{
+          route = 'teacher/courses';
+        }
         this.router.navigate([route]);
         this.close(true);
       },  error => {
-        //TODO migliorare nel progetto, spostare nell'error interceptor
-        if(error.status===400)
-          this.serverErrors = "Authentication failed!";
-        else
-          this.serverErrors = "Something went wrong!";
+        // TODO migliorare nel progetto, spostare nell'error interceptor
+        if (error.status === 400) {
+          this.serverErrors = 'Authentication failed!';
+        }
+        else {
+          this.serverErrors = 'Something went wrong!';
+        }
       });
     }
   }

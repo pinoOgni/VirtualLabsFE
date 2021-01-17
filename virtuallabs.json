@@ -3,12 +3,14 @@
     {
       "email": "pino@polito.it",
       "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
-      "id": 1
+      "id": 1,
+      "role": "teacher"
     },
     {
       "email": "ale@polito.it",
       "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
-      "id": 2
+      "id": 2,
+      "role": "student"
     }
   ],
   "students": [
@@ -48,7 +50,7 @@
       "serial": "101010",
       "firstName": "Jack",
       "name": "Amoruso",
-      "courseId": 1,
+      "courseId": 0,
       "id": "5",
       "groupId": 0
     },
@@ -112,14 +114,39 @@
   "courses": [
     {
       "id": 1,
-      "name": "Applicazioni Internet",
-      "path": "applicazioni-internet"
+      "acronym": "AI",
+      "fullName": "Applicazioni Internet",
+      "minStudentsForTeam": 2,
+      "maxStudentsForTeam": 3,
+      "enabled": "true"
+    },
+    {
+      "id": 2,
+      "acronym": "APA",
+      "fullName": "Algoritmi e programmazione avanzata",
+      "minStudentsForTeam": 2,
+      "maxStudentsForTeam": 3,
+      "enabled": "true"
     }
   ],
   "groups": [
     {
       "id": 1,
       "name": "Argonauti"
+    }
+  ],
+  "teachers": [
+    {
+      "id": 1,
+      "serial": "123123",
+      "firstName": "Malnati",
+      "name": "Giovanni"
+    },
+    {
+      "id": 2,
+      "serial": "123124",
+      "firstName": "Risso",
+      "name": "Fulvio Giovanni Ottavio"
     }
   ]
 }
