@@ -4,10 +4,22 @@ export interface LoginModel {
 }
 
 export interface RegisterModel {
-  email: string
-  firstName: string
-  lastName: string
-  password: string
-  password2: string
-  serialNumber: string
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  password2: string;
+  serialNumber: string;
+}
+
+export interface EditCourseModel{
+  id: number;
+  acronym: string ;
+  fullName: string;
+  minStudentsForTeam: number;
+  maxStudentsForTeam: number;
+ // heldBy: number[]; // da aggiungere poi forse la di aggiungere altri prof
+  enabled: boolean;
+
+
 }
