@@ -1,39 +1,40 @@
 <mat-toolbar color="primary">
-     <button *ngIf="isLogged();" mat-icon-button (click)="toggleForMenuClick()">
-      <mat-icon>menu</mat-icon>
-     </button>
+  <button *ngIf="currentUser" mat-icon-button (click)="sidebar.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
   <span routerLink="/home">
-     VirtualLabs
+    VirtualLabs
   </span>
 
   <!-- This fills the remaining space of the current row -->
   <span class="example-fill-remaining-space"></span>
-  <span *ngIf="isLogged(); else notLogged" >
-    {{email}}
-  <button mat-button (click)="logout()">Logout</button>
-  </span>
+  <span *ngIf="currentUser"> Hello {{ currentUser.id }} </span>
+  <button *ngIf="currentUser; else notLogged" mat-button (click)="logout()">Logout</button>
   <ng-template #notLogged>
-  <span>
-  <button mat-button routerLink="home" [queryParams]="{doLogin: true}">Login</button>
-  </span>
-  <span>
-    <button mat-button routerLink="home" [queryParams]="{doRegister: true}">Register</button>
-  </span>
+    <span>
+      <button mat-button routerLink="home" [queryParams]="{doLogin: true}">Login</button>
+    </span>
+    <span>
+      <button mat-button routerLink="home" [queryParams]="{doRegister: true}">Register</button>
+    </span>
   </ng-template>
 </mat-toolbar>
-<mat-toolbar *ngIf="isLogged();">
+<mat-toolbar *ngIf="currentUser">
   Applicazioni Internet
 </mat-toolbar>
-<mat-sidenav-container >
-  <mat-sidenav *ngIf="isLogged();" #sidenav mode="side" opened position="start" class="sidenav">
+<mat-sidenav-container>
+  
+  <mat-sidenav #sidebar mode="side" [opened]="navBarOpened" position="start" class="sidenav">
     <div class=“container-small”>
       <mat-nav-list>
-        <mat-list-item> <a routerLink="teacher/courses/applicazioni-internet/students"> Applicazioni Internet </a> </mat-list-item>
+        <mat-list-item> <a routerLink="teacher/courses/applicazioni-internet/students">Applicazioni Internet </a></mat-list-item>
         <mat-list-item> Programmazione di Sistema </mat-list-item>
       </mat-nav-list>
     </div>
   </mat-sidenav>
-    <mat-sidenav-content>
+
+  <!-- current view -->
+  <mat-sidenav-content>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -12,13 +12,13 @@ import { StudentAssignmentsContComponent } from './student/assignments/student-a
 import { StudentVmsContComponent } from './student/vms/student-vms.container';
 import { StudentTeamContComponent } from './student/team/student-team.container';
 import {Role} from './models/role.model'
-const routes: Routes = [
+const routes  = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent},
   { path: 'teacher/courses/applicazioni-internet', //TODO :coursename 
     component: TeacherComponent, 
-    data: { roles: [Role.Teacher] },
-    canActivateChild: [AuthGuard],
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Teacher, Role.Admin] },
     children: [
       { path: '', redirectTo: 'students', pathMatch: 'full'},
       { path: 'students', component: StudentsContComponent},
@@ -28,8 +28,8 @@ const routes: Routes = [
     },
     { path: 'student/courses/applicazioni-internet', //TODO :coursename 
     component: StudentComponent, 
-    data: { roles: [Role.Student] },
-    canActivateChild: [AuthGuard],
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Student, Role.Admin] },
     children: [
       { path: '', redirectTo: 'team', pathMatch: 'full'},
       { path: 'team', component: StudentTeamContComponent},

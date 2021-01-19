@@ -1,15 +1,15 @@
 {
   "users": [
     {
+      "id": 1,
       "email": "pino@polito.it",
       "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
-      "id": 1,
       "role": "teacher"
     },
     {
+      "id": 2,
       "email": "ale@polito.it",
       "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
-      "id": 2,
       "role": "student"
     }
   ],
@@ -122,6 +122,15 @@
     {
       "id": 1,
       "name": "Argonauti"
+    }
+  ],
+  "teachers": [
+    {
+      "id": 1,
+      "email": "pino@polito.it",
+      "surname": "Pino",
+      "name": "Ogni",
+      "courseId": 1
     }
   ]
 }
