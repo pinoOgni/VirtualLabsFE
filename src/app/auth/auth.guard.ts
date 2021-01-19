@@ -5,41 +5,63 @@ import {
   RouterStateSnapshot,
   UrlTree,
   Router,
-  CanActivateChild
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import {AuthService} from "./auth.service";
+import { AuthService } from "./auth.service";
+import * as moment from 'moment';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate, CanActivateChild {
+export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
     private authService: AuthService
   ) { }
 
-  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+  canActivate(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
 
     //if the user is not logged, the login form is opened,
     //if the user is logged the url is available
-    return this.checkLogin(state.url);
+    return this.checkLogin(state, childRoute);
+  }
+
+  checkLogin(state: RouterStateSnapshot, route: ActivatedRouteSnapshot): boolean {
+    console.log("checkLogin 1")
+    const currentUser = this.authService.currentUserValue;
+    //control if the user is logged
+    if (!currentUser) {
+      //in this case the user is not logged, so we need to redirect
+      //it will open a login-dialog
+      this.router.navigate(['/home'], {
+        queryParams: { returnUrl: state.url, doLogin: true },
+      });
+      return false;
     }
-
-    //delete?
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.checkLogin(state.url);
+    console.log("checkLogin 2 ", currentUser.id, " ", currentUser.roles[0])
+    //now we need to control the time of the token
+    if (moment().isBefore(User.getToken_idExpireTime(currentUser.token_id))) {
+      console.log('Token is expired!');
+      this.authService.logout();
+      this.router.navigate(['/home'], {
+        queryParams: { returnUrl: state.url, doLogin: true },
+      });
+      return false;
+    }
+    console.log("checkLogin 3")
+    // check if route is restricted by role
+    if (
+      route.data.roles &&
+      !currentUser.roles.some((r) => route.data.roles.includes(r))) {
+        console.log("800A 2")
+      // role not authorised so redirect to home page
+      console.log('User', currentUser.id , 'route', state.url);
+      this.router.navigate(['/home']);
+      return false;
+    }
+    console.log("800A 3 ", currentUser.roles[0])
+    // authorized
+    return true;
   }
-
-  checkLogin(url: string): boolean {
-    if(this.authService.isUserLogged())
-      return true;
-
-    localStorage.setItem('to_url',url);
-    this.router.navigate(['/home'], { queryParams: { doLogin: true }}); // returnUrl: state.url
-    return false;
-  }
-
 }

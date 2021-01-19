@@ -1,11 +1,19 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import { HttpHeaders } from '@angular/common/http';
+
+const BASE_URL_API = '/api';
 
 export const environment = {
   production: false,
   // base_URL: 'http://localhost:3000'
-  base_URL: 'api/'
+  base_URL: BASE_URL_API,
+  register_url: `${BASE_URL_API}/register`,
+  login_url: `${BASE_URL_API}/login`,
+  base_http_headers: {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  } 
 };
 
 /*

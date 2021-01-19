@@ -6,20 +6,27 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
+import { environment } from "../../environments/environment";
+
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor() {}
+  constructor(private authService: AuthService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const tokenId = localStorage.getItem('token_id');
-    if (tokenId) {
+    // add auth header with jwt if user is logged in and request is to api url
+    const currentUser = this.authService.currentUserValue;
+    console.log("800A 1 ")
+    if (currentUser) {
+      console.log("800A 1.1 ", currentUser.roles[0])
       request = request.clone({
         headers: request.headers.set('Authorization',
-          'Bearer ' + tokenId)
+          'Bearer ' + currentUser.token_id)
       });
     }
+
     return next.handle(request);
   }
 }
