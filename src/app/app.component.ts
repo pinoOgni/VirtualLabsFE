@@ -31,7 +31,7 @@ export class AppComponent implements OnDestroy, OnInit{
 
   currentUser: User;
   course: Course;
-  courses: Course[];
+  courses: Observable<Course[]>;
   navBarOpened = false;
 
   constructor(
@@ -144,10 +144,9 @@ export class AppComponent implements OnDestroy, OnInit{
   private refillCourses() {
     if (this.userLogged){
       if ( this.currentUser.roles.includes('ROLE_STUDENT')){
-        this.studentsService.getCoursesOfStudentById(this.currentUser.id).subscribe(
-            courses => {
-              this.courses = courses;
-            });
+       this.courses =  this.studentsService
+            .getCoursesOfStudentById(this.currentUser.id)
+            .pipe(first());
       }
 
     }
