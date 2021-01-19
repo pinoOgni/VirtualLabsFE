@@ -11,7 +11,7 @@ import { StudentComponent } from './student/student.component';
 import { StudentAssignmentsContComponent } from './student/assignments/student-assignments.container';
 import { StudentVmsContComponent } from './student/vms/student-vms.container';
 import { StudentTeamContComponent } from './student/team/student-team.container';
-import {Role} from './models/role.model'
+import {Role} from './models/role.model';
 const routes  = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent},

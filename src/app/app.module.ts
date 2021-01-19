@@ -69,7 +69,7 @@ import {MatSelectModule} from "@angular/material/select";
     StudentAssignmentsContComponent,
     StudentAssignmentsComponent,
     StudentVmsContComponent,
-    StudentTeamContComponent
+    StudentTeamContComponent,
     EditCourseDialogComponent,
   ],
     imports: [
