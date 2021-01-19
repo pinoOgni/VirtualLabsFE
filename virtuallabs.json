@@ -114,8 +114,19 @@
   "courses": [
     {
       "id": 1,
-      "name": "Applicazioni Internet",
-      "path": "applicazioni-internet"
+      "acronym": "AI",
+      "fullName": "Applicazioni Internet",
+      "minStudentsForTeam": 2,
+      "maxStudentsForTeam": 3,
+      "enabled": "true"
+    },
+    {
+      "id": 2,
+      "acronym": "APA",
+      "fullName": "Algoritmi e programmazione avanzata",
+      "minStudentsForTeam": 2,
+      "maxStudentsForTeam": 3,
+      "enabled": "true"
     }
   ],
   "groups": [

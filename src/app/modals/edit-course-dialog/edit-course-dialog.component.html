@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>Edit Course</h2>
+<mat-dialog-content class="md-dialog-container">
+    <form [formGroup]="editCourseForm" (ngSubmit)="submit()">
+        <mat-label for="courseFullName">Fullname:</mat-label>
+        <mat-form-field floatLabel="never" class="md-form-dialog-container">
+
+            <input   autocomplete="on" formControlName="courseFullName" type="text" matInput id="courseFullName" name="courseFullName"
+                   placeholder="{{data.courseFullName}}" required >
+
+        </mat-form-field>
+        <br>
+
+        <mat-label for="courseAcronym">Acronym:</mat-label>
+        <mat-form-field floatLabel="never" class="md-form-dialog-container">
+
+            <input   autocomplete="on" formControlName="courseAcronym" type="text" matInput id="courseAcronym" name="courseAcronym"
+                     placeholder="{{data.courseAcronym}}" required >
+
+        </mat-form-field>
+        <br>
+
+        <mat-label for="courseMinStudents">Minimum group size:</mat-label>
+        <mat-form-field floatLabel="never" class="md-form-dialog-container">
+
+            <input   autocomplete="on" formControlName="courseMinStudents" type="text" matInput id="courseMinStudents" name="courseMinStudents"
+                     placeholder="{{data.minStudents}}" required >
+
+        </mat-form-field>
+
+        <mat-label for="courseMaxStudents">Maximum group size:</mat-label>
+        <mat-form-field floatLabel="never" class="md-form-dialog-container">
+
+            <input   autocomplete="on" formControlName="courseMaxStudents" type="text" matInput id="courseMaxStudents" name="courseMaxStudents"
+                     placeholder="{{data.maxStudents}}" required >
+
+        </mat-form-field>ee
+
+        <br>
+
+        <mat-label for="courseEnabled">Enabled:</mat-label>
+        <mat-form-field floatLabel="never" class="md-form-dialog-container">
+            <mat-select formControlName="courseEnabled"  matInput id="courseEnabled" name="courseEnabled" >
+                <mat-option value="true"> Enabled</mat-option>
+                <mat-option value="false"> Disabled</mat-option>
+            </mat-select>
+
+        </mat-form-field>
+
+        <br>
+
+
+        <mat-dialog-actions class="example-button-row">
+            <button color="primary" type="submit" [disabled]="!editCourseForm.valid" mat-raised-button>Edit</button>
+            <button type="reset" mat-raised-button [mat-dialog-close]="false">Cancel</button>
+        </mat-dialog-actions>
+        <br>
+    </form>
+</mat-dialog-content>

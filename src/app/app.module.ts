@@ -44,6 +44,9 @@ import { StudentVmsContComponent } from './student/vms/student-vms.container';
 import { StudentAssignmentsComponent } from './student/assignments/student-assignments.component';
 import { StudentAssignmentsContComponent } from './student/assignments/student-assignments.container';
 
+import { EditCourseDialogComponent } from './modals/edit-course-dialog/edit-course-dialog.component';
+import {MatMenuModule} from "@angular/material/menu";
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -67,30 +70,37 @@ import { StudentAssignmentsContComponent } from './student/assignments/student-a
     StudentAssignmentsComponent,
     StudentVmsContComponent,
     StudentTeamContComponent
+    EditCourseDialogComponent,
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatTableModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatCheckboxModule,
-    MatTabsModule,
-    MatTableModule,
-    AppRoutingModule,
-    HttpClientModule,
-    MatDialogModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatTableModule,
+        MatSidenavModule,
+        MatIconModule,
+        MatListModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        MatSortModule,
+        MatPaginatorModule,
+        MatCheckboxModule,
+        MatTabsModule,
+        MatTableModule,
+        AppRoutingModule,
+        HttpClientModule,
+        MatDialogModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatMenuModule,
+        MatSelectModule
+    ],
+    exports:[
+        MatFormFieldModule,
+        MatInputModule
+    ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
