@@ -28,7 +28,7 @@ export class TeacherService {
   // TODO spostare in courseService
   update(course: Course): Observable<Course> {
     console.log('sto updatando: ' +  course.id + ' nome: ' + course.fullName);
-    return this.http.post<Course>(this.base_URL + 'courses/' + course.id, course, this.httpOptions).pipe(
+    return this.http.put<Course>(this.base_URL + 'courses/' + course.id, course, this.httpOptions).pipe(
         catchError(this.handleError<any>('updateCourse'))
     );
 

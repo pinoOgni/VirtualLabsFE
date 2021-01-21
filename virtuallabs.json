@@ -114,11 +114,11 @@
   "courses": [
     {
       "id": 1,
-      "acronym": "AI",
-      "fullName": "Applicazioni Internet",
-      "minStudentsForTeam": 2,
-      "maxStudentsForTeam": 3,
-      "enabled": "true"
+      "acronym": "AIT",
+      "fullName": "Applicazioni supermega",
+      "minStudentsForTeam": null,
+      "maxStudentsForTeam": null,
+      "enabled": true
     },
     {
       "id": 2,

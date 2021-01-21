@@ -44,9 +44,9 @@ export class AppComponent implements OnDestroy, OnInit{
     // Here we subscribe to the currentUser and then call the refillCourses method
     this.authService.getCurrentUserserObservable().subscribe((u: User) => {
       this.currentUser = u;
-      this.refillCourses();
       if (u) {
         this.navBarOpened = true;
+        this.refillCourses();
       }
     });
 
@@ -57,16 +57,14 @@ export class AppComponent implements OnDestroy, OnInit{
       else if (params.doRegister) {
         this.openDialogRegister();
       }
-      else if (params.doEditCourse){
-        this.openDialogEditCourse(this.courses[params.courseIndex]);
-      }
     });
 
   }
 
   ngOnInit(): void {
-        // throw new Error("Method not implemented.");
-    }
+//    this.refillCourses();
+
+  }
 
   ngOnDestroy() {
     this.routeQueryParams$.unsubscribe();
@@ -80,6 +78,7 @@ export class AppComponent implements OnDestroy, OnInit{
       if (res) {
         this.router.navigate([this.route.snapshot.queryParams.returnUrl || '/home', ]);
         this.navBarOpened = true;
+
       }
       else if (latestUrl === this.router.url) {
         this.router.navigate(['/home']);
@@ -110,7 +109,7 @@ export class AppComponent implements OnDestroy, OnInit{
     this.router.navigate(['/home']);
   }
 
-  private openDialogEditCourse(course: Course) {
+  private openDialogEditCourse(course: Course): void {
     const dialogRef = this.dialog.open(EditCourseDialogComponent, {
       data: {
         courseFullName: course.fullName,
@@ -123,6 +122,9 @@ export class AppComponent implements OnDestroy, OnInit{
 
     dialogRef.afterClosed().subscribe(
         result => {
+          if (result === undefined ){
+            return;
+          }
           if ( result.logged === true ){
             const updatedCourse = result.newCourseModel;
             // TODO gestire heldBy
@@ -133,7 +135,12 @@ export class AppComponent implements OnDestroy, OnInit{
                 Number(updatedCourse.minStudents),
                 Number(updatedCourse.maxStudents),
                 Boolean(updatedCourse.enabled));
-            this.teacherService.update(editedCourse);
+            this.teacherService.update(editedCourse).subscribe(
+                r => {
+                  console.log('sono result:' + r.fullName);
+                  this.refillCourses();
+                }
+            );
             this.router.navigate(['/home']);
           }
         }
@@ -142,11 +149,30 @@ export class AppComponent implements OnDestroy, OnInit{
   }
 
   private refillCourses() {
-    if (this.userLogged){
+    if (this.currentUser){
+    //  console.log('polopolo: ' + this.currentUser.roles);
       if ( this.currentUser.roles.includes('ROLE_STUDENT')){
+     //   console.log('pacimbolombolo');
        this.courses =  this.studentsService
             .getCoursesOfStudentById(this.currentUser.id)
-            .pipe(first());
+            .pipe(
+                first()
+            );
+     //  this.courses = this.studentsService.getCoursesOfStudentById(this.currentUser.id);
+      }
+      if ( this.currentUser.roles.includes('ROLE_TEACHER')){
+   //     console.log('sto chiamando popopo');
+        this.courses = this.teacherService.query()
+            .pipe(
+                first()
+            );
+      }
+      if ( this.currentUser.roles.includes('ROLE_ADMIN')){
+   //     console.log('pocibomboli lembe');
+        this.courses = this.teacherService.query()
+            .pipe(
+                first()
+            );
       }
 
     }
