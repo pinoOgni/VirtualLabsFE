@@ -38,7 +38,7 @@ export class EditCourseDialogComponent implements OnInit {
         this.editCourseForm.controls.courseMinStudents.setValue(data.minStudents);
         this.editCourseForm.controls.courseMaxStudents.setValue(data.maxStudents);
         this.editCourseForm.controls.courseEnabled.setValue(data.enabled);
-        console.log('ciaociaociaociao');
+        console.log('ciaociaociaociaociao');
     }
 
     ngOnInit() {
