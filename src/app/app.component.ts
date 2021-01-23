@@ -109,7 +109,7 @@ export class AppComponent implements OnDestroy, OnInit{
     this.router.navigate(['/home']);
   }
 
-  private openDialogEditCourse(course: Course): void {
+  public openDialogEditCourse(course: Course): void {
     const dialogRef = this.dialog.open(EditCourseDialogComponent, {
       data: {
         courseFullName: course.fullName,
@@ -132,9 +132,10 @@ export class AppComponent implements OnDestroy, OnInit{
                 course.id,
                 updatedCourse.acronym,
                 updatedCourse.fullName,
-                Number(updatedCourse.minStudents),
-                Number(updatedCourse.maxStudents),
+                updatedCourse.minStudentsForTeam,
+                updatedCourse.maxStudentsForTeam,
                 Boolean(updatedCourse.enabled));
+            console.log('min max enabled: ' + editedCourse.minStudentsForTeam + editedCourse.maxStudentsForTeam + editedCourse.enabled);
             this.teacherService.update(editedCourse).subscribe(
                 r => {
                   console.log('sono result:' + r.fullName);
