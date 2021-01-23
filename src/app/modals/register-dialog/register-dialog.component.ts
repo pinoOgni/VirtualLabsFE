@@ -18,9 +18,9 @@ export class RegisterDialogComponent implements OnInit {
   model: RegisterModel;
   
   constructor(private auth: AuthService, private formBuilder: FormBuilder, private router: Router, private dialogRef: MatDialogRef<RegisterDialogComponent>) {
-    this.model = {email: '', firstName: '', lastName: '', password: '' , password2: '', serialNumber: ''};
+    this.model = {email: '', firstName: '', lastName: '', password: '' , password2: '', idNumber: ''};
     this.registerForm = this.formBuilder.group ({
-      serialNumber: ['',Validators.pattern('^(s|d)[0-9]+$')],
+      idNumber: ['',Validators.pattern('^(s|d)[0-9]+$')],
       email: ['', Validators.pattern(/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(polito|studenti.polito)\.it$/)],
       firstName: ['',Validators.pattern('^[A-Za-z]{2,20}$')],
       lastName: ['',Validators.pattern('^[A-Za-z]{2,20}$')],
@@ -79,7 +79,7 @@ export class RegisterDialogComponent implements OnInit {
   model: RegisterModel;
   
   constructor(private auth: AuthService,  private formBuilder: FormBuilder, private router: Router, private dialogRef: MatDialogRef<RegisterDialogComponent>) {
-    this.model = {email: '', firstName: '', lastName: '', password: '' , password2: '', serialNumber: ''};
+    this.model = {email: '', firstName: '', lastName: '', password: '' , password2: '', idNumber: ''};
     this.registerForm = this.formBuilder.group ({
       email: ['', Validators.required, Validators.pattern(/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(polito|studenti.polito)\.it$/)],
       firstName: ['',Validators.required],
@@ -88,7 +88,7 @@ export class RegisterDialogComponent implements OnInit {
         Validators.pattern(/^((?=.*[0-9])|(?=.*[@#$%^&+!=]))((?=.*[a-z])|(?=.*[A-Z]))(?=\S+$).{8,}$/)],
       password2: ['', Validators.required,
           Validators.pattern(/^((?=.*[0-9])|(?=.*[@#$%^&+!=]))((?=.*[a-z])|(?=.*[A-Z]))(?=\S+$).{8,}$/)],
-      serialNumber: ['',Validators.required],
+      idNumber: ['',Validators.required],
     },{
       validator: this.checkIfMatchingPasswords('password','password2'),
     });

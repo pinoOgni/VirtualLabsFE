@@ -2,120 +2,120 @@
   "users": [
     {
       "id": 1,
-      "email": "pino@polito.it",
+      "email": "d100001@polito.it",
       "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
       "role": "teacher"
     },
     {
       "id": 2,
-      "email": "ale@polito.it",
+      "email": "s200001@studenti.polito.it",
       "password": "$2a$10$9SFIVF0tDrwRoUlZOo9Q0urEs0cnpBXu9RWGf/TxuHjFzDteQhvDW",
       "role": "student"
     }
   ],
   "students": [
     {
-      "serial": "100010",
+      "email": "s200001@studenti.polito.it",
       "firstName": "Alessandro",
-      "name": "Pagano",
+      "lastName": "Pagano",
       "courseId": 1,
       "id": "1",
-      "groupId": 1
+      "teamId": 1
     },
     {
-      "serial": "100011",
+      "email": "s200002@studenti.polito.it",
       "firstName": "Giuseppe",
-      "name": "Ognibene",
+      "lastName": "Ognibene",
       "courseId": 1,
       "id": "2",
-      "groupId": 1
+      "teamId": 1
     },
     {
-      "serial": "100012",
+      "email": "s200003@studenti.polito.it",
       "firstName": "Leonardo",
-      "name": "Tolomei",
+      "lastName": "Tolomei",
       "courseId": 1,
       "id": "3",
-      "groupId": 1
+      "teamId": 1
     },
     {
-      "serial": "100013",
+      "email": "s200004@studenti.polito.it",
       "firstName": "Hamza",
-      "name": "Rhaouati",
-      "courseId": 0,
+      "lastName": "Rhaouati",
+      "courseId": 1,
       "id": "4",
-      "groupId": 1
+      "teamId": 1
     },
     {
-      "serial": "101010",
+      "email": "s200005@studenti.polito.it",
       "firstName": "Jack",
-      "name": "Amoruso",
+      "lastName": "Amoruso",
       "courseId": 0,
       "id": "5",
-      "groupId": 0
+      "teamId": 0
     },
     {
-      "serial": "101011",
+      "email": "s200006@studenti.polito.it",
       "firstName": "Giacomo",
-      "name": "Amoruso",
+      "lastName": "Amoruso",
       "courseId": 0,
       "id": "6",
-      "groupId": 0
+      "teamId": 0
     },
     {
-      "serial": "202020",
+      "email": "s200007@studenti.polito.it",
       "firstName": "Al",
-      "name": "Caruso",
+      "lastName": "Caruso",
       "courseId": 0,
       "id": "7",
-      "groupId": 0
+      "teamId": 0
     },
     {
-      "serial": "202021",
+      "email": "s200008@studenti.polito.it",
       "firstName": "Alessandro",
-      "name": "Caruso",
+      "lastName": "Caruso",
       "courseId": 0,
       "id": "8",
-      "groupId": 0
+      "teamId": 0
     },
     {
-      "serial": "303031",
+      "email": "s200009@studenti.polito.it",
       "firstName": "Johnny",
-      "name": "Gresko",
+      "lastName": "Gresko",
       "courseId": 0,
       "id": "9",
-      "groupId": 0
+      "teamId": 0
     },
     {
-      "serial": "303032",
+      "email": "s200010@studenti.polito.it",
       "firstName": "Giovanni",
-      "name": "Gresko",
+      "lastName": "Gresko",
       "courseId": 0,
       "id": "10",
-      "groupId": 0
+      "teamId": 0
     },
     {
-      "serial": "404041",
+      "email": "s200011@studenti.polito.it",
       "firstName": "Sam",
-      "name": "Genovese",
+      "lastName": "Genovese",
       "courseId": 0,
       "id": "11",
-      "groupId": 0
+      "teamId": 0
     },
     {
-      "serial": "404042",
+      "email": "s200012@studenti.polito.it",
       "firstName": "Samuele",
-      "name": "Genovese",
+      "lastName": "Genovese",
       "courseId": 0,
       "id": "12",
-      "groupId": 0
+      "teamId": 0
     }
   ],
   "courses": [
     {
       "id": 1,
-      "acronym": "AK472",
-      "fullName": "Applicazioni grosse tette  poppone belle giga",
+      "acronym": "AI",
+      "fullName": "Applicazioni Internet",
       "minStudentsForTeam": "2",
       "maxStudentsForTeam": "3",
       "enabled": true
@@ -123,24 +123,25 @@
     {
       "id": 2,
       "acronym": "APA",
-      "fullName": "Algoritmi e programmazione avanzata",
+      "fullName": "Algoritmi e Programmazione Avanzata",
       "minStudentsForTeam": 2,
       "maxStudentsForTeam": 3,
       "enabled": "true"
     }
   ],
-  "groups": [
+  "teams": [
     {
       "id": 1,
+      "courseId": 1,
       "name": "Argonauti"
     }
   ],
   "teachers": [
     {
       "id": 1,
-      "email": "pino@polito.it",
-      "surname": "Pino",
-      "name": "Ogni",
+      "email": "d100001@polito.it",
+      "firstName": "Fulvio",
+      "lastName": "Risso",
       "courseId": 1
     }
   ]

@@ -4,7 +4,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable, of} from "rxjs";
 import {catchError} from "rxjs/operators";
 import {Course} from "../models/course.model";
-import {StudentModel} from "../models/student.model";
+import {Student} from "../models/student.model";
 
 @Injectable({
   providedIn: 'root'

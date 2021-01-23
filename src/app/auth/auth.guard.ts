@@ -39,7 +39,6 @@ export class AuthGuard implements CanActivate {
       });
       return false;
     }
-    console.log("checkLogin 2 ", currentUser.id, " ", currentUser.roles[0])
     //now we need to control the time of the token
     if (moment().isBefore(User.getToken_idExpireTime(currentUser.token_id))) {
       console.log('Token is expired!');
@@ -54,13 +53,11 @@ export class AuthGuard implements CanActivate {
     if (
       route.data.roles &&
       !currentUser.roles.some((r) => route.data.roles.includes(r))) {
-        console.log("800A 2")
       // role not authorised so redirect to home page
-      console.log('User', currentUser.id , 'route', state.url);
+      console.log('User', currentUser.email , 'route', state.url);
       this.router.navigate(['/home']);
       return false;
     }
-    console.log("800A 3 ", currentUser.roles[0])
     // authorized
     return true;
   }

@@ -2,13 +2,13 @@
   <button *ngIf="currentUser" mat-icon-button (click)="sidebar.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <span routerLink="/home">
+  <span [routerLink]="['/home']">
     VirtualLabs
   </span>
 
   <!-- This fills the remaining space of the current row -->
   <span class="example-fill-remaining-space"></span>
-  <span *ngIf="currentUser"> Hello {{ currentUser.id }} </span>
+  <span *ngIf="currentUser"> Hello {{ currentUser.email }} </span>
   <button *ngIf="currentUser; else notLogged" mat-button (click)="logout()">Logout</button>
   <ng-template #notLogged>
     <span>
@@ -25,9 +25,13 @@
 <mat-sidenav-container>
   
   <mat-sidenav #sidebar mode="side" [opened]="navBarOpened" position="start" class="sidenav">
-    <div class=“container-small”>
+    <div *ngIf="currentUser" class=“container-small”>
       <mat-nav-list>
-        <mat-list-item *ngFor="let course of (courses | async); index as i " >
+        <mat-list-item *ngFor="let course of (courses | async); index as i " [routerLink]="[
+        currentUser.roles[0].toLowerCase().replace('role_', '') +
+          '/courses/' +
+          course.acronym + '-' + course.id
+      ]" >
           {{course.fullName}}
           <button [matMenuTriggerFor]="menu" mat-icon-button mat-button>
             <mat-icon>more_vert</mat-icon>
@@ -37,8 +41,6 @@
             <button mat-menu-item>Delete</button>
           </mat-menu>
         </mat-list-item>
-        <mat-list-item> <a routerLink="teacher/courses/applicazioni-internet/students">Applicazioni Internet </a></mat-list-item>
-        <mat-list-item> Programmazione di Sistema </mat-list-item>
       </mat-nav-list>
     </div>
   </mat-sidenav>

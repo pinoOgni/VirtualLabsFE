@@ -23,8 +23,6 @@ export class AppComponent implements OnDestroy, OnInit{
   // @ViewChild('sidenav') sidenav: MatSidenav;
 
   title = 'VirtualLabs';
-  userLogged: boolean;
-  email: string;
   routeQueryParams$: Subscription;
 
 
@@ -148,15 +146,12 @@ export class AppComponent implements OnDestroy, OnInit{
 
   private refillCourses() {
     if (this.currentUser){
-    //  console.log('polopolo: ' + this.currentUser.roles);
       if ( this.currentUser.roles.includes('ROLE_STUDENT')){
-     //   console.log('pacimbolombolo');
        this.courses =  this.studentsService
-            .getCoursesOfStudentById(this.currentUser.id)
+            .getCoursesOfStudentById(this.currentUser.email)  //this will be id??
             .pipe(
                 first()
             );
-     //  this.courses = this.studentsService.getCoursesOfStudentById(this.currentUser.id);
       }
       if ( this.currentUser.roles.includes('ROLE_TEACHER')){
    //     console.log('sto chiamando popopo');

@@ -102,7 +102,9 @@ export class AuthService{
           model.email,
           authResult.accessToken,
           //this.jwtParser(authResult.accessToken).roles
-          ["ROLE_ADMIN"]
+          ["ROLE_TEACHER"]
+          // ["ROLE_STUDENT"]
+          // ["ROLE_ADMIN"]
         );
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);

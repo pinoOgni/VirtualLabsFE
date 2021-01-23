@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {StudentModel} from "../../models/student.model";
+import {Student} from "../../models/student.model";
 import {StudentService} from "../../services/student.service";
 
 
@@ -9,9 +9,8 @@ import {StudentService} from "../../services/student.service";
   styleUrls: ['./students-cont.component.css']
 })
 export class StudentsContComponent implements OnInit {
-
-  students: StudentModel[];
-  enrolledStudents: StudentModel[];
+  students: Student[]; //all students
+  enrolledStudents: Student[]; //enrolled students in this course
 
   //TODO nel progetto
   courseId: number = 1;
@@ -29,25 +28,25 @@ export class StudentsContComponent implements OnInit {
 
   getStudents(): void {
     this.studentService.query().subscribe(students => {
-          this.students = students as StudentModel[];
+          this.students = students as Student[];
     });
   }
 
   getEnrolled(courseId: number): void {
     this.studentService.getEnrolled(courseId).subscribe(enrolledStudents => {
-      this.enrolledStudents = enrolledStudents as StudentModel[];
+      this.enrolledStudents = enrolledStudents as Student[];
     });
   }
 
   // TODO
-  addStudent($student: StudentModel) {
+  addStudent($student: Student) {
     $student.courseId = 1;
     // Dopo ciascuna modifica si ricarichi la lista degli studenti iscritti dal server per averla aggiornata
     // inside the subscribe not outside!!
     this.studentService.update($student).subscribe(() => this.getEnrolled(1));
   }
 
-  removeStudent($students: StudentModel[]): void {
+  removeStudent($students: Student[]): void {
     $students.forEach(s => s.courseId = 0);
     // Dopo ciascuna modifica si ricarichi la lista degli studenti iscritti dal server per averla aggiornata
 
