@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {StudentModel} from "../models/student.model";
+import {Course} from "../models/course.model";
 import {forkJoin, Observable, of} from "rxjs";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {catchError, map, retry, tap} from 'rxjs/operators';
@@ -91,4 +92,8 @@ export class StudentService {
     };
   }
 
+  public getCoursesOfStudentById(id: string): Observable<Course[]> {
+    // TODO implementare
+    return null;
+  }
 }

@@ -18,9 +18,9 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // add auth header with jwt if user is logged in and request is to api url
     const currentUser = this.authService.currentUserValue;
-    console.log("800A 1 ")
+   // console.log("800A 1 "); pino scriviti suca in culo
     if (currentUser) {
-      console.log("800A 1.1 ", currentUser.roles[0])
+    //  console.log("800A 1.1 ", currentUser.roles[0]); pino scriviti suca in culo
       request = request.clone({
         headers: request.headers.set('Authorization',
           'Bearer ' + currentUser.token_id)

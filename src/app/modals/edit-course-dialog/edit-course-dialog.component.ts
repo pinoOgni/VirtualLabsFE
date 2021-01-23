@@ -1,10 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {EditCourseModel, LoginModel} from '../../models/form-models';
+import {EditCourseModel} from '../../models/form-models';
 import {AuthService} from '../../auth/auth.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {MatSelect} from '@angular/material/select';
 
 @Component({
     selector: 'app-edit-course-dialog',
@@ -21,10 +20,11 @@ export class EditCourseDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: {
               courseFullName: string,
               courseAcronym: string,
-              maxStudents: number,
-              minStudents: number,
+              maxStudents: string,
+              minStudents: string,
               enabled: boolean
-    }, private auth: AuthService, private formBuilder: FormBuilder, private router: Router, private dialogRef: MatDialogRef<EditCourseDialogComponent>) {
+    },
+        private auth: AuthService, private formBuilder: FormBuilder, private router: Router, private dialogRef: MatDialogRef<EditCourseDialogComponent>) {
         // this.model = {email: '', password: ''};
         this.editCourseForm = this.formBuilder.group ({
             courseFullName: ['', Validators.required],
@@ -33,6 +33,12 @@ export class EditCourseDialogComponent implements OnInit {
             courseMaxStudents: ['', Validators.required],
             courseEnabled: ['', Validators.required]
         });
+        this.editCourseForm.controls.courseFullName.setValue(data.courseFullName);
+        this.editCourseForm.controls.courseAcronym.setValue(data.courseAcronym);
+        this.editCourseForm.controls.courseMinStudents.setValue(data.minStudents);
+        this.editCourseForm.controls.courseMaxStudents.setValue(data.maxStudents);
+        this.editCourseForm.controls.courseEnabled.setValue(data.enabled);
+        console.log('poppe');
     }
 
     ngOnInit() {
@@ -42,8 +48,8 @@ export class EditCourseDialogComponent implements OnInit {
             acronym: '' ,
             enabled: false,
             fullName: '',
-            maxStudentsForTeam: 0,
-            minStudentsForTeam: 0
+            maxStudentsForTeam: '',
+            minStudentsForTeam: ''
         };
     }
 
@@ -59,8 +65,6 @@ export class EditCourseDialogComponent implements OnInit {
             this.model.maxStudentsForTeam = this.editCourseForm.controls.courseMaxStudents.value;
             this.model.enabled = this.editCourseForm.controls.courseEnabled.value;
 
-            // console.log('mi è arrivato: ' + this.model.enabled);
-            // let route ='/home';
             this.dialogRef.close(
                 {
                     logged: true,
