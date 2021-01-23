@@ -1,23 +1,22 @@
-import { Component, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
-import { MatDialog } from '@angular/material/dialog';
-import { LoginDialogComponent } from './modals/login-dialog/login-dialog.component';
-import { AuthService } from './auth/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { RegisterDialogComponent } from './modals/register-dialog/register-dialog.component';
-import { User } from './models/user.model';
-import { Course } from './models/course.model';
-import { first } from 'rxjs/operators';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {LoginDialogComponent} from './modals/login-dialog/login-dialog.component';
+import {AuthService} from './auth/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable, Subscription} from 'rxjs';
+import {RegisterDialogComponent} from './modals/register-dialog/register-dialog.component';
+import {User} from './models/user.model';
+import {Course} from './models/course.model';
+import {first} from 'rxjs/operators';
 import {EditCourseDialogComponent} from './modals/edit-course-dialog/edit-course-dialog.component';
 import {TeacherService} from './services/teacher.service';
 import {StudentService} from './services/student.service';
 
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnDestroy, OnInit{
 
@@ -135,11 +134,9 @@ export class AppComponent implements OnDestroy, OnInit{
                 updatedCourse.minStudentsForTeam,
                 updatedCourse.maxStudentsForTeam,
                 Boolean(updatedCourse.enabled));
-            console.log('min max enabled: ' + editedCourse.minStudentsForTeam + editedCourse.maxStudentsForTeam + editedCourse.enabled);
             this.teacherService.update(editedCourse).subscribe(
                 r => {
-                  console.log('sono result:' + r.fullName);
-                  this.refillCourses();
+                    this.refillCourses();
                 }
             );
             this.router.navigate(['/home']);

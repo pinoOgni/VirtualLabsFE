@@ -1,10 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {EditCourseModel, LoginModel} from '../../models/form-models';
+import {EditCourseModel} from '../../models/form-models';
 import {AuthService} from '../../auth/auth.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {MatSelect} from '@angular/material/select';
 
 @Component({
     selector: 'app-edit-course-dialog',
@@ -65,8 +64,6 @@ export class EditCourseDialogComponent implements OnInit {
             this.model.maxStudentsForTeam = this.editCourseForm.controls.courseMaxStudents.value;
             this.model.enabled = this.editCourseForm.controls.courseEnabled.value;
 
-            console.log('mi è arrivato: ' + typeof(this.editCourseForm.controls.courseMinStudents.value));
-            // let route ='/home';
             this.dialogRef.close(
                 {
                     logged: true,
