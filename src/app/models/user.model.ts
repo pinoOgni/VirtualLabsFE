@@ -4,16 +4,16 @@ import {Role} from './role.model'
  * This class represents a model for the User
  */
 export class User {
-    id: string;
+    email: string;
     token_id: string;
     roles: string[];
   
     constructor(
-      id: string = null,
+      email: string,
       token_id: string = null,
-      roles: string[] = null,
+      roles: string[] = null
     ) {
-      this.id = id;
+      this.email = email;
       this.token_id = token_id;
       this.roles = roles;
     }

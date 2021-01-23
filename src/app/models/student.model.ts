@@ -1,30 +1,34 @@
-export class StudentModel {
-  serial: string;
-  firstName: string;
-  name: string;
-  groupId: number;
-  courseId: number;
-  id: number;
-  groupName?: string;
+/**
+ * @param id: this is the id of the student
+ * @param email: this is the email of the student
+ * @param firstName: this is the firstname of the student
+ * @param lastName: this is the lastName of the student
+ * @param courseId the id of the course where the student is enrolled to (0 if none)
+ * @param teamId the id of the team where the student belongs to (0 if none)
+ */
 
-  constructor(element: {id: number, serial: string, firstName: string, name: string, groupId?: number, group?: { id: number, name: string}, courseId: number}) {
-    this.serial = element.serial;
-    this.firstName = element.firstName;
-    this.name = element.name;
+import { ThrowStmt } from "@angular/compiler";
 
-    this.courseId = element.courseId;
-    this.id = element.id;
+export class Student {
+    id: number;  // 1 
+    email: string; // s200001@studenti.polito.it
+    firstName: string; //Giacomo
+    lastName: string; //Leopardi
+    //remove later
+    courseId: number; //1
+    teamId: number; //1
 
-    this.groupId = element.groupId;
-    if(element.group == null ) {
-      this.groupName = '<>';
-    } else {
-      this.groupName = element.group.name;
+    constructor(id: number, email: string, firstName: string, lastName: string,  courseId?: number, teamId?: number) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.courseId = courseId;
+        this.teamId = teamId;
     }
-  }
 
-  static toString(s: StudentModel): string {
-    return s.firstName + ' ' + s.name + ' ' + s.serial;
-  }
+
+    static toString(student: Student): string {
+        return student.firstName + ' ' + student.lastName + 'id[' + student.id + ']';
+      }
 }
-

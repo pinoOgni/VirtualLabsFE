@@ -9,7 +9,7 @@ export interface RegisterModel {
   lastName: string;
   password: string;
   password2: string;
-  serialNumber: string;
+  idNumber: string;
 }
 
 export interface EditCourseModel{

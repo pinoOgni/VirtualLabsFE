@@ -1,6 +1,6 @@
 import {Component, ViewChild, AfterViewInit, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
-import {StudentModel} from '../../models/student.model';
+import {Student} from '../../models/student.model';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 
 import {SelectionModel} from '@angular/cdk/collections';
@@ -22,33 +22,33 @@ export class StudentsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild('autoComplete') autoComplete: MatAutocomplete;
 
-  private _enrolledStudents: StudentModel[];
-  private _students: StudentModel[];
+  private _enrolledStudents: Student[];
+  private _students: Student[];
 
   // columnsToDisplay = ['select'].concat(Object.keys(DB_STUDENT[0]));
-  columnsToDisplay: string[] = ['select', 'serial', 'name', 'firstName', 'groupName'];
+  columnsToDisplay: string[] = ['select', 'id', 'firstName', 'lastName', 'teamId']; //'teamId'
 
-  dataSource: MatTableDataSource<StudentModel>;
-  selection: SelectionModel<StudentModel>;
-  options: StudentModel[];
+  dataSource: MatTableDataSource<Student>;
+  selection: SelectionModel<Student>;
+  options: Student[];
   addStudentSelection = null;
 
-  @Input() set students(students: StudentModel[]) {
-    this._students = students.map( (element) => new StudentModel(element) );
+  @Input() set students(students: Student[]) {
+    this._students = students;
     this.options = this._students;
   }
 
-  @Input() set enrolledStudents(enrolledStudents: StudentModel[]) {
-    this._enrolledStudents = enrolledStudents.map( (element) => new StudentModel(element) );
-    this.dataSource = new MatTableDataSource<StudentModel>(this._enrolledStudents);
+  @Input() set enrolledStudents(enrolledStudents: Student[]) {
+    this._enrolledStudents = enrolledStudents;
+    this.dataSource = new MatTableDataSource<Student>(this._enrolledStudents);
     this.dataSource.sort = this.sort;
-    this.selection = new SelectionModel<StudentModel>(true, []);
+    this.selection = new SelectionModel<Student>(true, []);
     this.dataSource.paginator = this.paginator;
     this.addStudentSelection = null;
   }
 
-  @Output() addEmitter = new EventEmitter<StudentModel>();
-  @Output() removeEmitter = new EventEmitter<StudentModel[]>();
+  @Output() addEmitter = new EventEmitter<Student>();
+  @Output() removeEmitter = new EventEmitter<Student[]>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -58,7 +58,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     //TODO remove?
-    this.dataSource = new MatTableDataSource<StudentModel>(this._enrolledStudents);
+    this.dataSource = new MatTableDataSource<Student>(this._enrolledStudents);
     this.dataSource.sort = this.sort;
     this.options = this._students;
 
@@ -88,12 +88,12 @@ export class StudentsComponent implements OnInit, AfterViewInit {
   }
 
   // The label for the checkbox on the passed row
-  checkboxLabel(row?: StudentModel): string {
+  checkboxLabel(row?: Student): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
     // is correct to put row.id or I need a row.position (not displayed)
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.serial + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 
   addStudent() {
@@ -115,11 +115,11 @@ export class StudentsComponent implements OnInit, AfterViewInit {
 
       // forse c'è un altro modo. Per ora sposto la delete al container e qui aggiorno il data source
       this.dataSource.data = [...this._enrolledStudents];
-      this.selection = new SelectionModel<StudentModel>(true, []);
+      this.selection = new SelectionModel<Student>(true, []);
     }
   }
 
-  displayFn(st: StudentModel): string {
+  displayFn(st: Student): string {
     return st.toString();
   }
 

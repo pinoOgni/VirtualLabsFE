@@ -1,24 +1,16 @@
 <!-- 3 tabs for students, vms and assignments -->
 <nav mat-tab-nav-bar>
-    <a mat-tab-link routerLinkActive #rla="routerLinkActive"
-       [active]="rla.isActive" [routerLink]="['/teacher/courses/applicazioni-internet/students']" label="Students">
-      <div class="container">
-        <h3>Students</h3>
-      </div>
-    </a>
-    <a mat-tab-link routerLinkActive #rla="routerLinkActive"
-       [active]="rla.isActive" [routerLink]="['/teacher/courses/applicazioni-internet/vms']" label="Vms">
-      <div class="container">
-        <h3>Vms</h3>
-      </div>
-    </a>
-    <a mat-tab-link routerLinkActive #rla="routerLinkActive"
-       [active]="rla.isActive" [routerLink]="['/teacher/courses/applicazioni-internet/assignments']" label="Assignments">
-      <div class="container">
-        <h3>Assignments</h3>
-      </div>
-    </a>
-  </nav>
-  <div class="tab-content">
-    <router-outlet></router-outlet>
-  </div>
+  <a
+    mat-tab-link
+    *ngFor="let l of teacherLinks"
+    [routerLink]="l.path"
+    routerLinkActive
+    [active]="rla.isActive"
+    #rla="routerLinkActive"
+  >
+    <h3>{{ l.label }}</h3>
+  </a>
+</nav>
+<div class="tab-content">
+  <router-outlet></router-outlet>
+</div>

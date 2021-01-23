@@ -15,7 +15,7 @@ import {Role} from './models/role.model';
 const routes  = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent},
-  { path: 'teacher/courses/applicazioni-internet', //TODO :coursename 
+  { path: 'teacher/courses/:courseAcrAndId', //apa-1
     component: TeacherComponent, 
     canActivate: [AuthGuard],
     data: { roles: [Role.Teacher, Role.Admin] },
@@ -26,13 +26,13 @@ const routes  = [
       { path: 'assignments', component: AssignmentsContComponent}
       ]
     },
-    { path: 'student/courses/applicazioni-internet', //TODO :coursename 
+    { path: 'student/courses/:courseAcrAndId',
     component: StudentComponent, 
     canActivate: [AuthGuard],
     data: { roles: [Role.Student, Role.Admin] },
     children: [
-      { path: '', redirectTo: 'team', pathMatch: 'full'},
-      { path: 'team', component: StudentTeamContComponent},
+      { path: '', redirectTo: 'teams', pathMatch: 'full'},
+      { path: 'teams', component: StudentTeamContComponent},
       { path: 'vms', component: StudentVmsContComponent},
       { path: 'assignments', component: StudentAssignmentsContComponent}
       ]

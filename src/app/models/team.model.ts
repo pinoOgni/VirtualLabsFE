@@ -1,13 +1,13 @@
-import { StudentModel } from "./student.model";
+import { Student } from "./student.model";
 /**
  * This class represents a model for the Team
  */
 export class Team {
     name: string;
     id: number;
-    members: StudentModel[];
+    members: Student[];
     courseId: number;
-    maxVCpu: number;
+    maxVCpu: number; 
     maxDiskSpace: number;
     maxRam: number;
     maxRunningInstances: number;
@@ -17,7 +17,7 @@ export class Team {
     constructor(
         name: string,
         id: number,
-        members: StudentModel[],
+        members: Student[],
         courseId: number,
         maxVCpu: number,
         maxDiskSpace: number,

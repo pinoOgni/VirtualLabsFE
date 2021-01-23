@@ -7,8 +7,10 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./teacher.component.css']
 })
 export class TeacherComponent implements OnInit {
-  navLinks = [
-    // All available navigation links (tabs)
+  /**
+   * These paths are used to create the appropriate link and allow the Teacher to navigate between the tabs
+   */
+  teacherLinks = [
     { label: 'Students', path: 'students' },
     { label: 'Vms', path: 'vms' },
     { label: 'Assignments', path: 'assignments' },

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {StudentModel} from "../models/student.model";
+import {Student} from "../models/student.model";
 import {Course} from "../models/course.model";
 import {forkJoin, Observable, of} from "rxjs";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -19,63 +19,65 @@ export class StudentService {
 
   constructor(private http: HttpClient) { }
 
-  query(): Observable<StudentModel[]> {
-   return this.http.get<StudentModel[]>(this.base_URL + 'students')
+  query(): Observable<Student[]> {
+   return this.http.get<Student[]>(this.base_URL + 'students')
       .pipe(
-        catchError(this.handleError<StudentModel[]>('query', []))
+        catchError(this.handleError<Student[]>('query', []))
       );
   }
 
-  getEnrolled(courseId: number): Observable<StudentModel[]> {
+  getEnrolled(courseId: number): Observable<Student[]> {
     const url = `${this.base_URL}courses/${courseId}/students?_expand=group`;
-    return this.http.get<StudentModel[]>(url)
+    return this.http.get<Student[]>(url)
       .pipe(
-        catchError(this.handleError<StudentModel[]>('getEnrolled', []))
+        catchError(this.handleError<Student[]>('getEnrolled', []))
       );
   }
 
 
   // per aggiornarne uno esistente
-  update(student: StudentModel): Observable<StudentModel> {
-    //in the db json we cannot put the groupName because it is a relation
-    delete student.groupName;
-    return this.http.put<StudentModel>(this.base_URL+'students/' + student.id, student, this.httpOptions).pipe(
+  update(student: Student): Observable<Student> {
+    //in the db json we cannot put the teamName because it is a relation
+    // TODO
+    // delete student.teamName; 
+    return this.http.put<Student>(this.base_URL+'students/' + student.id, student, this.httpOptions).pipe(
       catchError(this.handleError<any>('updateStudent'))
     );
   }
 
   // per recuperarne uno dato l’id univoco
-  find(id: number): Observable<StudentModel> {
+  find(id: number): Observable<Student> {
     const url = `${this.base_URL}/students/${id}`;
-    return this.http.get<StudentModel>(url)
+    return this.http.get<Student>(url)
       .pipe(
-        catchError(this.handleError<StudentModel>('find')
+        catchError(this.handleError<Student>('find')
         )
       );
   }
 
   // per eliminare un elemento dato l’id univoco
-  delete(id: number): Observable<StudentModel> {
+  delete(id: number): Observable<Student> {
     const url = `${this.base_URL}/students/${id}`;
-    return this.http.delete<StudentModel>(url)
+    return this.http.delete<Student>(url)
       .pipe(
-        catchError(this.handleError<StudentModel>('delete')
+        catchError(this.handleError<Student>('delete')
         )
       );
   }
 
   // Iscrivere e dis-iscrivere uno o più studenti ad un corso (e.g. updateEnrolled)
-  updateEnrolled(students: StudentModel[]): Observable<StudentModel[]> {
-    const temp$ = new Array<Observable<StudentModel>>();
+  updateEnrolled(students: Student[]): Observable<Student[]> {
+    const temp$ = new Array<Observable<Student>>();
     students.forEach(s => temp$.push(this.update(s)));
   return forkJoin(temp$);
   }
 
   // per creare un nuovo elemento
-  create(student: StudentModel): Observable<StudentModel> {
-    //in the db json we cannot put the groupName because it is a relation
-    delete student.groupName;
-    return this.http.post<StudentModel>(this.base_URL+'students/', student, this.httpOptions).pipe(
+  create(student: Student): Observable<Student> {
+    //in the db json we cannot put the teamName because it is a relation
+    // TODO
+    // delete student.groupName;
+    return this.http.post<Student>(this.base_URL+'students/', student, this.httpOptions).pipe(
       catchError(this.handleError<any>('createStudent'))
     );
   }
