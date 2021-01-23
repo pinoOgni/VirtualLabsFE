@@ -14,12 +14,12 @@ export interface RegisterModel {
 
 export interface EditCourseModel{
   id: number;
-  acronym: string ;
+  acronym: string;
   fullName: string;
   minStudentsForTeam: string;
   maxStudentsForTeam: string;
- // heldBy: number[]; // da aggiungere poi forse la di aggiungere altri prof
-  enabled: boolean;
+  // heldBy: number[]; // da aggiungere poi forse la di aggiungere altri prof
+  enabled: string;
 
 
 }

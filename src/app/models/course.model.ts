@@ -8,9 +8,9 @@ export class Course {
     minStudentsForTeam: string;
     maxStudentsForTeam: string;
    // heldBy: number[];
-    enabled: boolean;
+    enabled: string;
 
-    constructor(id: number, acronym: string, name: string, minStudentsForTeam: string, maxStudentsForTeam: string,  enabled: boolean
+    constructor(id: number, acronym: string, name: string, minStudentsForTeam: string, maxStudentsForTeam: string, enabled: string
     ) {
         this.id = id;
         this.acronym = acronym;

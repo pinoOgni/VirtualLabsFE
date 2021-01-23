@@ -22,7 +22,7 @@ export class EditCourseDialogComponent implements OnInit {
               courseAcronym: string,
               maxStudents: string,
               minStudents: string,
-              enabled: boolean
+              enabled: string
     },
         private auth: AuthService, private formBuilder: FormBuilder, private router: Router, private dialogRef: MatDialogRef<EditCourseDialogComponent>) {
         // this.model = {email: '', password: ''};
@@ -37,16 +37,17 @@ export class EditCourseDialogComponent implements OnInit {
         this.editCourseForm.controls.courseAcronym.setValue(data.courseAcronym);
         this.editCourseForm.controls.courseMinStudents.setValue(data.minStudents);
         this.editCourseForm.controls.courseMaxStudents.setValue(data.maxStudents);
-        this.editCourseForm.controls.courseEnabled.setValue(data.enabled);
-        console.log('poppe');
+        // this.editCourseForm.controls.courseEnabled.setValue(data.enabled);
+        this.editCourseForm.controls.courseEnabled.setValue(String(data.enabled));
+
     }
 
     ngOnInit() {
 
         this.model = {
-            id:  -1,
-            acronym: '' ,
-            enabled: false,
+            id: -1,
+            acronym: '',
+            enabled: '',
             fullName: '',
             maxStudentsForTeam: '',
             minStudentsForTeam: ''

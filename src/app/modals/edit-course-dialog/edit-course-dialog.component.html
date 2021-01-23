@@ -1,6 +1,7 @@
 <h2 mat-dialog-title>Edit Course</h2>
 <mat-dialog-content class="md-dialog-container">
     <form [formGroup]="editCourseForm" (ngSubmit)="submit()">
+        <h3 mat-dialog-title>Course details:</h3>
         <mat-label for="courseFullName">Fullname:</mat-label>
         <mat-form-field floatLabel="never" class="md-form-dialog-container">
 
@@ -39,7 +40,7 @@
 
         <mat-label for="courseEnabled">Enabled:</mat-label>
         <mat-form-field floatLabel="never" class="md-form-dialog-container">
-            <mat-select formControlName="courseEnabled"   id="courseEnabled"  >
+            <mat-select formControlName="courseEnabled" id="courseEnabled">
                 <mat-option value="true"> Enabled</mat-option>
                 <mat-option value="false"> Disabled</mat-option>
             </mat-select>
@@ -47,6 +48,8 @@
         </mat-form-field>
 
         <br>
+
+        <h3 mat-dialog-title> Virtual Machine default resources </h3>
 
 
         <mat-dialog-actions class="example-button-row">

@@ -118,7 +118,7 @@
       "fullName": "Applicazioni Internet",
       "minStudentsForTeam": "2",
       "maxStudentsForTeam": "3",
-      "enabled": true
+      "enabled": "true"
     },
     {
       "id": 2,

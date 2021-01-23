@@ -131,7 +131,7 @@ export class AppComponent implements OnDestroy, OnInit{
                 updatedCourse.fullName,
                 updatedCourse.minStudentsForTeam,
                 updatedCourse.maxStudentsForTeam,
-                Boolean(updatedCourse.enabled));
+                updatedCourse.enabled);
             this.teacherService.update(editedCourse).subscribe(
                 r => {
                     this.refillCourses();
