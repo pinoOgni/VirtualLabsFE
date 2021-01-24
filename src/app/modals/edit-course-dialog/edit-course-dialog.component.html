@@ -49,7 +49,46 @@
 
         <br>
 
-        <h3 mat-dialog-title> Virtual Machine default resources </h3>
+        <h3 mat-dialog-title> Virtual Machines Default resources: </h3>
+        <mat-label for="vmModelName">VM model name:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="vmModelName" id="vmModelName" matInput name="vmModelName" required
+                   type="text">
+
+        </mat-form-field>
+
+        <br>
+        <mat-label for="vmModelVcpus">VM Model vCPUs number:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="vmModelVcpus" id="vmModelVcpus" matInput name="vmModelVcpus"
+                   required
+                   type="text">
+
+        </mat-form-field>
+
+        <br>
+        <mat-label for="vmModelDiskSpace">VM Model Disk Space:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="vmModelDiskSpace" id="vmModelDiskSpace" matInput
+                   name="vmModelDiskSpace" required
+                   type="text">
+
+        </mat-form-field>
+
+        <br>
+        <mat-label for="vmModelRamSize">VM Model RAM size:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="vmModelRamSize" id="vmModelRamSize" matInput name="vmModelRamSize"
+                   required
+                   type="text">
+
+        </mat-form-field>
+
+        <br>
 
 
         <mat-dialog-actions class="example-button-row">

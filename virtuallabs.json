@@ -144,5 +144,15 @@
       "lastName": "Risso",
       "courseId": 1
     }
+  ],
+  "vmModels": [
+    {
+      "id": 5,
+      "name": "Vm model 5",
+      "courseId": 1,
+      "vcpus": 5,
+      "diskSpace": 10,
+      "ramSize": 4096
+    }
   ]
 }
