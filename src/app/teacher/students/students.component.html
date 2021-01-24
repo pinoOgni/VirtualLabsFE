@@ -5,7 +5,7 @@
   <input type="search" matInput placeholder="Search a student" title="Firstname, name or id" [matAutocomplete]="autoComplete"  (keyup)="queryFilter(searchInput.value)" #searchInput/>
   <mat-autocomplete #autoComplete [displayWith]="displayFn"  (optionSelected)="updateAddSelection($event)">
     <mat-option *ngFor="let option of options" [value]="option">
-      {{option}}
+      {{option.firstName + ' ' + option.lastName}}
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>
