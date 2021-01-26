@@ -127,6 +127,14 @@
       "minStudentsForTeam": 2,
       "maxStudentsForTeam": 3,
       "enabled": "true"
+    },
+    {
+      "id": -1,
+      "acronym": "PF",
+      "fullName": "Pippo e le fragoline",
+      "minStudentsForTeam": "2",
+      "maxStudentsForTeam": "3",
+      "enabled": "true"
     }
   ],
   "teams": [

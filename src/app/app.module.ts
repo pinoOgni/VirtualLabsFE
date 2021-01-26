@@ -96,7 +96,8 @@ import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-di
         FormsModule,
         ReactiveFormsModule,
         MatMenuModule,
-        MatSelectModule
+        MatSelectModule,
+
     ],
     exports:[
         MatFormFieldModule,
