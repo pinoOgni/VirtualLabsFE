@@ -13,6 +13,7 @@ import {TeacherService} from './services/teacher.service';
 import {StudentService} from './services/student.service';
 import {VmModelsService} from './services/vm-models.service';
 import {VmModel} from './models/vm-model.model';
+import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-dialog.component';
 
 
 @Component({
@@ -163,6 +164,52 @@ export class AppComponent implements OnDestroy, OnInit {
                         }
                     }
                 );
+            }
+        );
+
+
+    }
+
+    public openDialogAddCourse() {
+        const dialogRef = this.dialog.open(AddCourseDialogComponent);
+
+        dialogRef.afterClosed().subscribe(
+            result => {
+                if (result === undefined) {
+                    return;
+                }
+                if (result.logged === true) {
+                    const updatedCourse = result.newCourseModel;
+                    // TODO gestire generazione id di course e vmModel
+                    const editedCourse = new Course(
+                        -1,
+                        updatedCourse.acronym,
+                        updatedCourse.fullName,
+                        updatedCourse.minStudentsForTeam,
+                        updatedCourse.maxStudentsForTeam,
+                        updatedCourse.enabled);
+                    const updatedVmModel = result.newVmModel;
+                    const editedVmModel = new VmModel(
+                        -1,
+                        updatedVmModel.name,
+                        -1,
+                        updatedVmModel.vcpus,
+                        updatedVmModel.diskSpace,
+                        updatedVmModel.ramSize
+                    );
+                    this.teacherService.addCourse(editedCourse).subscribe(
+                        r => {
+                            console.log('Nuovo corso: ' + r);
+                            this.refillCourses();
+                        }
+                    );
+                    this.vmModelsService.addVmModel(editedVmModel).subscribe(
+                        r => {
+                            console.log(r); // TODO aggiornare vmModel locale
+                        }
+                    );
+
+                }
             }
         );
 

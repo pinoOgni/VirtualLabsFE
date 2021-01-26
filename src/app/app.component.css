@@ -37,4 +37,6 @@ nav a.active {
   flex: 1 1 auto;
 }
 
-
+.mat-divider {
+    border-top-width: 16px;
+}

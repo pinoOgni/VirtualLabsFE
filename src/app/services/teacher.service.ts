@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable, of} from "rxjs";
-import {catchError} from "rxjs/operators";
-import {Course} from "../models/course.model";
-import {Student} from "../models/student.model";
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {Course} from '../models/course.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,7 @@ export class TeacherService {
   base_URL = environment.base_URL;
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
 
@@ -42,6 +41,12 @@ export class TeacherService {
         );
   }
 
+  addCourse(newCourse: Course): Observable<Course> {
+    return this.http.post<Course>(this.base_URL + 'courses/', newCourse, this.httpOptions).pipe(
+        catchError(this.handleError<any>('createCourse'))
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
@@ -53,4 +58,6 @@ export class TeacherService {
       return of(result as T);
     };
   }
+
+
 }

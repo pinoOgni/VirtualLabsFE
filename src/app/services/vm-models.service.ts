@@ -42,6 +42,10 @@ export class VmModelsService {
     return of(updatedVmModel);
   }
 
+  addVmModel(newVmModel: VmModel): Observable<VmModel> {
+    return of(newVmModel);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
@@ -53,4 +57,6 @@ export class VmModelsService {
       return of(result as T);
     };
   }
+
+
 }
