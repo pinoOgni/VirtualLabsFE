@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
+import {MatDividerModule} from '@angular/material/divider'; 
 import { StudentsComponent } from './teacher/students/students.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatListModule} from '@angular/material/list';
@@ -43,10 +45,16 @@ import { StudentVmsComponent } from './student/vms/student-vms.component';
 import { StudentVmsContComponent } from './student/vms/student-vms.container';
 import { StudentAssignmentsComponent } from './student/assignments/student-assignments.component';
 import { StudentAssignmentsContComponent } from './student/assignments/student-assignments.container';
+import { StudentComponent } from './student/student.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 import { EditCourseDialogComponent } from './modals/edit-course-dialog/edit-course-dialog.component';
 import {MatMenuModule} from "@angular/material/menu";
 import {MatSelectModule} from "@angular/material/select";
+
+
+import { MatNativeDateModule } from '@angular/material/core';
+
 
 @NgModule({
   declarations: [
@@ -71,8 +79,10 @@ import {MatSelectModule} from "@angular/material/select";
     StudentVmsContComponent,
     StudentTeamContComponent,
     EditCourseDialogComponent,
+    StudentComponent,
   ],
     imports: [
+        MatNativeDateModule,
         BrowserModule,
         BrowserAnimationsModule,
         MatToolbarModule,
@@ -95,11 +105,13 @@ import {MatSelectModule} from "@angular/material/select";
         FormsModule,
         ReactiveFormsModule,
         MatMenuModule,
-        MatSelectModule
+        MatSelectModule,
+        MatDatepickerModule
     ],
     exports:[
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        MatDatepickerModule
     ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

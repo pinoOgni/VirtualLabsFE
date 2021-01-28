@@ -8,7 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class TeacherComponent implements OnInit {
   /**
-   * These paths are used to create the appropriate link and allow the Teacher to navigate between the tabs
+   * links used in teacher-component.html in ngFor to go to the correct tab
    */
   teacherLinks = [
     { label: 'Students', path: 'students' },

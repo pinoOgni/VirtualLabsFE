@@ -1,1 +1,26 @@
-<p>student-team works!</p>
+<h3>Student's team</h3>
+<br>
+<div class="student-team-container">
+    <h4>Team name {{teamName}}</h4>
+    <!-- Members -->
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+        <!-- first name column-->
+        <ng-container matColumnDef="firstName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>First name</th>
+            <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+        </ng-container>
+        <!-- last name column-->
+        <ng-container matColumnDef="lastName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Last name</th>
+            <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+        </ng-container>
+        <!-- id column-->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Member id</th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+    </table>
+</div>

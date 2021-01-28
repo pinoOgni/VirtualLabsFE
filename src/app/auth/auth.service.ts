@@ -67,7 +67,7 @@ export class AuthService{
    */
   constructor(private httpClient: HttpClient) {
     let user = JSON.parse(localStorage.getItem('currentUser'));
-    if (user && moment().isBefore(User.getToken_idExpireTime(user.token_id))) {
+    if (user && moment().isBefore(User.getAccessTokenExpireTime(user.token))) {
       localStorage.removeItem('currentUser');
       user = null;
     }
@@ -95,17 +95,26 @@ export class AuthService{
    * @param model 
    */
   login(model: LoginModel) {
-    return this.httpClient.post<any>(environment.login_url,model)
+    console.log("login before post")
+    return this.httpClient.post<User>(environment.login_url,model,environment.http_options)
     .pipe(
       map((authResult) => {
+        console.log('login in pipe ', authResult)
+        //jwt response, I'm logged
+        //jwt è un json con chiave "token" asfajscbiasoc.acnasicansocas.coacoasbnsoc
+        // "email": caicao
+        // "roles": suca hamza
+        // 
+        console.log("800A ", JSON.parse(atob(authResult.token.split('.')[1])).sub)
        const user = new User(
-          model.email,
-          authResult.accessToken,
-          //this.jwtParser(authResult.accessToken).roles
-          ["ROLE_TEACHER"]
-          // ["ROLE_STUDENT"]
-          // ["ROLE_ADMIN"]
+          JSON.parse(atob(authResult.token.split('.')[1])).sub, //admin
+          authResult.token, //token sano
+          JSON.parse(atob(authResult.token.split('.')[1])).roles //ROLE_ADMIN
         );
+        console.log("800A ", authResult.token)
+        console.log("800A ", JSON.parse(atob(authResult.token.split('.')[1])).sub)
+        console.log("800A ", JSON.parse(atob(authResult.token.split('.')[1])).roles)
+        console.log("800A ", JSON.parse(atob(authResult.token.split('.')[1])).exp)
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
         return authResult;
@@ -123,10 +132,18 @@ export class AuthService{
   }
 
   register(model: RegisterModel) {
-    return this.httpClient.post(environment.register_url, model).pipe();
+    return this.httpClient.post(environment.register_url, model).pipe(
+      map((result) => {
+        console.log("result register ", result)
+        return result;
+      })
+    );
   }
   /**
    * This function is used to return the currentUser ad an observable
+   * using the currentUserSubject which is a BehaviorSubject 
+   * (super sayan of Subject that store the current value and emits
+   * it to any new subscribers as soon as is possible)
    */
   public getCurrentUserserObservable(): Observable<User> {
     return this.currentUserSubject.asObservable();
@@ -150,8 +167,9 @@ export class AuthService{
   }
 
   getExpirationToken() {
-    const expiration = JSON.parse(localStorage.getItem('currentUser')).token_id;
+    const expiration = JSON.parse(localStorage.getItem('currentUser')).accessToken;
     const expiresAt = JSON.parse(expiration);
+    console.log('getExpirationToken ',expiration )
     return moment(expiresAt);
   }
 }
