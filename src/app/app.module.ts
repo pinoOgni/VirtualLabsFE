@@ -47,6 +47,7 @@ import {EditCourseDialogComponent} from './modals/edit-course-dialog/edit-course
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSelectModule} from '@angular/material/select';
 import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-dialog.component';
+import {ConfirmationDialogComponent} from './modals/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
     declarations: [
@@ -72,6 +73,7 @@ import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-di
         StudentTeamContComponent,
         EditCourseDialogComponent,
         AddCourseDialogComponent,
+        ConfirmationDialogComponent,
     ],
     imports: [
         BrowserModule,

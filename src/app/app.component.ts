@@ -14,6 +14,7 @@ import {StudentService} from './services/student.service';
 import {VmModelsService} from './services/vm-models.service';
 import {VmModel} from './models/vm-model.model';
 import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-dialog.component';
+import {ConfirmationDialogComponent} from './modals/confirmation-dialog/confirmation-dialog.component';
 
 
 @Component({
@@ -241,6 +242,26 @@ export class AppComponent implements OnDestroy, OnInit {
             }
 
         }
+    }
+
+    openDialogDeleteCourse(course: Course): void {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+        dialogRef.afterClosed().subscribe(
+            result => {
+                if (result === undefined) {
+                    return;
+                }
+                if (result.confirmed === true) {
+                    this.teacherService.deleteCourse(course).subscribe(
+                        result => {
+                            this.refillCourses();
+                        }
+                    );
+                }
+
+            }
+        );
+
     }
 }
 
