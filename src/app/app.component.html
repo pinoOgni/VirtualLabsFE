@@ -50,7 +50,7 @@
           </button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="openDialogEditCourse(course)">Edit</button>
-            <button mat-menu-item>Delete</button>
+            <button (click)="openDialogDeleteCourse(course)" mat-menu-item>Delete</button>
           </mat-menu>
         </mat-list-item>
       </mat-nav-list>

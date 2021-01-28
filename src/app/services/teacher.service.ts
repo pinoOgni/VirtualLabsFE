@@ -60,4 +60,9 @@ export class TeacherService {
   }
 
 
+  deleteCourse(course: Course): Observable<Course> {
+    return this.http.delete<Course>(this.base_URL + 'courses/' + course.id).pipe(
+        catchError(this.handleError<any>('createCourse')));
+
+  }
 }
