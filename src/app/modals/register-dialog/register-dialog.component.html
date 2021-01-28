@@ -2,9 +2,9 @@
 <mat-dialog-content class="md-dialog-container">
     <form [formGroup]="registerForm" (ngSubmit)="submit()">
         <mat-form-field class="md-form-dialog-container">
-            <input autocomplete="off" formControlName="idNumber" type="text" id="idNumber" name="idNumber" matInput
-                placeholder="Serial number" required>
-            <mat-error *ngIf="registerForm.controls['idNumber'].hasError('required')">Serial number is required</mat-error>
+            <input autocomplete="off" formControlName="id" type="text" id="id" name="id" matInput
+                placeholder="Serial" required>
+            <mat-error *ngIf="registerForm.controls['id'].hasError('required')">Serial is required</mat-error>
         </mat-form-field>
         <br>
         <mat-form-field class="md-form-dialog-container">

@@ -1,0 +1,28 @@
+.submitter {
+    float: right;
+}
+  
+.form-team-name {
+    width: 74%;
+}
+  
+.create-team-1 {
+    padding-left: 2%;
+    width: 48%;
+    float: left;
+}
+
+.create-team-2 {
+    padding-left: 2%;
+    width: 48%;
+    float: right;
+}
+
+.proposals-team {
+    width: 100%;
+}
+
+.table {
+    width: 100%;
+}
+

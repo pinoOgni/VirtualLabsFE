@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import {Student} from "../models/student.model";
-import {Course} from "../models/course.model";
-import {forkJoin, Observable, of} from "rxjs";
+import { Student } from "../models/student.model";
+import { Course } from "../models/course.model";
+import { forkJoin, Observable, of } from "rxjs";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {catchError, map, retry, tap} from 'rxjs/operators';
-import {environment} from "../../environments/environment";
+import { catchError, map, retry, tap } from 'rxjs/operators';
+import { environment } from "../../environments/environment";
+import { Proposal } from '../models/proposal.model';
+import { AuthService } from '../auth/auth.service';
+import { CourseService } from './course.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,74 +16,25 @@ export class StudentService {
 
   base_URL = environment.base_URL;
 
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
+  constructor(private httpClient: HttpClient, private authService: AuthService, private courseService: CourseService) { }
+  teamName: string;
+  creator: string;
+  membersWithState: string[];
+  deadline: string;
+  isValid: boolean;
+  token: string;
 
-  constructor(private http: HttpClient) { }
+  //test 
+  exampleProposals: Proposal[] = [
+    { teamName: "Vendetta", creator: "Pino", membersWithState: ["Leo Tolo 1", "Hamza Rh 4"], deadline: "14-12-2022", isValid: true, token: "bbbbbbb" },
+    { teamName: "Argonauti", creator: "ALALA", membersWithState: ["Ale Pag 1", "Jack Am 4"], deadline: "14-12-2021", isValid: true, token: "aaaaaa" }
+  ]
 
-  query(): Observable<Student[]> {
-   return this.http.get<Student[]>(this.base_URL + 'students')
-      .pipe(
-        catchError(this.handleError<Student[]>('query', []))
-      );
-  }
-
-  getEnrolled(courseId: number): Observable<Student[]> {
-    const url = `${this.base_URL}courses/${courseId}/students?_expand=group`;
-    return this.http.get<Student[]>(url)
-      .pipe(
-        catchError(this.handleError<Student[]>('getEnrolled', []))
-      );
-  }
-
-
-  // per aggiornarne uno esistente
-  update(student: Student): Observable<Student> {
-    //in the db json we cannot put the teamName because it is a relation
-    // TODO
-    // delete student.teamName; 
-    return this.http.put<Student>(this.base_URL+'students/' + student.id, student, this.httpOptions).pipe(
-      catchError(this.handleError<any>('updateStudent'))
-    );
-  }
-
-  // per recuperarne uno dato l’id univoco
-  find(id: number): Observable<Student> {
-    const url = `${this.base_URL}/students/${id}`;
-    return this.http.get<Student>(url)
-      .pipe(
-        catchError(this.handleError<Student>('find')
-        )
-      );
-  }
-
-  // per eliminare un elemento dato l’id univoco
-  delete(id: number): Observable<Student> {
-    const url = `${this.base_URL}/students/${id}`;
-    return this.http.delete<Student>(url)
-      .pipe(
-        catchError(this.handleError<Student>('delete')
-        )
-      );
-  }
-
-  // Iscrivere e dis-iscrivere uno o più studenti ad un corso (e.g. updateEnrolled)
-  updateEnrolled(students: Student[]): Observable<Student[]> {
-    const temp$ = new Array<Observable<Student>>();
-    students.forEach(s => temp$.push(this.update(s)));
-  return forkJoin(temp$);
-  }
-
-  // per creare un nuovo elemento
-  create(student: Student): Observable<Student> {
-    //in the db json we cannot put the teamName because it is a relation
-    // TODO
-    // delete student.groupName;
-    return this.http.post<Student>(this.base_URL+'students/', student, this.httpOptions).pipe(
-      catchError(this.handleError<any>('createStudent'))
-    );
-  }
+  //test
+  searchingStudents: Student[] = [
+    { id: "11", email: "string", firstName: "aaaa", lastName: "bbbbbbbb"},
+    { id: "12", email: "string", firstName: "aaaa", lastName: "cccccccc"},
+  ];
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
@@ -94,8 +48,106 @@ export class StudentService {
     };
   }
 
-  public getCoursesOfStudentById(id: string): Observable<Course[]> {
-    // TODO implementare
-    return null;
+
+  /**
+   * TODO
+   * uploadStudentAssignment: metodo per caricare l'assignment di uno studente. Ritorna un Observable<UploadAssignment>
+   */
+
+
+  /**
+   * This method is used to make a request to the the server and retrieve all the available
+   * students of the course with courseAcronym and ad criteria is used the lastName
+   * If the courseAcronym is undefined it returns an empty Observable<[]>
+   * @param courseAcronym acronym of the course
+   * @param lastName the last name of the student
+   */
+  searchingAvailableStudentsInCourseByLastName(lastName: string, courseAcronym: string = this.courseService.currentCourseAcrSubject.value): Observable<Student[]> {
+    //return of<Student[]>(this.searchingStudents)
+    const url = `${environment.base_url_course}/${courseAcronym}/availableStudents?lastName_like=${lastName}`
+    if (typeof lastName !== 'string' || courseAcronym === undefined) {
+      return of([]);
+    } else {
+      //whitespaces
+      lastName = lastName.trim();
+      if (!lastName || lastName.indexOf(' ') >= 0) {
+        return of([]);
+      }
+    }
+    return this.httpClient.get<Student[]>(url)
+      .pipe(
+        tap((s) =>
+          console.log(`searchingAvailableStudentsInCourseByLastName  ${s.length} for criteria ${lastName}`
+          )
+        ),
+        catchError(this.handleError<Student[]>(`searchingAvailableStudentsInCourseByLastName error ${lastName})`,[])
+        )
+      );
   }
+
+  /**
+   * It searchs all the students in the DB with a given last name
+   * @param lastName the last name of the student
+   */
+  searchingStudentsByLastName(lastName: string): Observable<Student[]> {
+    // return of<Student[]>(this.searchingStudents)
+    const url = `${environment.base_url_students}?lastName_like=${lastName}`
+    if (typeof lastName !== 'string') {
+      return of([]);
+    }
+    else {
+      //if th lastName has whitespaces
+      lastName = lastName.trim();
+      if (!lastName || lastName.indexOf(' ') >= 0) {
+        return of([]);
+      }
+    }
+    return this.httpClient.get<Student[]>(url)
+      .pipe(tap((s) =>
+        console.log(`searchingStudentsByLastName ${s.length} for critera: ${lastName} `)
+      ),
+        catchError(
+          this.handleError<Student[]>(`searchingStudentsByLastName error ${lastName}`, [])
+        )
+      );
+  }
+
+  /**
+   * The parametrers are taken by the courseService and authService, exploiting the injection and the 
+   * power of BehaviorSubject
+   * @param courseAcronym the acronym of the course
+   * @param studentId the id of the student
+   */
+  getProposalsInCourse(courseAcronym: string = this.courseService.currentCourseAcrSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Proposal[]> {
+    //return of<Proposal[]>(this.exampleProposals)
+    const url = `${environment.base_url_students}/${studentId}/proposalsOfCourse/${courseAcronym}`
+    return this.httpClient.get<Proposal[]>(url, environment.http_options)
+      .pipe(
+        tap(() =>
+          console.log(`getProposalsInCourse ok studentId ${studentId}, course ${courseAcronym}`)
+        ),
+        catchError(
+          this.handleError<Proposal[]>(`getTeamProposalsForCourse error studentId ${studentId}, course ${courseAcronym})`, []))
+      );
+  }
+
+  /**
+   * Retrieve all the courses taken by the student
+   * @param studentId the id of the student
+   */
+  getCoursesOfStudentById(studentId: string = this.authService.currentUserValue.username): Observable<Course[]> {
+    const url = `${environment.base_url_students}/${studentId}/courses`
+    return this.httpClient.get<Course[]>(url)
+      .pipe(
+        tap(() =>
+          console.log(`getCoursesOfStudentById ok studentId ${studentId}`)),
+        catchError(
+          this.handleError<Course[]>(`getCoursesOfStudentById error studentId ${studentId}`)
+        )
+      );
+  }
+
+
+
+
 }

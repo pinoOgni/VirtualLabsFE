@@ -15,7 +15,7 @@ import {Role} from './models/role.model';
 const routes  = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent},
-  { path: 'teacher/courses/:courseAcrAndId', //apa-1
+  { path: 'teacher/courses/:courseAcronym', //apa
     component: TeacherComponent, 
     canActivate: [AuthGuard],
     data: { roles: [Role.Teacher, Role.Admin] },
@@ -26,7 +26,7 @@ const routes  = [
       { path: 'assignments', component: AssignmentsContComponent}
       ]
     },
-    { path: 'student/courses/:courseAcrAndId',
+    { path: 'student/courses/:courseAcronym',
     component: StudentComponent, 
     canActivate: [AuthGuard],
     data: { roles: [Role.Student, Role.Admin] },
