@@ -10,11 +10,10 @@
 export class Proposal {
     teamName: string;
     creator: string;
-    membersWithState: string[];
     deadline: string;
     isValid: boolean;
     token: string;
-
+    membersWithState: string[];
 
 
     constructor(teamName: string = '', creator: string = '', membersWithState: string[], deadline: string, isValid: boolean,  token: string='') {

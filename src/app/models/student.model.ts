@@ -3,7 +3,6 @@
  * @param email: this is the email of the student
  * @param firstName: this is the firstname of the student
  * @param lastName: this is the lastName of the student
- * @param teamId the id of the team where the student belongs to (0 if none)
  */
 
 import { ThrowStmt } from "@angular/compiler";
