@@ -8,7 +8,7 @@
 
   <!-- This fills the remaining space of the current row -->
   <span class="example-fill-remaining-space"></span>
-  <span *ngIf="currentUser"> Hello {{ currentUser.email }} </span>
+  <span *ngIf="currentUser"> Hello {{ currentUser.username }} </span>
   <button *ngIf="currentUser; else notLogged" mat-button (click)="logout()">Logout</button>
   <ng-template #notLogged>
     <span>
@@ -24,7 +24,7 @@
 </mat-toolbar>
 <mat-sidenav-container>
   
-  <mat-sidenav #sidebar mode="side" [opened]="navBarOpened" position="start" class="sidenav">
+  <mat-sidenav #sidebar mode="side" position="start" class="sidenav">
     <div *ngIf="currentUser" class=“container-small”>
       <mat-nav-list>
         <mat-list-item *ngFor="let course of (courses | async); index as i " [routerLink]="[

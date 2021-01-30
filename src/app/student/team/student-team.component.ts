@@ -1,15 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { Student } from 'src/app/models/student.model';
+import { Team } from 'src/app/models/team.model';
 
 @Component({
   selector: 'app-student-team',
   templateUrl: './student-team.component.html',
   styleUrls: ['./student-team.component.css']
 })
-export class StudentTeamComponent implements OnInit {
+/**
+ * This class represents the tab TEAM id the student is in a team for that course
+ */
+export class StudentTeamComponent{
 
-  constructor() { }
+  teamName = '';
+  dataSource = new MatTableDataSource<Student>();
+  columnsToDisplay = ['firstName', 'lastName', 'id']; 
 
-  ngOnInit(): void {
+  @Input() set team(team: Team) {
+    this.teamName = team.name;
+    this.dataSource.data = team.members;
   }
 
 }

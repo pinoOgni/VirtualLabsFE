@@ -2,17 +2,14 @@
  * This class represents the model for a Course
  */
 export class Course {
-    id: number;
     acronym: string; //apa
     fullName: string; //algoritmi-e-prgrammazione
-    minStudentsForTeam: string;
-    maxStudentsForTeam: string;
-   // heldBy: number[];
+    minStudentsForTeam: number;
+    maxStudentsForTeam: number;
     enabled: boolean;
 
-    constructor(id: number, acronym: string, name: string, minStudentsForTeam: string, maxStudentsForTeam: string,  enabled: boolean
+    constructor(acronym: string, name: string, minStudentsForTeam: number, maxStudentsForTeam: number,  enabled: boolean
     ) {
-        this.id = id;
         this.acronym = acronym;
         this.fullName = name;
         this.minStudentsForTeam = minStudentsForTeam;

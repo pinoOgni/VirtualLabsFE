@@ -5,7 +5,6 @@ import { Student } from "./student.model";
 export class Team {
     name: string;
     id: number;
-    members: Student[];
     courseId: number;
     maxVCpu: number; 
     maxDiskSpace: number;
@@ -14,10 +13,10 @@ export class Team {
     maxTotalInstances: number;
     isActive: boolean;
 
+
     constructor(
         name: string,
         id: number,
-        members: Student[],
         courseId: number,
         maxVCpu: number,
         maxDiskSpace: number,
@@ -28,7 +27,6 @@ export class Team {
     ) {
         this.name = name;
         this.id = id;
-        this.members = members;
         this.courseId = courseId;
         this.maxVCpu = maxVCpu;
         this.maxDiskSpace = maxDiskSpace;

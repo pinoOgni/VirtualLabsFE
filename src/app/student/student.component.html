@@ -1,1 +1,16 @@
-<p>student works!</p>
+<!-- 3 tabs for teams, vms and assignments -->
+<nav mat-tab-nav-bar>
+  <a
+    mat-tab-link
+    *ngFor="let l of studentLinks"
+    [routerLink]="l.path"
+    routerLinkActive
+    [active]="rla.isActive"
+    #rla="routerLinkActive"
+  >
+    <h3>{{ l.label }}</h3>
+  </a>
+</nav>
+<div class="tab-content">
+  <router-outlet></router-outlet>
+</div>

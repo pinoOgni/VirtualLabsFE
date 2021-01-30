@@ -1,0 +1,12 @@
+.student-team-container {
+    width: 100%;
+    float: left;
+}
+
+table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    width: 50%;
+  }

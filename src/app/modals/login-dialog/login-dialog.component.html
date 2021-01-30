@@ -2,9 +2,9 @@
 <mat-dialog-content class="md-dialog-container">
     <form [formGroup]="loginForm" (ngSubmit)="submit()">
         <mat-form-field class="md-form-dialog-container">
-            <input autocomplete="on" formControlName="email" type="email" matInput id="email" name="email"
-                   placeholder="Email" required email>
-            <mat-error *ngIf="loginForm.controls['email'].hasError('pattern')">Email is not valid (enabled domains
+            <input autocomplete="on" formControlName="username" type="email" matInput id="username" name="username"
+                   placeholder="Email" required text>
+            <mat-error *ngIf="loginForm.controls['username'].hasError('pattern')">Email is not valid (enabled domains
                 @polito.it, @studenti.polito.it)
             </mat-error>
         </mat-form-field>

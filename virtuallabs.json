@@ -127,6 +127,14 @@
       "minStudentsForTeam": 2,
       "maxStudentsForTeam": 3,
       "enabled": "true"
+    },
+    {
+      "id": 3,
+      "acronym": "LANDC",
+      "fullName": "Reti Locali e Data Center",
+      "minStudentsForTeam": 2,
+      "maxStudentsForTeam": 3,
+      "enabled": "true"
     }
   ],
   "teams": [

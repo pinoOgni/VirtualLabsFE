@@ -7,7 +7,7 @@ import {Observable, Subscription} from 'rxjs';
 import {RegisterDialogComponent} from './modals/register-dialog/register-dialog.component';
 import {User} from './models/user.model';
 import {Course} from './models/course.model';
-import {first} from 'rxjs/operators';
+import {first, tap} from 'rxjs/operators';
 import {EditCourseDialogComponent} from './modals/edit-course-dialog/edit-course-dialog.component';
 import {TeacherService} from './services/teacher.service';
 import {StudentService} from './services/student.service';
@@ -126,7 +126,6 @@ export class AppComponent implements OnDestroy, OnInit{
             const updatedCourse = result.newCourseModel;
             // TODO gestire heldBy
             const editedCourse = new Course(
-                course.id,
                 updatedCourse.acronym,
                 updatedCourse.fullName,
                 updatedCourse.minStudentsForTeam,
@@ -147,27 +146,23 @@ export class AppComponent implements OnDestroy, OnInit{
   private refillCourses() {
     if (this.currentUser){
       if ( this.currentUser.roles.includes('ROLE_STUDENT')){
-       this.courses =  this.studentsService
-            .getCoursesOfStudentById(this.currentUser.email)  //this will be id??
+        console.log("refill courses role student")
+       this.courses =  this.studentsService.getCoursesOfStudentById()
             .pipe(
-                first()
+              tap(() =>
+              console.log(`refill courses  getCoursesOfStudentById `, this.courses)
+            ),
             );
       }
-      if ( this.currentUser.roles.includes('ROLE_TEACHER')){
-   //     console.log('sto chiamando popopo');
-        this.courses = this.teacherService.query()
+      else if ( this.currentUser.roles.includes('ROLE_TEACHER')){
+        console.log("refill courses role teacher")
+        this.courses = this.teacherService.getCoursesOfTeacherById()
             .pipe(
-                first()
+              tap(() =>
+              console.log(`refill courses  getCoursesOfTeacherById `, this.courses)
+            ),
             );
       }
-      if ( this.currentUser.roles.includes('ROLE_ADMIN')){
-   //     console.log('pocibomboli lembe');
-        this.courses = this.teacherService.query()
-            .pipe(
-                first()
-            );
-      }
-
     }
   }
 }

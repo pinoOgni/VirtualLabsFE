@@ -25,7 +25,7 @@ export class EditCourseDialogComponent implements OnInit {
               enabled: boolean
     },
         private auth: AuthService, private formBuilder: FormBuilder, private router: Router, private dialogRef: MatDialogRef<EditCourseDialogComponent>) {
-        // this.model = {email: '', password: ''};
+        // this.model = {username: '', password: ''};
         this.editCourseForm = this.formBuilder.group ({
             courseFullName: ['', Validators.required],
             courseAcronym: ['', Validators.required],

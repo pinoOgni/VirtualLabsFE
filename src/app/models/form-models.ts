@@ -1,5 +1,5 @@
 export interface LoginModel {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -9,7 +9,7 @@ export interface RegisterModel {
   lastName: string;
   password: string;
   password2: string;
-  idNumber: string;
+  id: string;
 }
 
 export interface EditCourseModel{
@@ -22,4 +22,10 @@ export interface EditCourseModel{
   enabled: boolean;
 
 
+}
+
+
+
+export interface CourseModel{
+  //tutto il corso
 }
