@@ -11,6 +11,9 @@ import {first, tap} from 'rxjs/operators';
 import {EditCourseDialogComponent} from './modals/edit-course-dialog/edit-course-dialog.component';
 import {TeacherService} from './services/teacher.service';
 import {StudentService} from './services/student.service';
+import {VmModelsService} from './services/vm-models.service';
+import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-dialog.component';
+import {ConfirmationDialogComponent} from './modals/confirmation-dialog/confirmation-dialog.component';
 
 
 @Component({
@@ -18,153 +21,200 @@ import {StudentService} from './services/student.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnDestroy, OnInit{
+export class AppComponent implements OnDestroy, OnInit {
 
-  // @ViewChild('sidenav') sidenav: MatSidenav;
+    // @ViewChild('sidenav') sidenav: MatSidenav;
 
-  title = 'VirtualLabs';
-  routeQueryParams$: Subscription;
+    title = 'VirtualLabs';
+    routeQueryParams$: Subscription;
 
 
-  currentUser: User;
-  course: Course;
-  courses: Observable<Course[]>;
-  navBarOpened = false;
+    currentUser: User;
+    course: Course;
+    courses: Observable<Course[]>;
+    navBarOpened = false;
 
-  constructor(
-      private teacherService: TeacherService,
-      private studentsService: StudentService,
-      public dialog: MatDialog,
-      private authService: AuthService,
-      private router: Router,
-      private route: ActivatedRoute) {
-    // Here we subscribe to the currentUser and then call the refillCourses method
-    this.authService.getCurrentUserserObservable().subscribe((u: User) => {
-      this.currentUser = u;
-      if (u) {
-        this.navBarOpened = true;
-        this.refillCourses();
-      }
-    });
+    constructor(
+        private vmModelsService: VmModelsService,
+        private teacherService: TeacherService,
+        private studentsService: StudentService,
+        public dialog: MatDialog,
+        private authService: AuthService,
+        private router: Router,
+        private route: ActivatedRoute) {
+        // Here we subscribe to the currentUser and then call the refillCourses method
+        this.authService.getCurrentUserserObservable().subscribe((u: User) => {
+            this.currentUser = u;
+            if (u) {
+                this.navBarOpened = true;
+                this.refillCourses();
+            }
+        });
 
-    this.routeQueryParams$ = route.queryParams.subscribe(params => {
-      if (params.doLogin) {
-        this.openDialogLogin();
-      }
-      else if (params.doRegister) {
-        this.openDialogRegister();
-      }
-    });
+        this.routeQueryParams$ = route.queryParams.subscribe(params => {
+            if (params.doLogin) {
+                this.openDialogLogin();
+            } else if (params.doRegister) {
+                this.openDialogRegister();
+            }
+        });
 
-  }
+    }
 
-  ngOnInit(): void {
+    ngOnInit(): void {
 //    this.refillCourses();
 
-  }
-
-  ngOnDestroy() {
-    this.routeQueryParams$.unsubscribe();
-  }
-
-  openDialogLogin() {
-    const latestUrl = this.router.url;
-    const dialogRef = this.dialog.open(LoginDialogComponent); // {disableClose: true}
-    // First will deliver an EmptyError to the Observer's error callback if the Observable completes before any next notification was sent
-    dialogRef.afterClosed().pipe(first()).subscribe(res => {
-      if (res) {
-        this.router.navigate([this.route.snapshot.queryParams.returnUrl || '/home', ]);
-        this.navBarOpened = true;
-
-      }
-      else if (latestUrl === this.router.url) {
-        this.router.navigate(['/home']);
- }
-    });
-  }
-
-
-  openDialogRegister() {
-    const dialogRef = this.dialog.open(RegisterDialogComponent); // {disableClose: true}
-    const latestUrl = this.router.url;
-    dialogRef.afterClosed().pipe(first()).subscribe(res => {
-      if (res) {
-        this.router.navigate([this.route.snapshot.queryParams.returnUrl || '/home', ]);
-        this.navBarOpened = true;
-      }
-      else if (latestUrl === this.router.url) {
-        this.router.navigate(['/home']);
- }
-    });
-  }
-
-  logout() {
-    this.dialog.closeAll();
-    this.course = null;
-    this.navBarOpened = false;
-    this.authService.logout();
-    this.router.navigate(['/home']);
-  }
-
-  public openDialogEditCourse(course: Course): void {
-    const dialogRef = this.dialog.open(EditCourseDialogComponent, {
-      data: {
-        courseFullName: course.fullName,
-        courseAcronym : course.acronym,
-        maxStudents: course.maxStudentsForTeam,
-        minStudents: course.minStudentsForTeam,
-        enabled: course.enabled
-      }
-    }); // {disableClose: true}
-
-    dialogRef.afterClosed().subscribe(
-        result => {
-          if (result === undefined ){
-            return;
-          }
-          if ( result.logged === true ){
-            const updatedCourse = result.newCourseModel;
-            // TODO gestire heldBy
-            const editedCourse = new Course(
-                updatedCourse.acronym,
-                updatedCourse.fullName,
-                updatedCourse.minStudentsForTeam,
-                updatedCourse.maxStudentsForTeam,
-                Boolean(updatedCourse.enabled));
-            this.teacherService.update(editedCourse).subscribe(
-                r => {
-                    this.refillCourses();
-                }
-            );
-            this.router.navigate(['/home']);
-          }
-        }
-    );
-
-  }
-
-  private refillCourses() {
-    if (this.currentUser){
-      if ( this.currentUser.roles.includes('ROLE_STUDENT')){
-        console.log("refill courses role student")
-       this.courses =  this.studentsService.getCoursesOfStudentById()
-            .pipe(
-              tap(() =>
-              console.log(`refill courses  getCoursesOfStudentById `, this.courses)
-            ),
-            );
-      }
-      else if ( this.currentUser.roles.includes('ROLE_TEACHER')){
-        console.log("refill courses role teacher")
-        this.courses = this.teacherService.getCoursesOfTeacherById()
-            .pipe(
-              tap(() =>
-              console.log(`refill courses  getCoursesOfTeacherById `, this.courses)
-            ),
-            );
-      }
     }
-  }
+
+    ngOnDestroy() {
+        this.routeQueryParams$.unsubscribe();
+    }
+
+    openDialogLogin() {
+        const latestUrl = this.router.url;
+        const dialogRef = this.dialog.open(LoginDialogComponent); // {disableClose: true}
+        // First will deliver an EmptyError to the Observer's error callback if the Observable completes before any next notification was sent
+        dialogRef.afterClosed().pipe(first()).subscribe(res => {
+            if (res) {
+                this.router.navigate([this.route.snapshot.queryParams.returnUrl || '/home',]);
+                this.navBarOpened = true;
+
+            } else if (latestUrl === this.router.url) {
+                this.router.navigate(['/home']);
+            }
+        });
+    }
+
+
+    openDialogRegister() {
+        const dialogRef = this.dialog.open(RegisterDialogComponent); // {disableClose: true}
+        const latestUrl = this.router.url;
+        dialogRef.afterClosed().pipe(first()).subscribe(res => {
+            if (res) {
+                this.router.navigate([this.route.snapshot.queryParams.returnUrl || '/home',]);
+                this.navBarOpened = true;
+            } else if (latestUrl === this.router.url) {
+                this.router.navigate(['/home']);
+            }
+        });
+    }
+
+    logout() {
+        this.dialog.closeAll();
+        this.course = null;
+        this.navBarOpened = false;
+        this.authService.logout();
+        this.router.navigate(['/home']);
+    }
+
+    public openDialogEditCourse(course: Course): void {
+        const dialogRef = this.dialog.open(EditCourseDialogComponent, {
+            data: {
+                editedCourse: course
+            }
+        });
+        dialogRef.afterClosed().subscribe(
+            result => {
+                if (result === undefined) {
+                    return;
+                }
+                if (result.logged) {
+                    const editedCourse = result.editedCourse;
+                    const newCourse = new Course(
+                        course.id,
+                        editedCourse.acronym,
+                        editedCourse.fullName,
+                        editedCourse.minStudentsForTeam,
+                        editedCourse.maxStudentsForTeam,
+                        editedCourse.enable,
+                        editedCourse.vcpus,
+                        editedCourse.diskSpace,
+                        editedCourse.ramSize);
+                    this.teacherService.update(newCourse).subscribe(
+                        result => {
+                            this.refillCourses();
+                        }
+                    );
+                }
+            }
+        );
+    }
+
+    public openDialogAddCourse() {
+        const dialogRef = this.dialog.open(AddCourseDialogComponent,
+        );
+
+        dialogRef.afterClosed().subscribe(
+            result => {
+                if (result === undefined) {
+                    return;
+                }
+                if (result.logged) {
+                    const nCourse = result.newCourseModel;
+                    const newCourse = new Course(
+                        -1,
+                        nCourse.acronym,
+                        nCourse.name,
+                        nCourse.minStudentsForTeam,
+                        nCourse.maxStudentsForTeam,
+                        nCourse.enable,
+                        nCourse.vcpus,
+                        nCourse.diskSpace,
+                        nCourse.ramSize
+                    );
+                    this.teacherService.addCourse(newCourse).subscribe(
+                        result => {
+                            this.refillCourses();
+                        }
+                    );
+                }
+            }
+        );
+    }
+
+    openDialogDeleteCourse(course: Course): void {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+        dialogRef.afterClosed().subscribe(
+            result => {
+                if (result === undefined) {
+                    return;
+                }
+                if (result.confirmed === true) {
+                    this.teacherService.deleteCourse(course).subscribe(
+                        result => {
+                            this.refillCourses();
+                        }
+                    );
+                }
+
+            }
+        );
+
+    }
+
+    private refillCourses(): void {
+        if (this.currentUser) {
+            if (this.currentUser.roles.includes('ROLE_STUDENT')) {
+                console.log('refill courses role student');
+                this.courses = this.studentsService.getCoursesOfStudentById()
+                    .pipe(
+                        tap(() =>
+                            console.log(`refill courses  getCoursesOfStudentById `, this.courses)
+                        ),
+                    );
+            } else if (this.currentUser.roles.includes('ROLE_TEACHER')) {
+                console.log('refill courses role teacher');
+                this.courses = this.teacherService.getCoursesOfTeacherById()
+                    .pipe(
+                        tap(() =>
+                            console.log(`refill courses  getCoursesOfTeacherById `, this.courses)
+                        ),
+                    );
+            }
+        }
+    }
+
+
 }
 
 

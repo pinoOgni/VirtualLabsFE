@@ -45,70 +45,6 @@
       "courseId": 1,
       "id": "4",
       "teamId": 1
-    },
-    {
-      "email": "s200005@studenti.polito.it",
-      "firstName": "Jack",
-      "lastName": "Amoruso",
-      "courseId": 0,
-      "id": "5",
-      "teamId": 0
-    },
-    {
-      "email": "s200006@studenti.polito.it",
-      "firstName": "Giacomo",
-      "lastName": "Amoruso",
-      "courseId": 0,
-      "id": "6",
-      "teamId": 0
-    },
-    {
-      "email": "s200007@studenti.polito.it",
-      "firstName": "Al",
-      "lastName": "Caruso",
-      "courseId": 0,
-      "id": "7",
-      "teamId": 0
-    },
-    {
-      "email": "s200008@studenti.polito.it",
-      "firstName": "Alessandro",
-      "lastName": "Caruso",
-      "courseId": 0,
-      "id": "8",
-      "teamId": 0
-    },
-    {
-      "email": "s200009@studenti.polito.it",
-      "firstName": "Johnny",
-      "lastName": "Gresko",
-      "courseId": 0,
-      "id": "9",
-      "teamId": 0
-    },
-    {
-      "email": "s200010@studenti.polito.it",
-      "firstName": "Giovanni",
-      "lastName": "Gresko",
-      "courseId": 0,
-      "id": "10",
-      "teamId": 0
-    },
-    {
-      "email": "s200011@studenti.polito.it",
-      "firstName": "Sam",
-      "lastName": "Genovese",
-      "courseId": 0,
-      "id": "11",
-      "teamId": 0
-    },
-    {
-      "email": "s200012@studenti.polito.it",
-      "firstName": "Samuele",
-      "lastName": "Genovese",
-      "courseId": 0,
-      "id": "12",
-      "teamId": 0
     }
   ],
   "courses": [
@@ -118,14 +54,6 @@
       "fullName": "Applicazioni Internet",
       "minStudentsForTeam": "2",
       "maxStudentsForTeam": "3",
-      "enabled": true
-    },
-    {
-      "id": 2,
-      "acronym": "APA",
-      "fullName": "Algoritmi e Programmazione Avanzata",
-      "minStudentsForTeam": 2,
-      "maxStudentsForTeam": 3,
       "enabled": "true"
     },
     {
@@ -151,6 +79,16 @@
       "firstName": "Fulvio",
       "lastName": "Risso",
       "courseId": 1
+    }
+  ],
+  "vmModels": [
+    {
+      "id": 5,
+      "name": "Vm model 5",
+      "courseId": 1,
+      "vcpus": 5,
+      "diskSpace": 10,
+      "ramSize": 4096
     }
   ]
 }

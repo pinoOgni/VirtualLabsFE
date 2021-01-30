@@ -1,0 +1,103 @@
+<h2 mat-dialog-title>Add new Course</h2>
+<mat-dialog-content class="md-dialog-container">
+    <form (ngSubmit)="submit()" [formGroup]="editCourseForm">
+        <h3 mat-dialog-title>Course details:</h3>
+
+        <mat-form-field class="md-form-dialog-container">
+
+            <input autocomplete="on" formControlName="courseFullName" id="courseFullName" matInput name="courseFullName"
+                   placeholder="Course Name" required
+                   type="text">
+
+        </mat-form-field>
+        <br>
+
+
+        <mat-form-field class="md-form-dialog-container">
+
+            <input autocomplete="on" formControlName="courseAcronym" id="courseAcronym" matInput name="courseAcronym"
+                   placeholder="Acronym" required
+                   type="text">
+
+        </mat-form-field>
+        <br>
+
+
+        <mat-form-field class="md-form-dialog-container">
+
+            <input autocomplete="on" formControlName="courseMinStudents" id="courseMinStudents" matInput
+                   name="courseMinStudents" placeholder="Minimum Team size" required
+                   type="text">
+
+        </mat-form-field>
+        <br>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="courseMaxStudents" id="courseMaxStudents" matInput
+                   name="courseMaxStudents" placeholder="Maximum Team size" required
+                   type="text">
+
+        </mat-form-field>
+
+        <br>
+
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+            <mat-label> Enable Course</mat-label>
+            <mat-select formControlName="courseEnabled" id="courseEnabled">
+                <mat-option value="true"> Enabled</mat-option>
+                <mat-option value="false"> Disabled</mat-option>
+            </mat-select>
+
+        </mat-form-field>
+
+        <br>
+
+        <h3 mat-dialog-title> Virtual Machines Default resources: </h3>
+        <mat-form-field class="md-form-dialog-container">
+
+            <input autocomplete="on" formControlName="vmModelName" id="vmModelName" matInput name="vmModelName"
+                   placeholder="VM Model Name" required
+                   type="text">
+
+        </mat-form-field>
+
+        <br>
+        <mat-form-field class="md-form-dialog-container">
+
+            <input autocomplete="on" formControlName="vmModelVcpus" id="vmModelVcpus" matInput name="vmModelVcpus"
+                   placeholder="VM Model VCpus"
+                   required
+                   type="text">
+
+        </mat-form-field>
+
+        <br>
+        <mat-form-field class="md-form-dialog-container">
+
+            <input autocomplete="on" formControlName="vmModelDiskSpace" id="vmModelDiskSpace" matInput
+                   name="vmModelDiskSpace"
+                   placeholder="VM Model Disk Space" required
+                   type="text">
+
+        </mat-form-field>
+
+        <br>
+        <mat-form-field class="md-form-dialog-container">
+
+            <input autocomplete="on" formControlName="vmModelRamSize" id="vmModelRamSize" matInput name="vmModelRamSize"
+                   placeholder="VM Model Ram Size"
+                   required
+                   type="text">
+
+        </mat-form-field>
+
+        <br>
+
+
+        <mat-dialog-actions class="example-button-row">
+            <button [disabled]="!editCourseForm.valid" color="primary" mat-raised-button type="submit">Add</button>
+            <button [mat-dialog-close]="false" mat-raised-button type="reset">Cancel</button>
+        </mat-dialog-actions>
+        <br>
+    </form>
+</mat-dialog-content>

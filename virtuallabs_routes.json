@@ -1,1 +1,8 @@
-{ "users": 600, "students": 660, "teachers": 660, "courses": 660, "groups": 660 }
+{
+  "users": 600,
+  "students": 660,
+  "teachers": 660,
+  "courses": 660,
+  "groups": 660,
+  "vmModels": 660
+}
