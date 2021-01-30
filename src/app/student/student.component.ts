@@ -14,7 +14,9 @@ import { TeamService } from '../services/team.service';
   styleUrls: ['./student.component.css']
 })
 export class StudentComponent implements OnDestroy {
-  // Is used for the unsubscription when the component is destroyed
+  /**
+   * Is used for the unsubscription when the component is destroyed
+   */
   private destroy$: Subject<boolean> = new Subject<boolean>();
   /**
    * links used in student-component.html in ngFor to go to the correct tab
@@ -30,7 +32,7 @@ export class StudentComponent implements OnDestroy {
      */
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       //test
-      this.courseService.setNextCourse(params.courseAcronym.split("-")[1]);
+      this.courseService.setNextCourse(params.courseAcronym);
       console.log("setNextCourse ", params.courseAcronym)
       this.teamService
         .getTeamOfStudent(this.authService.currentUserValue.username, this.courseService.currentCourseAcrSubject.value)
