@@ -57,57 +57,58 @@ export class StudentService {
 
   /**
    * This method is used to make a request to the the server and retrieve all the available
-   * students of the course with courseAcronym and ad criteria is used the lastName
+   * students of the course with courseAcronym and ad criteria is used the name
    * If the courseAcronym is undefined it returns an empty Observable<[]>
    * @param courseAcronym acronym of the course
-   * @param lastName the last name of the student
+   * @param name the first name or the last name of the student
    */
-  searchingAvailableStudentsInCourseByLastName(lastName: string, courseAcronym: string = this.courseService.currentCourseAcrSubject.value): Observable<Student[]> {
+  searchingAvailableStudentsInCourseByName(name: string, courseAcronym: string = this.courseService.currentCourseAcrSubject.value): Observable<Student[]> {
     //return of<Student[]>(this.searchingStudents)
-    const url = `${environment.base_url_course}/${courseAcronym}/availableStudents?lastName_like=${lastName}`
-    if (typeof lastName !== 'string' || courseAcronym === undefined) {
+    const url = `${environment.base_url_course}/${courseAcronym}/availableStudents`
+    //copiare funzione dal lab5 PROF
+    if (typeof name !== 'string' || courseAcronym === undefined) {
       return of([]);
     } else {
       //whitespaces
-      lastName = lastName.trim();
-      if (!lastName || lastName.indexOf(' ') >= 0) {
+      name = name.trim();
+      if (!name || name.indexOf(' ') >= 0) {
         return of([]);
       }
     }
     return this.httpClient.get<Student[]>(url)
       .pipe(
         tap((s) =>
-          console.log(`searchingAvailableStudentsInCourseByLastName  ${s.length} for criteria ${lastName}`
+          console.log(`searchingAvailableStudentsInCourseByName  ${s.length} for criteria ${name}`
           )
         ),
-        catchError(this.handleError<Student[]>(`searchingAvailableStudentsInCourseByLastName error ${lastName})`,[])
+        catchError(this.handleError<Student[]>(`searchingAvailableStudentsInCourseByName error ${name})`,[])
         )
       );
   }
 
   /**
    * It searchs all the students in the DB with a given last name
-   * @param lastName the last name of the student
+   * @param name the last name of the student
    */
-  searchingStudentsByLastName(lastName: string): Observable<Student[]> {
+  searchingStudentsByName(name: string): Observable<Student[]> {
     // return of<Student[]>(this.searchingStudents)
-    const url = `${environment.base_url_students}?lastName_like=${lastName}`
-    if (typeof lastName !== 'string') {
+    const url = `${environment.base_url_students}`
+    if (typeof name !== 'string') {
       return of([]);
     }
     else {
-      //if th lastName has whitespaces
-      lastName = lastName.trim();
-      if (!lastName || lastName.indexOf(' ') >= 0) {
+      //if th name has whitespaces
+      name = name.trim();
+      if (!name || name.indexOf(' ') >= 0) {
         return of([]);
       }
     }
     return this.httpClient.get<Student[]>(url)
       .pipe(tap((s) =>
-        console.log(`searchingStudentsByLastName ${s.length} for critera: ${lastName} `)
+        console.log(`searchingStudentsByName ${s.length} for critera: ${name} `)
       ),
         catchError(
-          this.handleError<Student[]>(`searchingStudentsByLastName error ${lastName}`, [])
+          this.handleError<Student[]>(`searchingStudentsByName error ${name}`, [])
         )
       );
   }

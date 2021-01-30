@@ -63,7 +63,7 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
   /**
-   * Criteria emitter: used to refresh optionsStudents each time there is a change 
+   * Criteria emitter: used to refresh searchedStudents each time there is a change 
    */
   private searchOptions = new Subject<string>(); 
 
@@ -87,14 +87,12 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
        * The subscribe() call returns a Subscription object that has an unsubscribe() method
        * The unsubsribe method is used with the destroy$ in OnDestroy method
        */
-
-      //TEST
-      /*
+      
       this.teamService.currentTeamSubject
       .asObservable()
       .pipe(takeUntil(this.destroy$))
       .subscribe((team) => (this.team = team));
-      */
+      
 
       /**
        * Call the getEnrolledAvailableStudents to set the enrolledAvailableStudents
@@ -119,13 +117,13 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
       console.log("student-team-container ", this.currentCourse.fullName);
 
       /**
-       *  the serachedStudents is subscribed to the searchOptions 
+       *  the searchedStudents is subscribed to the searchOptions 
        */    
       this.searchedStudents = this.searchOptions.pipe(
       takeUntil(this.destroy$),
       // switch to new search observable each time the term changes
-      switchMap((lastname: string) =>
-        this.studentService.searchingAvailableStudentsInCourseByLastName(lastname)
+      switchMap((name: string) =>
+        this.studentService.searchingAvailableStudentsInCourseByName(name)
       )
     );
 
@@ -165,8 +163,9 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
       .createTeam(this.courseService.currentCourseAcrSubject.value,proposalOfTeam)
       .pipe(first()).subscribe(team => {
         if (team && proposalOfTeam.selectedStudentIds.length === 1) {
-          team.members = [];
-          team.members.push(this.enrolledAvailableStudents.find(s => s.id === JSON.parse(localStorage.getItem('currentUser')).id));
+          //TODO 
+          //team.members = [];
+          //team.members.push(this.enrolledAvailableStudents.find(s => s.id === JSON.parse(localStorage.getItem('currentUser')).id));
           this.teamService.currentTeamSubject.next(team);
         }
         this.getProposals();
@@ -176,19 +175,38 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
   /**
    * Thie method is used to push new options in the research 
    * Is used between the container and the student-no-team-component
-   * @param lastName 
+   * @param name 
    */
-  searchingStudentsByLastName(lastName: string): void {
-    this.searchOptions.next(lastName);
+  searchingStudentsByName(name: string): void {
+    this.searchOptions.next(name);
   }
 
 
   acceptedTeamProposal(tokenTeam: string) {
+    this.teamService.acceptTeamProposal(tokenTeam)
+    .pipe(first())
+    .subscribe(r => {
+      if (r) {
+        this.teamService
+          .getTeamOfStudent()
+          .pipe(first())
+          .subscribe((team) => this.teamService.currentTeamSubject.next(team));
+        this.router.navigate([this.router.url]);
+      }
+      this.getProposals();
+    });
   }
 
   rejectedTeamProposal(tokenTeam: string) {
+    this.teamService
+    .rejectTeamProposal(tokenTeam).pipe(first())
+    .subscribe(() => this.getProposals());
   }
+
   deletedTeamProposal(tokenTeam: string) {
+    this.teamService
+    .deleteProposal(tokenTeam).pipe(first())
+    .subscribe(() => this.getProposals());
   }
 
 

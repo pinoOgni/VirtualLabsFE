@@ -89,7 +89,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
   /**
    * Event emitter for the autocompletion of the students
    */
-  @Output() searchingStudentsByLastNameEvent = new EventEmitter<string>(); 
+  @Output() searchingStudentsByNameEvent = new EventEmitter<string>(); 
 
   /**
    * take the list of students that are enrolled and available and set it
@@ -144,7 +144,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
   constructor() { }
 
   ngOnInit(): void {
-      //jasonWatMore
+     // ALE
         this.studentControl.valueChanges
         .pipe(
             takeUntil(this.destroy$), // Emits the values emitted by the source Observable until a notifier Observable emits a value.
@@ -153,7 +153,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
                               // after a particular time span has passed without another source emission.
             distinctUntilChanged()
         )
-        .subscribe((lastName: string) => this.searchingStudentsByLastNameEvent.emit(lastName));
+        .subscribe((name: string) => this.searchingStudentsByNameEvent.emit(name));
   }
 
 

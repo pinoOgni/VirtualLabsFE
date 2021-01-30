@@ -14,7 +14,7 @@ export const environment = {
   base_url_teams: `${BASE_URL_API}teams`,
   base_url_course: `${BASE_URL_API}courses`,
   base_url_students: `${BASE_URL_API}students`,
-  base_url_teachers: `${BASE_URL_API}teachers`,
+  base_url_teachers: `${BASE_URL_API}teacher`,
   http_options: {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   } 

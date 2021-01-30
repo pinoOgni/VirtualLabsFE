@@ -23,8 +23,8 @@ export class TeacherService {
 
   /**
    * TODO
-   * searchingTeachersInCourseByLastName: metodo per cercare i teacher in un corso. Ritorna Observable<Teacher[]>
-   * searchingTeachersByLastName: metodo per cercare gli teacher. Ritorna un Observable<Teacher[]>
+   * searchingTeachersInCourseByName: metodo per cercare i teacher in un corso. Ritorna Observable<Teacher[]>
+   * searchingTeachersByName: metodo per cercare gli teacher. Ritorna un Observable<Teacher[]>
    * uploadTeacherAssignment: metodo per caricare l'assignment di uno teacher. Ritorna un Observable<Upload>
    */
 
@@ -48,8 +48,8 @@ export class TeacherService {
   //ALE
   // TODO spostare in courseService
   update(course: Course): Observable<Course> {
-    console.log('sto updatando: ' +  course.id + ' nome: ' + course.fullName);
-    return this.httpClient.put<Course>(this.base_URL + 'courses/' + course.id, course, this.httpOptions).pipe(
+    console.log('sto updatando: ' +  course.acronym + ' nome: ' + course.fullName);
+    return this.httpClient.put<Course>(this.base_URL + 'courses/' + course.acronym, course, this.httpOptions).pipe(
         catchError(this.handleError<any>('updateCourse'))
     );
 
