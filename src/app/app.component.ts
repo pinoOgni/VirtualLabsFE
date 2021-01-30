@@ -7,7 +7,7 @@ import {Observable, Subscription} from 'rxjs';
 import {RegisterDialogComponent} from './modals/register-dialog/register-dialog.component';
 import {User} from './models/user.model';
 import {Course} from './models/course.model';
-import {first} from 'rxjs/operators';
+import {first, tap} from 'rxjs/operators';
 import {EditCourseDialogComponent} from './modals/edit-course-dialog/edit-course-dialog.component';
 import {TeacherService} from './services/teacher.service';
 import {StudentService} from './services/student.service';
@@ -127,121 +127,52 @@ export class AppComponent implements OnDestroy, OnInit {
                     }
                 }); // {disableClose: true}
 
-                dialogRef.afterClosed().subscribe(
-                    result => {
-                        if (result === undefined) {
-                            return;
-                        }
-                        if (result.logged === true) {
-                            const updatedCourse = result.newCourseModel;
-                            // TODO gestire heldBy
-                            const editedCourse = new Course(
-                                course.id,
-                                updatedCourse.acronym,
-                                updatedCourse.fullName,
-                                updatedCourse.minStudentsForTeam,
-                                updatedCourse.maxStudentsForTeam,
-                                updatedCourse.enabled);
-                            const updatedVmModel = result.newVmModel;
-                            const editedVmModel = new VmModel(
-                                vmModel.id,
-                                updatedVmModel.name,
-                                vmModel.courseId,
-                                updatedVmModel.vcpus,
-                                updatedVmModel.diskSpace,
-                                updatedVmModel.ramSize
-                            );
-                            this.teacherService.update(editedCourse).subscribe(
-                                r => {
-                                    this.refillCourses();
-                                }
-                            );
-                            this.vmModelsService.update(editedVmModel).subscribe(
-                                r => {
-                                    console.log(r); // TODO aggiornare vmModel locale
-                                }
-                            );
-                            this.router.navigate(['/home']);
-                        }
-                    }
-                );
-            }
-        );
-
-
-    }
-
-    public openDialogAddCourse() {
-        const dialogRef = this.dialog.open(AddCourseDialogComponent);
-
-        dialogRef.afterClosed().subscribe(
-            result => {
-                if (result === undefined) {
-                    return;
+    dialogRef.afterClosed().subscribe(
+        result => {
+          if (result === undefined ){
+            return;
+          }
+          if ( result.logged === true ){
+            const updatedCourse = result.newCourseModel;
+            // TODO gestire heldBy
+            const editedCourse = new Course(
+                updatedCourse.acronym,
+                updatedCourse.fullName,
+                updatedCourse.minStudentsForTeam,
+                updatedCourse.maxStudentsForTeam,
+                Boolean(updatedCourse.enabled));
+            this.teacherService.update(editedCourse).subscribe(
+                r => {
+                    this.refillCourses();
                 }
-                if (result.logged === true) {
-                    const updatedCourse = result.newCourseModel;
-                    // TODO gestire generazione id di course e vmModel
-                    const editedCourse = new Course(
-                        -1,
-                        updatedCourse.acronym,
-                        updatedCourse.fullName,
-                        updatedCourse.minStudentsForTeam,
-                        updatedCourse.maxStudentsForTeam,
-                        updatedCourse.enabled);
-                    const updatedVmModel = result.newVmModel;
-                    const editedVmModel = new VmModel(
-                        -1,
-                        updatedVmModel.name,
-                        -1,
-                        updatedVmModel.vcpus,
-                        updatedVmModel.diskSpace,
-                        updatedVmModel.ramSize
-                    );
-                    this.teacherService.addCourse(editedCourse).subscribe(
-                        r => {
-                            console.log('Nuovo corso: ' + r);
-                            this.refillCourses();
-                        }
-                    );
-                    this.vmModelsService.addVmModel(editedVmModel).subscribe(
-                        r => {
-                            console.log(r); // TODO aggiornare vmModel locale
-                        }
-                    );
-
-                }
-            }
-        );
-
-
-    }
-
-    private refillCourses() {
-        if (this.currentUser) {
-            if (this.currentUser.roles.includes('ROLE_STUDENT')) {
-                this.courses = this.studentsService
-                    .getCoursesOfStudentById(this.currentUser.email)  //this will be id??
-                    .pipe(
-                        first()
-                    );
-            }
-            if (this.currentUser.roles.includes('ROLE_TEACHER')) {
-                //     console.log('sto chiamando popopo');
-                this.courses = this.teacherService.query()
-                    .pipe(
-                        first()
-                    );
-            }
-            if (this.currentUser.roles.includes('ROLE_ADMIN')) {
-                //     console.log('pocibomboli lembe');
-                this.courses = this.teacherService.query()
-                    .pipe(
-                        first()
-                    );
-            }
-
+            );
+            this.router.navigate(['/home']);
+          }
         }
+    );
+
+  }
+
+  private refillCourses() {
+    if (this.currentUser){
+      if ( this.currentUser.roles.includes('ROLE_STUDENT')){
+        console.log("refill courses role student")
+       this.courses =  this.studentsService.getCoursesOfStudentById()
+            .pipe(
+              tap(() =>
+              console.log(`refill courses  getCoursesOfStudentById `, this.courses)
+            ),
+            );
+      }
+      else if ( this.currentUser.roles.includes('ROLE_TEACHER')){
+        console.log("refill courses role teacher")
+        this.courses = this.teacherService.getCoursesOfTeacherById()
+            .pipe(
+              tap(() =>
+              console.log(`refill courses  getCoursesOfTeacherById `, this.courses)
+            ),
+            );
+      }
     }
 
     openDialogDeleteCourse(course: Course): void {

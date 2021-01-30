@@ -1,7 +1,7 @@
-import { ProposedTeam } from './proposed-team.model';
+import { ProposalOfTeam } from './proposal-of-team.model';
 
-describe('ProposedTeam', () => {
+describe('ProposalOfTeam', () => {
   it('should create an instance', () => {
-    expect(new ProposedTeam()).toBeTruthy();
+    expect(new ProposalOfTeam()).toBeTruthy();
   });
 });
