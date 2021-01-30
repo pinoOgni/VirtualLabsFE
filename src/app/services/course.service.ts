@@ -7,6 +7,8 @@ import { catchError, first, mergeMap, tap } from 'rxjs/operators';
 import { Student } from '../models/student.model';
 import { CourseModel } from '../models/form-models';
 import { Teacher } from '../models/teacher.model';
+import { Assignment } from '../models/assignment.model';
+import { Homework, HomeworkStatus } from '../models/homework.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +27,24 @@ export class CourseService {
     {id: "5", email: "string", firstName: "jack", lastName: "r"},
     {id: "6", email: "string", firstName: "john", lastName: "t"} 
   ];
+  //test 
+  exampleAssignments: Assignment[] = [
+    {id: 1, releaseDate:"bbb", expiryDate:"cccc", name: "aaaa",content: "aaaaaaaa"},
+    {id: 2, releaseDate:"eee", expiryDate:"ffff", name: "dddd", content: "bbbbbbbb"}
+  ];
+
+  //test
+  exampleHomeworks_1: Homework[] = [
+    {assignment_id: 1, student_id: "aa" , status: HomeworkStatus.NULL, score: 0},
+    {assignment_id: 1, student_id: "bb" , status: HomeworkStatus.NULL, score: 0}
+  ];
+  
+  exampleHomeworks_2: Homework[] = [
+    {assignment_id: 2, student_id: "cc" , status: HomeworkStatus.NULL, score: 0},
+    {assignment_id: 2, student_id: "dd" , status: HomeworkStatus.NULL, score: 0}
+  ];
+
+
 
   constructor(private httpClient: HttpClient) {
     this.course = new BehaviorSubject<Course>(null);
@@ -273,6 +293,18 @@ export class CourseService {
       );
   }
 
+
+  // getAssignmentsOfCourse per ottenere tutti gli assignements di questo corso. Prende un courseAcronym. Ritorna Observable<Assignment[]>
+  getAssignmentsOfCourse(courseAcronym: string): Observable<Assignment[]> {
+    return of(this.exampleAssignments);
+  }
+
+  getHomeworkOfAssignmentOfCourse(courseAcronym: string, assignmentId: number): Observable<Homework[]> {
+    if(assignmentId === 1) 
+     return of(this.exampleHomeworks_1);
+    else
+      return of(this.exampleHomeworks_2);
+  }
 
 
 }
