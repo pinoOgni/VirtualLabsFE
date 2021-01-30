@@ -1,0 +1,10 @@
+<app-teacher-students 
+    [searchedStudents]="searchedStudents"
+    [enrolledStudents]="enrolledStudents" 
+    
+    (searchingStudentsByNameEvent)="searchingStudentsByName($event)"
+    (enrollStudentsToCourseEvent)="enrollStudentsToCourse($event)" 
+    (unenrollStudentsFromCourseEvent)="unenrollStudentsFromCourse($event)" 
+    (enrollStudentsToCourseWithCsv)="enrollStudentsToCourseWithCsv($event)"
+>
+</app-teacher-students>

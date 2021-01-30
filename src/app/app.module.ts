@@ -5,8 +5,10 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
+
+import {MatCardModule} from '@angular/material/card'; 
 import {MatDividerModule} from '@angular/material/divider'; 
-import { StudentsComponent } from './teacher/students/students.component';
+import { TeacherStudentsComponent } from './teacher/students/teacher-students.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatListModule} from '@angular/material/list';
 import {MatPaginatorModule} from '@angular/material/paginator';
@@ -20,7 +22,6 @@ import {MatInputModule} from '@angular/material/input';
 import {MatTableModule} from '@angular/material/table';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatSortModule} from '@angular/material/sort';
-import { StudentsContComponent } from './teacher/students/students-cont.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { HomeComponent } from './home/home.component';
 import { VmsContComponent } from './teacher/vms/vms-cont.component';
@@ -41,6 +42,7 @@ import { TeacherComponent } from './teacher/teacher.component';
 import { StudentNoTeamComponent } from './student/team/student-no-team.component';
 import { StudentTeamComponent } from './student/team/student-team.component';
 import { StudentTeamContComponent } from './student/team/student-team.container';
+import { TeacherStudentsContComponent } from './teacher/students/teacher-students.container'
 import { StudentVmsComponent } from './student/vms/student-vms.component';
 import { StudentVmsContComponent } from './student/vms/student-vms.container';
 import { StudentAssignmentsComponent } from './student/assignments/student-assignments.component';
@@ -59,8 +61,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
-    StudentsComponent,
-    StudentsContComponent,
+    TeacherStudentsComponent,
     PageNotFoundComponent,
     HomeComponent,
     VmsContComponent,
@@ -78,6 +79,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     StudentAssignmentsComponent,
     StudentVmsContComponent,
     StudentTeamContComponent,
+    TeacherStudentsContComponent,
     EditCourseDialogComponent,
     StudentComponent,
   ],
@@ -95,6 +97,7 @@ import { MatNativeDateModule } from '@angular/material/core';
         MatInputModule,
         MatAutocompleteModule,
         MatSortModule,
+        MatCardModule,
         MatPaginatorModule,
         MatCheckboxModule,
         MatTabsModule,

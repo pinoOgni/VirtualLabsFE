@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {HomeComponent} from "./home/home.component";
-import {StudentsContComponent} from "./teacher/students/students-cont.component";
 import {VmsContComponent} from "./teacher/vms/vms-cont.component";
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {AuthGuard} from "./auth/auth.guard";
@@ -12,6 +11,7 @@ import { StudentAssignmentsContComponent } from './student/assignments/student-a
 import { StudentVmsContComponent } from './student/vms/student-vms.container';
 import { StudentTeamContComponent } from './student/team/student-team.container';
 import {Role} from './models/role.model';
+import { TeacherStudentsContComponent } from './teacher/students/teacher-students.container';
 const routes  = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent},
@@ -21,7 +21,7 @@ const routes  = [
     data: { roles: [Role.Teacher, Role.Admin] },
     children: [
       { path: '', redirectTo: 'students', pathMatch: 'full'},
-      { path: 'students', component: StudentsContComponent},
+      { path: 'students', component: TeacherStudentsContComponent},
       { path: 'vms', component: VmsContComponent},
       { path: 'assignments', component: AssignmentsContComponent}
       ]
