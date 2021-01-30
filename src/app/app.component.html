@@ -42,10 +42,10 @@
           <a [routerLink]="[
         currentUser.roles[0].toLowerCase().replace('role_', '') +
           '/courses/' +
-          course.acronym + '-' + course.id
+          course.id
       ]"> {{course.fullName}} </a>
 
-          <button [matMenuTriggerFor]="menu" mat-icon-button mat-button>
+          <button *ngIf="currentUser.roles[0] === 'ROLE_TEACHER'" [matMenuTriggerFor]="menu" mat-button mat-icon-button>
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">

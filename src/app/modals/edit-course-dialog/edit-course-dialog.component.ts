@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {VmModel} from '../../models/vm-model.model';
+import {Course} from '../../models/course.model';
 
 @Component({
     selector: 'app-edit-course-dialog',
@@ -19,12 +20,7 @@ export class EditCourseDialogComponent implements OnInit {
     vmModel: VmModel;
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: {
-            courseFullName: string,
-            courseAcronym: string,
-            maxStudents: string,
-            minStudents: string,
-            enabled: string,
-            vModel: VmModel
+            editedCourse: Course
         },
         private auth: AuthService, private formBuilder: FormBuilder, private router: Router, private dialogRef: MatDialogRef<EditCourseDialogComponent>) {
         // this.model = {username: '', password: ''};
@@ -39,15 +35,14 @@ export class EditCourseDialogComponent implements OnInit {
             vmModelDiskSpace: ['', Validators.required],
             vmModelRamSize: ['', Validators.required]
         });
-        this.editCourseForm.controls.courseFullName.setValue(data.courseFullName);
-        this.editCourseForm.controls.courseAcronym.setValue(data.courseAcronym);
-        this.editCourseForm.controls.courseMinStudents.setValue(data.minStudents);
-        this.editCourseForm.controls.courseMaxStudents.setValue(data.maxStudents);
-        this.editCourseForm.controls.courseEnabled.setValue(String(data.enabled));
-        this.editCourseForm.controls.vmModelName.setValue(data.vModel.name);
-        this.editCourseForm.controls.vmModelVcpus.setValue(data.vModel.vcpus);
-        this.editCourseForm.controls.vmModelDiskSpace.setValue(data.vModel.diskSpace);
-        this.editCourseForm.controls.vmModelRamSize.setValue(data.vModel.ramSize);
+        this.editCourseForm.controls.courseFullName.setValue(data.editedCourse.fullName);
+        this.editCourseForm.controls.courseAcronym.setValue(data.editedCourse.acronym);
+        this.editCourseForm.controls.courseMinStudents.setValue(data.editedCourse.minStudentsForTeam);
+        this.editCourseForm.controls.courseMaxStudents.setValue(data.editedCourse.maxStudentsForTeam);
+        this.editCourseForm.controls.courseEnabled.setValue(String(data.editedCourse.enabled));
+        this.editCourseForm.controls.vmModelVcpus.setValue(data.editedCourse.vcpus);
+        this.editCourseForm.controls.vmModelDiskSpace.setValue(data.editedCourse.diskSpace);
+        this.editCourseForm.controls.vmModelRamSize.setValue(data.editedCourse.ramSize);
 
 
     }
@@ -55,17 +50,11 @@ export class EditCourseDialogComponent implements OnInit {
     ngOnInit() {
 
         this.model = {
-            id: -1,
             acronym: '',
             enabled: '',
             fullName: '',
             maxStudentsForTeam: '',
-            minStudentsForTeam: ''
-        };
-        this.vmModel = {
-            id: -1,
-            name: '',
-            courseId: -1,
+            minStudentsForTeam: '',
             vcpus: -1,
             diskSpace: -1,
             ramSize: -1
@@ -83,16 +72,14 @@ export class EditCourseDialogComponent implements OnInit {
             this.model.minStudentsForTeam = this.editCourseForm.controls.courseMinStudents.value;
             this.model.maxStudentsForTeam = this.editCourseForm.controls.courseMaxStudents.value;
             this.model.enabled = this.editCourseForm.controls.courseEnabled.value;
-            this.vmModel.name = this.editCourseForm.controls.vmModelName.value;
-            this.vmModel.vcpus = Number(this.editCourseForm.controls.vmModelVcpus.value);
-            this.vmModel.diskSpace = Number(this.editCourseForm.controls.vmModelDiskSpace.value);
-            this.vmModel.ramSize = Number(this.editCourseForm.controls.vmModelRamSize.value);
+            this.model.vcpus = Number(this.editCourseForm.controls.vmModelVcpus.value);
+            this.model.diskSpace = Number(this.editCourseForm.controls.vmModelDiskSpace.value);
+            this.model.ramSize = Number(this.editCourseForm.controls.vmModelRamSize.value);
 
             this.dialogRef.close(
                 {
                     logged: true,
                     newCourseModel: this.model,
-                    newVmModel: this.vmModel
                 }
             );
         }

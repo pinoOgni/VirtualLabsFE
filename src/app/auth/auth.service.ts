@@ -1,32 +1,32 @@
 /**
- * NOTE: If you don't like the idea of storing the current user 
- * details in local storage, all you need to do is change the 3 
- * references to localStorage in this file. Other options are session 
- * storage, cookies, or you could simply not store the user details 
- * in the browser, although be aware that with this last option that 
+ * NOTE: If you don't like the idea of storing the current user
+ * details in local storage, all you need to do is change the 3
+ * references to localStorage in this file. Other options are session
+ * storage, cookies, or you could simply not store the user details
+ * in the browser, although be aware that with this last option that
  * the user will be automatically logged out if they refresh the page.
- * 
+ *
  */
 
-import { Injectable } from '@angular/core';
-import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {LoginModel, RegisterModel} from "../models/form-models";
-import {tap,map} from "rxjs/operators";
+import {Injectable} from '@angular/core';
+import {environment} from '../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {LoginModel, RegisterModel} from '../models/form-models';
+import {map} from 'rxjs/operators';
 // @ts-ignore
 import * as moment from 'moment';
 // @ts-ignore
 import * as jwt_decode from 'jwt-decode';
-import {BehaviorSubject,Observable} from "rxjs";
-import { User } from '../models/user.model';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {User} from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 
 /**
- * RxJS Subjects and Observables are used to store the current 
- * user object and notify other components when the user logs in 
+ * RxJS Subjects and Observables are used to store the current
+ * user object and notify other components when the user logs in
  * and out of the app
  */
 export class AuthService{
@@ -96,17 +96,17 @@ export class AuthService{
    */
   login(model: LoginModel) {
     console.log("login before post")
-    return this.httpClient.post<User>(environment.login_url,model,environment.http_options)
-    .pipe(
-      map((authResult) => {
-        console.log('login in pipe ', authResult)
-        //jwt response, I'm logged
-        //jwt è un json con chiave "token" asfajscbiasoc.acnasicansocas.coacoasbnsoc
-        // "email": caicao
-        // "roles": suca hamza
-        // 
-        console.log("800A ", JSON.parse(atob(authResult.token.split('.')[1])).sub)
-       const user = new User(
+    return this.httpClient.post<User>(environment.login_url, model, environment.http_options)
+        .pipe(
+            map((authResult) => {
+              console.log('login in pipe ', authResult);
+              //jwt response, I'm logged
+              //jwt è un json con chiave "token" asfajscbiasoc.acnasicansocas.coacoasbnsoc
+              // "email": caicao
+              // "roles": suca hamza
+              //
+              console.log('800A ', JSON.parse(atob(authResult.token.split('.')[1])).sub);
+              const user = new User(
           JSON.parse(atob(authResult.token.split('.')[1])).sub, //admin
           authResult.token, //token sano
           JSON.parse(atob(authResult.token.split('.')[1])).roles //ROLE_ADMIN
