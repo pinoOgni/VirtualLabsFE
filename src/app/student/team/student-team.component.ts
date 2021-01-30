@@ -19,7 +19,8 @@ export class StudentTeamComponent{
 
   @Input() set team(team: Team) {
     this.teamName = team.name;
-    this.dataSource.data = team.members;
+    //TODO
+    //this.dataSource.data = team.members;
   }
 
 }

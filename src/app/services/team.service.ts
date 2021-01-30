@@ -29,7 +29,7 @@ export class TeamService {
   ];
 
   //test
-  exampleTeam: Team = new Team("New Team", 2, this.newMembers,1,1,1,1,1,1,true)
+  exampleTeam: Team = new Team("New Team", 2,1,1,1,1,1,1,true)
 
    /**
    * The RxJS BehaviorSubject is a special type of Subject that 
@@ -41,11 +41,12 @@ export class TeamService {
   public currentTeamSubject: BehaviorSubject<Team>; 
   constructor(private httpClient: HttpClient, private authService: AuthService, private courseService: CourseService) { 
     //test
-    this.currentTeamSubject = new BehaviorSubject<Team>(new Team("Argonauti", 1, this.members,1,1,1,1,1,1,true));
+    //this.currentTeamSubject = new BehaviorSubject<Team>(new Team("Argonauti", 1, this.members,1,1,1,1,1,1,true));
+    this.currentTeamSubject = new BehaviorSubject<Team>(null)
   }
 
   /**
-   * Metodi da fare
+   * TODO
    * updateTeamVmResources: aggiorna le risorse di un team da parte di un teacher. Prende un FORM e un teamId. Ritorna Observable<Team>
    */
 
@@ -54,11 +55,42 @@ export class TeamService {
     * @param courseAcronym the acronym of a team
     * @param studentId the student id that is equal of the user username of a user logged
     */
-  getTeamOfStudent(courseAcronym: string, studentId: string = this.authService.currentUserValue.username): Observable<Team> {
+  getTeamOfStudent(courseAcronym: string = this.courseService.currentCourseAcrSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Team> {
     //this method will done a get
     //test
-    return from(this.currentTeamSubject);
-  }
+    //return from(this.currentTeamSubject);
+    const url = `${environment.base_url_students}/${studentId}/teams/${courseAcronym}`
+    return this.httpClient
+    .get<Team>(url).pipe(
+        tap(() =>
+            console.log(`getTeamOfStudent ok studentId ${studentId} course ${courseAcronym}`
+            )
+        ),
+        catchError(
+            this.handleError<Team>(`getTeamOfStudent error studentId ${studentId} course ${courseAcronym}`)
+        )
+    );
+}
+
+
+getMembersOfTeam(teamId: string, courseAcronym: string = this.courseService.currentCourseAcrSubject.value): Observable<Student[]> {
+  //this method will done a get
+  //test
+  //return from(this.currentTeamSubject);
+  const url = `${environment.base_url_course}/${courseAcronym}/teams/${teamId}/students`
+  return this.httpClient
+  .get<Student[]>(url).pipe(
+      tap(() =>
+          console.log(`getMembersOfTeam ok studentId ${teamId} course ${courseAcronym}`
+          )
+      ),
+      catchError(
+          this.handleError<Student[]>(`getMembersOfTeam error studentId ${teamId} course ${courseAcronym}`,[])
+      )
+  );
+}
+
+  
 
   /**
    * This method create a team given a course and a proposal of team
@@ -66,7 +98,7 @@ export class TeamService {
    * @param proposalOfTeam proposal of a team
    */
   createTeam(courseAcronym: string, proposalOfTeam: ProposalOfTeam): Observable<Team> {
-    const url = `${environment.base_url_course}+/${courseAcronym}/teams`
+    const url = `${environment.base_url_course}/${courseAcronym}/teams`
     return this.httpClient.post<Team>(url,proposalOfTeam,environment.http_options)
         .pipe(tap(() =>
                 console.log(`createTeam ${proposalOfTeam.teamName}`)
@@ -80,7 +112,7 @@ export class TeamService {
    * @param tokenTeam the token associated to the team proposal
    */
   acceptTeamProposal(tokenTeam: string):  Observable<boolean> {
-    const url = `${environment.base_url_teams}+/acceptTeamInvitation/${tokenTeam}`
+    const url = `${environment.base_url_teams}/acceptTeamInvitation/${tokenTeam}`
     return this.httpClient.get<boolean>(url,environment.http_options)
     .pipe(tap(() =>
     console.log(`acceptTeamProposal() ok ${tokenTeam}`)
@@ -94,7 +126,7 @@ export class TeamService {
    * @param tokenTeam the token associated to the team proposal
    */
   rejectTeamProposal(tokenTeam: string):  Observable<boolean> {
-    const url = `${environment.base_url_teams}+/rejectTeamInvitation/${tokenTeam}`
+    const url = `${environment.base_url_teams}/rejectTeamInvitation/${tokenTeam}`
     return this.httpClient.get<boolean>(url,environment.http_options)
     .pipe(tap(() =>
     console.log(`rejectTeamProposal() ok ${tokenTeam}`)
@@ -107,7 +139,7 @@ export class TeamService {
    * @param tokenTeam the token associated to the team proposal
    */
   public deleteProposal(tokenTeam: string): Observable<boolean> {
-    const url = `${environment.base_url_teams}+/deleteTeamProposal/${tokenTeam}`
+    const url = `${environment.base_url_teams}/deleteTeamProposal/${tokenTeam}`
     return this.httpClient.get<boolean>(url,environment.http_options)
       .pipe(
         tap(() => console.log(`deleteProposal ok ${tokenTeam}`)),
