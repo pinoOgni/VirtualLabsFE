@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {EditCourseModel} from '../../models/form-models';
-import {VmModel} from '../../models/vm-model.model';
 import {MatDialogRef} from '@angular/material/dialog';
 import {AuthService} from '../../auth/auth.service';
 import {Router} from '@angular/router';
@@ -17,7 +16,7 @@ export class AddCourseDialogComponent implements OnInit {
   serverErrors: string;
   editCourseForm: FormGroup;
   model: EditCourseModel;
-  vmModel: VmModel;
+
 
   constructor(
       private auth: AuthService,
@@ -41,17 +40,11 @@ export class AddCourseDialogComponent implements OnInit {
   ngOnInit() {
 
     this.model = {
-      id: -1,
       acronym: '',
       enabled: '',
       fullName: '',
       maxStudentsForTeam: '',
-      minStudentsForTeam: ''
-    };
-    this.vmModel = {
-      id: -1,
-      name: '',
-      courseId: -1,
+      minStudentsForTeam: '',
       vcpus: -1,
       diskSpace: -1,
       ramSize: -1
@@ -69,16 +62,14 @@ export class AddCourseDialogComponent implements OnInit {
       this.model.minStudentsForTeam = this.editCourseForm.controls.courseMinStudents.value;
       this.model.maxStudentsForTeam = this.editCourseForm.controls.courseMaxStudents.value;
       this.model.enabled = this.editCourseForm.controls.courseEnabled.value;
-      this.vmModel.name = this.editCourseForm.controls.vmModelName.value;
-      this.vmModel.vcpus = Number(this.editCourseForm.controls.vmModelVcpus.value);
-      this.vmModel.diskSpace = Number(this.editCourseForm.controls.vmModelDiskSpace.value);
-      this.vmModel.ramSize = Number(this.editCourseForm.controls.vmModelRamSize.value);
+      this.model.vcpus = Number(this.editCourseForm.controls.vmModelVcpus.value);
+      this.model.diskSpace = Number(this.editCourseForm.controls.vmModelDiskSpace.value);
+      this.model.ramSize = Number(this.editCourseForm.controls.vmModelRamSize.value);
 
       this.dialogRef.close(
           {
             logged: true,
             newCourseModel: this.model,
-            newVmModel: this.vmModel
           }
       );
     } else {

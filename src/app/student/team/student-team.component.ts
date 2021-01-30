@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { Student } from 'src/app/models/student.model';
-import { Team } from 'src/app/models/team.model';
+import {Component, Input} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
+import {Student} from 'src/app/models/student.model';
+import {Team} from 'src/app/models/team.model';
 
 @Component({
   selector: 'app-student-team',
@@ -11,16 +11,15 @@ import { Team } from 'src/app/models/team.model';
 /**
  * This class represents the tab TEAM id the student is in a team for that course
  */
-export class StudentTeamComponent{
+export class StudentTeamComponent {
 
   teamName = '';
   dataSource = new MatTableDataSource<Student>();
-  columnsToDisplay = ['firstName', 'lastName', 'id']; 
+  columnsToDisplay = ['firstName', 'lastName', 'id'];
 
   @Input() set team(team: Team) {
     this.teamName = team.name;
-    //TODO
-    //this.dataSource.data = team.members;
+    // TODO
+    // this.dataSource.data = team.members;
   }
-
 }

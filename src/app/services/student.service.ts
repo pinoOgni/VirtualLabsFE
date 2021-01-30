@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Student } from "../models/student.model";
-import { Course } from "../models/course.model";
-import { forkJoin, Observable, of } from "rxjs";
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, map, retry, tap } from 'rxjs/operators';
-import { environment } from "../../environments/environment";
-import { Proposal } from '../models/proposal.model';
-import { AuthService } from '../auth/auth.service';
-import { CourseService } from './course.service';
+import {Injectable} from '@angular/core';
+import {Student} from '../models/student.model';
+import {Course} from '../models/course.model';
+import {Observable, of} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {catchError, tap} from 'rxjs/operators';
+import {environment} from '../../environments/environment';
+import {Proposal} from '../models/proposal.model';
+import {AuthService} from '../auth/auth.service';
+import {CourseService} from './course.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,9 @@ export class StudentService {
 
   base_URL = environment.base_URL;
 
-  constructor(private httpClient: HttpClient, private authService: AuthService, private courseService: CourseService) { }
+  constructor(private httpClient: HttpClient, private authService: AuthService, private courseService: CourseService) {
+  }
+
   teamName: string;
   creator: string;
   membersWithState: string[];
@@ -120,7 +122,7 @@ export class StudentService {
    * @param studentId the id of the student
    */
   getProposalsInCourse(courseAcronym: string = this.courseService.currentCourseAcrSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Proposal[]> {
-    //return of<Proposal[]>(this.exampleProposals)
+    // return of<Proposal[]>(this.exampleProposals)
     const url = `${environment.base_url_students}/${studentId}/proposalsOfCourse/${courseAcronym}`
     return this.httpClient.get<Proposal[]>(url, environment.http_options)
       .pipe(

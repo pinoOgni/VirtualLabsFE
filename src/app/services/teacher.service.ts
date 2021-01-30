@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable, of} from "rxjs";
-import {catchError, tap} from "rxjs/operators";
-import {Course} from "../models/course.model";
-import {Student} from "../models/student.model";
-import { AuthService } from '../auth/auth.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Observable, of} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {Course} from '../models/course.model';
+import {AuthService} from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +13,7 @@ export class TeacherService {
   base_URL = environment.base_URL;
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
 
@@ -34,7 +33,7 @@ export class TeacherService {
    * @param teacherId the teacher id that is equal to the username of a user logged
    */
   getCoursesOfTeacherById(teacherId: string = this.authService.currentUserValue.username): Observable<Course[]> {
-    const url = `${environment.base_url_teachers}/${teacherId}/courses`
+    const url = `${environment.base_url_teachers}/${teacherId}/courses`;
     return this.httpClient.get<Course[]>(url)
       .pipe(
         tap(() =>
@@ -45,7 +44,7 @@ export class TeacherService {
       );
   }
 
-  //ALE
+  // ALE
   // TODO spostare in courseService
   update(course: Course): Observable<Course> {
     console.log('sto updatando: ' +  course.acronym + ' nome: ' + course.fullName);
@@ -69,8 +68,14 @@ export class TeacherService {
 
 
   deleteCourse(course: Course): Observable<Course> {
-    return this.http.delete<Course>(this.base_URL + 'courses/' + course.id).pipe(
+    return this.httpClient.delete<Course>(this.base_URL + 'courses/' + course.acronym).pipe(
         catchError(this.handleError<any>('createCourse')));
 
+  }
+
+  addCourse(newCourse: Course): Observable<Course> {
+    return this.httpClient.post<Course>(this.base_URL + 'courses/', newCourse, this.httpOptions).pipe(
+        catchError(this.handleError<any>('createCourse'))
+    );
   }
 }

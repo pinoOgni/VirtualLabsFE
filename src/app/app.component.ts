@@ -12,7 +12,6 @@ import {EditCourseDialogComponent} from './modals/edit-course-dialog/edit-course
 import {TeacherService} from './services/teacher.service';
 import {StudentService} from './services/student.service';
 import {VmModelsService} from './services/vm-models.service';
-import {VmModel} from './models/vm-model.model';
 import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-dialog.component';
 import {ConfirmationDialogComponent} from './modals/confirmation-dialog/confirmation-dialog.component';
 
@@ -109,70 +108,68 @@ export class AppComponent implements OnDestroy, OnInit {
     }
 
     public openDialogEditCourse(course: Course): void {
-        let vmModel: VmModel;
-        this.vmModelsService.getVmModelByCourseId(course.id).subscribe(
-            //   this.vmModelsService.query().subscribe(
+        const dialogRef = this.dialog.open(EditCourseDialogComponent, {
+            data: {
+                editedCourse: course
+            }
+        });
+        dialogRef.afterClosed().subscribe(
             result => {
-
-                vmModel = result;
-                console.log('vmModel: ' + typeof (result.courseId));
-                const dialogRef = this.dialog.open(EditCourseDialogComponent, {
-                    data: {
-                        courseFullName: course.fullName,
-                        courseAcronym: course.acronym,
-                        maxStudents: course.maxStudentsForTeam,
-                        minStudents: course.minStudentsForTeam,
-                        enabled: course.enabled,
-                        vModel: vmModel
-                    }
-                }); // {disableClose: true}
-
-    dialogRef.afterClosed().subscribe(
-        result => {
-          if (result === undefined ){
-            return;
-          }
-          if ( result.logged === true ){
-            const updatedCourse = result.newCourseModel;
-            // TODO gestire heldBy
-            const editedCourse = new Course(
-                updatedCourse.acronym,
-                updatedCourse.fullName,
-                updatedCourse.minStudentsForTeam,
-                updatedCourse.maxStudentsForTeam,
-                Boolean(updatedCourse.enabled));
-            this.teacherService.update(editedCourse).subscribe(
-                r => {
-                    this.refillCourses();
+                if (result === undefined) {
+                    return;
                 }
-            );
-            this.router.navigate(['/home']);
-          }
-        }
-    );
+                if (result.logged) {
+                    const editedCourse = result.editedCourse;
+                    const newCourse = new Course(
+                        course.id,
+                        editedCourse.acronym,
+                        editedCourse.fullName,
+                        editedCourse.minStudentsForTeam,
+                        editedCourse.maxStudentsForTeam,
+                        editedCourse.enable,
+                        editedCourse.vcpus,
+                        editedCourse.diskSpace,
+                        editedCourse.ramSize);
+                    this.teacherService.update(newCourse).subscribe(
+                        result => {
+                            this.refillCourses();
+                        }
+                    );
+                }
+            }
+        );
+    }
 
-  }
+    public openDialogAddCourse() {
+        const dialogRef = this.dialog.open(AddCourseDialogComponent,
+        );
 
-  private refillCourses() {
-    if (this.currentUser){
-      if ( this.currentUser.roles.includes('ROLE_STUDENT')){
-        console.log("refill courses role student")
-       this.courses =  this.studentsService.getCoursesOfStudentById()
-            .pipe(
-              tap(() =>
-              console.log(`refill courses  getCoursesOfStudentById `, this.courses)
-            ),
-            );
-      }
-      else if ( this.currentUser.roles.includes('ROLE_TEACHER')){
-        console.log("refill courses role teacher")
-        this.courses = this.teacherService.getCoursesOfTeacherById()
-            .pipe(
-              tap(() =>
-              console.log(`refill courses  getCoursesOfTeacherById `, this.courses)
-            ),
-            );
-      }
+        dialogRef.afterClosed().subscribe(
+            result => {
+                if (result === undefined) {
+                    return;
+                }
+                if (result.logged) {
+                    const nCourse = result.newCourseModel;
+                    const newCourse = new Course(
+                        -1,
+                        nCourse.acronym,
+                        nCourse.name,
+                        nCourse.minStudentsForTeam,
+                        nCourse.maxStudentsForTeam,
+                        nCourse.enable,
+                        nCourse.vcpus,
+                        nCourse.diskSpace,
+                        nCourse.ramSize
+                    );
+                    this.teacherService.addCourse(newCourse).subscribe(
+                        result => {
+                            this.refillCourses();
+                        }
+                    );
+                }
+            }
+        );
     }
 
     openDialogDeleteCourse(course: Course): void {
@@ -194,6 +191,30 @@ export class AppComponent implements OnDestroy, OnInit {
         );
 
     }
+
+    private refillCourses(): void {
+        if (this.currentUser) {
+            if (this.currentUser.roles.includes('ROLE_STUDENT')) {
+                console.log('refill courses role student');
+                this.courses = this.studentsService.getCoursesOfStudentById()
+                    .pipe(
+                        tap(() =>
+                            console.log(`refill courses  getCoursesOfStudentById `, this.courses)
+                        ),
+                    );
+            } else if (this.currentUser.roles.includes('ROLE_TEACHER')) {
+                console.log('refill courses role teacher');
+                this.courses = this.teacherService.getCoursesOfTeacherById()
+                    .pipe(
+                        tap(() =>
+                            console.log(`refill courses  getCoursesOfTeacherById `, this.courses)
+                        ),
+                    );
+            }
+        }
+    }
+
+
 }
 
 
