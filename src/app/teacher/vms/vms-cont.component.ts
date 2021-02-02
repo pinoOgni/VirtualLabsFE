@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Team} from '../../models/team.model';
 
 @Component({
   selector: 'app-vms-cont',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VmsContComponent implements OnInit {
 
-  constructor() { }
+  teams: Team[];
+
+  constructor() {
+  }
 
   ngOnInit(): void {
+
   }
 
 }

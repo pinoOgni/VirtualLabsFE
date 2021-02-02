@@ -31,7 +31,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthInterceptor} from './auth/auth.interceptor';
 import {ErrorInterceptor} from './helpers/error.interceptor';
 import {RegisterDialogComponent} from './modals/register-dialog/register-dialog.component';
-import {VmsResourcesComponent} from './teacher/vms/vms-resources.component';
 import {AssignmentsComponent} from './teacher/assignments/assignments.component';
 import {AssignmentsContComponent} from './teacher/assignments/assignments-cont.component';
 import {TeacherComponent} from './teacher/teacher.component';
@@ -60,7 +59,6 @@ import {ConfirmationDialogComponent} from './modals/confirmation-dialog/confirma
         LoginDialogComponent,
     RegisterDialogComponent,
     VmsComponent,
-    VmsResourcesComponent,
     AssignmentsComponent,
         AssignmentsContComponent,
         TeacherComponent,
