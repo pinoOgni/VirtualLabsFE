@@ -47,8 +47,8 @@ export class TeacherService {
   // ALE
   // TODO spostare in courseService
   update(course: Course): Observable<Course> {
-    console.log('sto updatando: ' +  course.acronym + ' nome: ' + course.fullName);
-    return this.httpClient.put<Course>(this.base_URL + 'courses/' + course.acronym, course, this.httpOptions).pipe(
+    console.log('sto updatando: ' +  course.id + ' nome: ' + course.name);
+    return this.httpClient.put<Course>(this.base_URL + 'courses/' + course.id, course, this.httpOptions).pipe(
         catchError(this.handleError<any>('updateCourse'))
     );
 
@@ -69,13 +69,13 @@ export class TeacherService {
 
   deleteCourse(course: Course): Observable<Course> {
     return this.httpClient.delete<Course>(this.base_URL + 'courses/' + course.acronym).pipe(
-        catchError(this.handleError<any>('createCourse')));
-
+        catchError(this.handleError<any>('deleteCourse')));
   }
 
+  
   addCourse(newCourse: Course): Observable<Course> {
     return this.httpClient.post<Course>(this.base_URL + 'courses/', newCourse, this.httpOptions).pipe(
-        catchError(this.handleError<any>('createCourse'))
+        catchError(this.handleError<any>('addCourse'))
     );
   }
 }

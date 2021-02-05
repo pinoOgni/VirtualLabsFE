@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { Course } from '../models/course.model';
 import { catchError, first, mergeMap, tap } from 'rxjs/operators';
 import { Student } from '../models/student.model';
-import { CourseModel } from '../models/form-models';
+import { CourseModel, CreateAssignment } from '../models/form-models';
 import { Teacher } from '../models/teacher.model';
 import { Assignment } from '../models/assignment.model';
 import { Homework, HomeworkStatus } from '../models/homework.model';
@@ -14,10 +14,9 @@ import { Homework, HomeworkStatus } from '../models/homework.model';
   providedIn: 'root'
 })
 export class CourseService {
-  base_URL = environment.base_URL
 
   public course: BehaviorSubject<Course>;
-  public currentCourseAcrSubject: BehaviorSubject<string>;
+  public currentCourseIdSubject: BehaviorSubject<string>;
  
   //test
   enrolledAvailableStudents: Student[] = [
@@ -33,47 +32,71 @@ export class CourseService {
     {id: 2, releaseDate:"eee", expiryDate:"ffff", name: "dddd", content: "bbbbbbbb"}
   ];
 
-  //test
-  exampleHomeworks_1: Homework[] = [
-    {assignment_id: 1, student_id: "aa" , status: HomeworkStatus.NULL, score: 0},
-    {assignment_id: 1, student_id: "bb" , status: HomeworkStatus.NULL, score: 0}
-  ];
-  
-  exampleHomeworks_2: Homework[] = [
-    {assignment_id: 2, student_id: "cc" , status: HomeworkStatus.NULL, score: 0},
-    {assignment_id: 2, student_id: "dd" , status: HomeworkStatus.NULL, score: 0}
-  ];
-
-
 
   constructor(private httpClient: HttpClient) {
     this.course = new BehaviorSubject<Course>(null);
     // test 
     // this.course = new BehaviorSubject<Course>(new Course("APA","Algoritmi e Programmazione Avanzata",3,4,true));
-    this.currentCourseAcrSubject = new BehaviorSubject<string>(null);
+    this.currentCourseIdSubject = new BehaviorSubject<string>(null);
   }
 
   /**
-   * metodo enrollStudentsToCourseWithCSV per aggiungere degli studenti al corso dato un ID con csv. Prende un FORM e un courseAcronym.
-   * metodo getTeachersOfCourse per ottenere la lista di teacher che tengono un Course. Prende un Course. Ritorna un Observable<Teacher[]>
-   * metodo deleteCourse per cancellare un corso in base all'ID o all'acronimo?
-   * metodo createCourse per creare un corso. Ritorna un Observable<Course>. FORM COURSE.
+   * metodo enrollStudentsToCourseWithCSV per aggiungere degli studenti al corso dato un ID con csv. Prende un FORM e un courseId.
    * metodo updateCourse per aggiornare un corso. Ritorna un Observable<Course>. FORM COURSE.
-   * getVmsOfCourse per ottenere tutte le VM di questo corso. Prende un courseAcronym. Ritorna un Observable<TeacherVmInfo>
-   * getAssignmentsOfCourse per ottenere tutti gli assignements di questo corso. Prende un courseAcronym. Ritorna Observable<Assignment[]>
-   * createAssignment: crea un assignment per questo corso. Ritorna un Observable<Assignment>. FORM ASSIGNMENT
+   * getVmsOfCourse per ottenere tutte le VM di questo corso. Prende un courseId. Ritorna un Observable<TeacherVmInfo>
    */
 
+
+
+  /**
+   * This method is used to enable a course
+   * @param courseId 
+   */
+  enableCourse(courseId: string = this.currentCourseIdSubject.value): Observable<boolean> {
+    const url = `${environment.base_url_course}/${courseId}/enableCourse`
+    return this.httpClient.put<boolean>(url,{},environment.http_options)
+      .pipe(
+        tap(() => {
+          console.log(`enableCourse ok ${courseId}`);
+        }),
+        catchError(
+          this.handleError<boolean>(`enableCourse error ${courseId} `)
+        )
+    )
+  }
+
+  /**
+   * This method is used to disable a course
+   * @param courseId 
+   */
+  disableCourse(courseId: string = this.currentCourseIdSubject.value): Observable<boolean> {
+    const url = `${environment.base_url_course}/${courseId}/disableCourse`
+    return this.httpClient.put<boolean>(url,{},environment.http_options)
+      .pipe(
+        tap(() => {
+          console.log(`disableCourse ok ${courseId}`);
+        }),
+        catchError(
+          this.handleError<boolean>(`disableCourse error ${courseId} `)
+        )
+    )
+  }
+
+
+  /**
+   * This method is used to retrieve all teachers of a given course
+   * @param course 
+   */
   getTeachersOfCourse(course: Course): Observable<Teacher[]> {
-    const url = `${environment.base_url_course}/${course.acronym}/teachers`
+    const url = `${environment.base_url_course}/${course.id}/teachers`
     return this.httpClient.get<Teacher[]>(url)
       .pipe(
         tap(() =>
-          console.log(`getTeachersOfCourse ok ${course.acronym}`
+          console.log(`getTeachersOfCourse ok ${course.id}`
           )
         ),
         catchError(
-          this.handleError<Teacher[]>(`getTeachersOfCourse error ${course.acronym}`
+          this.handleError<Teacher[]>(`getTeachersOfCourse error ${course.id}`
           )
         )
       );
@@ -82,38 +105,31 @@ export class CourseService {
 
   /**
    * 
-   * @param courseAcronym is the acronym of the course (APA)
+   * @param courseId is the id of the course (APA)
    */
-  getThisCourse(courseAcronym: string): Observable<Course> {
-    const url = `${this.base_URL}/courses/${courseAcronym}`;
+  getThisCourse(courseId: string): Observable<Course> {
+    const url = `${environment.base_url_course}/${courseId}`;
     return this.httpClient
       .get<Course>(url).pipe( tap(() =>
-          console.log(`getThisCourse ${courseAcronym}`)
+          console.log(`getThisCourse ok ${courseId}`)
         ),
-        catchError(this.handleError<any>(`getThisCourse(${courseAcronym})`,[]))
+        catchError(this.handleError<any>(`getThisCourse error ${courseId} `,[]))
       );
   }
 
   /**
-   * This method will make a get to the server to retrieve the
-   * list of students that are enrolled in this course and also available
-   * i.e. with no team
-   * @param courseAcronym the course acronym
+   * This method is used to create an assignment for a given course
+   * @param formCreateAssignment 
    */
-  getAvailableStudentsOfCourse(courseAcronym: string = this.currentCourseAcrSubject.value): Observable<Student[]> {
-    const url = `${environment.base_url_course}/${courseAcronym}/availableStudents`
-    return this.httpClient.get<Student[]>(url)
+  createAssignment(formCreateAssignment: CreateAssignment): Observable<Assignment> {
+    const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/assignment`
+    return this.httpClient.post<Assignment>(url,formCreateAssignment)
       .pipe(
-        tap(() =>
-          console.log(`getAvailableStudentsOfCourse ok ${courseAcronym}`)
-        ),
-        catchError(
-          this.handleError<Student[]>(`getAvailableStudentsOfCourse error ${courseAcronym}`)
-        )
+        tap(() => console.log('createAssignment ok') ),
+          catchError(this.handleError<Assignment>(`createAssignment error`)
+          )
       );
   }
-
-  
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
@@ -128,36 +144,41 @@ export class CourseService {
   }
 
 
-  setNextCourse(courseAcronym: string) {
-    this.currentCourseAcrSubject.next(courseAcronym);
-    if (!courseAcronym) {
+  setNextCourse(courseId: string) {
+    this.currentCourseIdSubject.next(courseId);
+    if (!courseId) {
       this.course.next(null);
       return;
     }
-    this.getThisCourse(courseAcronym)
+    this.getThisCourse(courseId)
       .pipe(first())
       .subscribe((x) => this.course.next(x));
   }
 
   /**
-   * 
-   * @param courseAcronym given a courseAcronym this will give the list of student of that course
+  * This method will make a get to the server to retrieve the
+   * list of students that are enrolled in this course and also available
+   * i.e. with no team
+   * @param courseId given a courseId this will give the list of student of that course
    * that are available (not in a team)
    */
-  getEnrolledAvailableStudents(courseAcronym: string = this.currentCourseAcrSubject.value): Observable<Student[]> {
+  getEnrolledAvailableStudentsForCourse(courseId: string = this.currentCourseIdSubject.value): Observable<Student[]> {
     //test
     //return of<Student[]>(this.enrolledAvailableStudents);
-    const url = `${this.base_URL}/courses/${courseAcronym}/availableStudents`;
+    const url = `${environment.base_url_course}/${courseId}/availableStudents`;
     return this.httpClient
       .get<Student[]>(url).pipe( tap(() =>
-          console.log(`getEnrolledAvailableStudents ${courseAcronym}`)
+          console.log(`getEnrolledAvailableStudents ok ${courseId}`)
         ),
-        catchError(this.handleError<any>(`getEnrolledAvailableStudents(${courseAcronym})`,[]))
+        catchError(this.handleError<any>(`getEnrolledAvailableStudents error ${courseId}`,[]))
       );
   }
 
+  /**
+   * This method return all courses
+   */
   getAllCourses(): Observable<Course[]> {
-    const url = `${this.base_URL}/courses`;
+    const url = `${environment.base_url_course}`;
     return this.httpClient
       .get<Course[]>(url).pipe( tap(() =>
           console.log(`getAllCourses`)
@@ -167,31 +188,40 @@ export class CourseService {
   }
 
 
-
-  getEnrolledStudents(courseAcronym: string = this.currentCourseAcrSubject.value): Observable<Student[]> {
-    const url = `${this.base_URL}/courses/${courseAcronym}/enrolled`;
+  /**
+   * This method returns all students of a course
+   * @param courseId 
+   */
+  getEnrolledStudents(courseId: string = this.currentCourseIdSubject.value): Observable<Student[]> {
+    const url = `${environment.base_url_course}/${courseId}/enrolled`;
     return this.httpClient
       .get<Student[]>(url).pipe( tap(() =>
-          console.log(`getEnrolledStudents ${courseAcronym}`)
+          console.log(`getEnrolledStudents ${courseId}`)
         ),
-        catchError(this.handleError<any>(`getEnrolledStudents(${courseAcronym})`,[]))
+        catchError(this.handleError<any>(`getEnrolledStudents(${courseId})`,[]))
       );
   }
 
 
 
-
-  deleteCourse(courseAcronym: string = this.currentCourseAcrSubject.value) {
-    const url = `${this.base_URL}/courses/${courseAcronym}`
+  /**
+   * This method is used to delete a course
+   * @param courseId 
+   */
+  deleteCourse(courseId: string = this.currentCourseIdSubject.value) {
+    const url = `${environment.base_url_course}/${courseId}`
     return this.httpClient.delete<Course>(url)
     .pipe(
       catchError(this.handleError<Course>('deleteCourse')
     ));
   }
 
-
+  /**
+   * This method is used to create a course
+   * @param courseModel 
+   */
   createCourse(courseModel: CourseModel) {
-    const url = `${this.base_URL}/courses`
+    const url = `${environment.base_url_course}`
     return this.httpClient.post<Course>(url,courseModel)
     .pipe(
       tap(() =>
@@ -207,10 +237,10 @@ export class CourseService {
   /**
    * This method will enroll a student to a given course
    * @param student the student to enroll
-   * @param courseAcronym the acronym of the course
+   * @param courseId the id of the course
    */
-  enrollStudentToCourse(student: Student,courseAcronym: string): Observable<Student> {
-    const url =  `${environment.base_url_course}/${courseAcronym}/enrollOne`
+  enrollStudentToCourse(student: Student,courseId: string): Observable<Student> {
+    const url =  `${environment.base_url_course}/${courseId}/enrollOne`
     return this.httpClient.put<Student>(url, {studentId: student.id},environment.http_options)
     .pipe(
       tap(() => {
@@ -226,18 +256,22 @@ export class CourseService {
   /**
    * This method calls the enrollStudentToCourse
    * @param students 
-   * @param courseAcronym 
+   * @param courseId 
    */
-  enrollStudentsToCourse(students: Student[], courseAcronym: string = this.currentCourseAcrSubject.value): Observable<Student[]> {
+  enrollStudentsToCourse(students: Student[], courseId: string = this.currentCourseIdSubject.value): Observable<Student[]> {
     const temp$ = new Array<Observable<Student>>();
-    students.forEach(student => temp$.push(this.enrollStudentToCourse(student, courseAcronym)));
+    students.forEach(student => temp$.push(this.enrollStudentToCourse(student, courseId)));
   return forkJoin(temp$);
   }
 
 
-
-  unenrollStudentFromCourse(student: Student, courseAcronym: string) {
-    const url =  `${environment.base_url_course}/${courseAcronym}/unenrollStudent`
+  /**
+   * This method is used to unenroll a student from a course
+   * @param student 
+   * @param courseId 
+   */
+  unenrollStudentFromCourse(student: Student, courseId: string) {
+    const url =  `${environment.base_url_course}/${courseId}/unenrollStudent`
     return this.httpClient.put<Student>(url,{ studentId: student.id },environment.http_options)
       .pipe(
         tap((student) => {
@@ -253,58 +287,70 @@ export class CourseService {
   /**
    * This method calls the unenrollStudentFromCourse
    * @param students 
-   * @param courseAcronym 
+   * @param courseId 
    */
-  unenrollStudentsFromCourse(students: Student[], courseAcronym: string = this.currentCourseAcrSubject.value): Observable<Student[]> {
+  unenrollStudentsFromCourse(students: Student[], courseId: string = this.currentCourseIdSubject.value): Observable<Student[]> {
     const temp$ = new Array<Observable<Student>>();
-    students.forEach(student => temp$.push(this.unenrollStudentFromCourse(student, courseAcronym)));
+    students.forEach(student => temp$.push(this.unenrollStudentFromCourse(student, courseId)));
   return forkJoin(temp$);
   }
 
-
+  /**
+   * This method is used to add a teacher to a given course
+   * @param teacher 
+   * @param course 
+   */
   addTeacherToCourse(teacher: Teacher,course: Course): Observable<Teacher> {
-    const url = `${environment.base_url_course}/${course.acronym}/addTeacher`
+    const url = `${environment.base_url_course}/${course.id}/addTeacher`
     return this.httpClient.put<Teacher>(url,{ teacherId: teacher.id },environment.http_options)
       .pipe(
         tap((teacher) => {
           if (teacher) {
             console.log(`addTeacherToCourse ok ${teacher.id}`)
           } else {
-            console.log(`addTeacherToCourse teacher ${teacher.id} already in this course ${course.acronym}`);
+            console.log(`addTeacherToCourse teacher ${teacher.id} already in this course ${course.id}`);
           }
         }),
         catchError(
-          this.handleError<Teacher>(`addTeacherToCourse error teacher ${teacher.id} and course ${course.acronym})` )
+          this.handleError<Teacher>(`addTeacherToCourse error teacher ${teacher.id} and course ${course.id})` )
         )
       );
   }
 
 
+  /**
+   * This method is used to remove a teacher from a given course
+   * @param teacher 
+   * @param course 
+   */
   removeTeacherFromCourse(teacher: Teacher, course: Course): Observable<Teacher> {
-    const url = `${environment.base_url_course}/${course.acronym}/removeTeacher`
+    const url = `${environment.base_url_course}/${course.id}/removeTeacher`
     return this.httpClient.put<Teacher>(url, { teacherId: teacher.id },environment.http_options )
       .pipe(
         tap((teacher) => {
          console.log(`removeTeacherFromCourse ok, ${teacher.id}`)
         }),
         catchError(
-          this.handleError<Teacher>(`removeTeacherFromCourse error teacher ${teacher.id} and course ${course.acronym})` )
+          this.handleError<Teacher>(`removeTeacherFromCourse error teacher ${teacher.id} and course ${course.id})` )
         )
       );
   }
 
-
-  // getAssignmentsOfCourse per ottenere tutti gli assignements di questo corso. Prende un courseAcronym. Ritorna Observable<Assignment[]>
-  getAssignmentsOfCourse(courseAcronym: string): Observable<Assignment[]> {
-    return of(this.exampleAssignments);
+  /**
+   * This method is used to retrieve all assignments of a course
+   * @param courseId 
+   */
+  getAssignmentsOfCourse(courseId: string): Observable<Assignment[]> {
+    //    return of(this.exampleAssignments);
+    const url = `${environment.base_url_course}/${courseId}/assignments`
+    return this.httpClient.get<Assignment[]>(url)
+      .pipe( tap(() =>
+          console.log(`getAssignmentsOfCourse ok ${courseId}`)
+        ),
+        catchError(this.handleError<any>(`getAssignmentsOfCourse(${courseId})`,[]))
+      );
   }
-
-  getHomeworkOfAssignmentOfCourse(courseAcronym: string, assignmentId: number): Observable<Homework[]> {
-    if(assignmentId === 1) 
-     return of(this.exampleHomeworks_1);
-    else
-      return of(this.exampleHomeworks_2);
-  }
-
+    
+  
 
 }
