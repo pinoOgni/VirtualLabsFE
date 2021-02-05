@@ -1,0 +1,17 @@
+.all-width {
+  width: 100%;
+}
+
+.mat-dialog-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.button-centered {
+  margin: auto;
+  display: flex;
+}
+
+
+
+  
