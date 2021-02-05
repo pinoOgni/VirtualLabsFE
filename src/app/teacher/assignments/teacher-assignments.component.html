@@ -1,0 +1,115 @@
+<div class="container">
+
+    <div style="text-align: center">
+        <button mat-raised-button color="primary" class="new-ass" [routerLink]="" [queryParams]="{ createAssignment: true }">Create new assignment</button>
+    </div>
+
+    Display current homeworks for status:
+    <div *ngFor="let status of homeworkStatuses" style="display: inline-block; margin: 20px">
+        <button mat-flat-button
+                [color]="this.filteredStatuses.includes(status) ? null : 'accent'"
+                (click)="changeFilterStatus(status)">{{status}}</button>
+    </div>
+
+    <h2>Assignments</h2>
+    <table mat-table [dataSource]="assignmentsDataSource" multiTemplateDataRows class="mat-elevation-z8" matSort>
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="releaseDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Release date</th>
+            <td mat-cell *matCellDef="let element"> {{dateToString(element.releaseDate)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="expiryDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="expiryDate">Expiry date</th>
+            <td mat-cell *matCellDef="let element"> {{dateToString(element.expiryDate)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="content">
+            <th mat-header-cell *matHeaderCellDef>Content assignment</th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-raised-button color="primary" [routerLink]="" [queryParams]="{ teacherContentAssignment: element.id }">
+                    View content
+                </button>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="homeworks">
+            <th mat-header-cell *matHeaderCellDef>Homework solutions</th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-raised-button (click)="showHomeworkInfoStudents(element)">
+                    <span *ngIf="expandedAssignment === element; else expandLess" class="material-icons">expand_less</span>
+                    <ng-template #expandLess>
+                        <span class="material-icons">expand_more</span>
+                    </ng-template>
+                </button>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let element" [attr.colspan]="assignmentColumnsToDisplay.length">
+                <div class="example-element-detail"
+                     [@detailExpand]="element == expandedAssignment ? 'expanded' : 'collapsed'">
+                    <table mat-table [dataSource]="homeworksInfoStudentsDataSource" class="mat-elevation-z8" matSort>
+
+                        <ng-container matColumnDef="studentId">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Student id</th>
+                            <td mat-cell *matCellDef="let element"> {{element.studentId}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="studentFirstName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Student first name</th>
+                            <td mat-cell *matCellDef="let element"> {{element.studentFirstName}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="studentLastName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Student last name</th>
+                            <td mat-cell *matCellDef="let element"> {{element.studentLastName}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="currentStatus">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Current status</th>
+                            <td mat-cell *matCellDef="let element"> {{element.currentStatus}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="currentStatusToString">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Current status ts</th>
+                            <td mat-cell *matCellDef="let element"> {{element.currentStatusToString}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="score">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Score</th>
+                            <td mat-cell *matCellDef="let element" style="text-align: center">
+                                <button mat-button *ngIf="scoreAssignableToHomework(element)"
+                                        [routerLink]="" [queryParams]="{assignScoreToHomework: element.studentId}">
+                                <mat-icon>add_circle_outline</mat-icon>
+                                </button>
+                                {{element.score}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="versions">
+                            <th mat-header-cell *matHeaderCellDef>Homework versions</th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-raised-button [routerLink]="" [queryParams]="{teacherHomeworkVersions: true, homeworkAssignment: element.assignment_id, homeworkStudent: element.student_id }">
+                                    Homework versions
+                                </button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="homeworksInfoStudentsColumnsToDisplay"></tr>
+                        <tr mat-row *matRowDef="let row; columns: homeworksInfoStudentsColumnsToDisplay;"
+                                    [hidden]="this.filteredStatuses.includes(row.currentStatus)">
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="assignmentColumnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: assignmentColumnsToDisplay;"
+            class="example-element-row"
+            [class.example-expanded-row]="expandedAssignment === row"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+    </table>
+
+    <mat-paginator #assignments [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
+    </mat-paginator>
+</div>
