@@ -4,7 +4,7 @@ import {HomeComponent} from "./home/home.component";
 import {VmsContComponent} from "./teacher/vms/vms-cont.component";
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {AuthGuard} from "./auth/auth.guard";
-import { AssignmentsContComponent } from './teacher/assignments/assignments-cont.component';
+import { TeacherAssignmentsContComponent } from './teacher/assignments/teacher-assignments.container';
 import { TeacherComponent } from './teacher/teacher.component';
 import { StudentComponent } from './student/student.component';
 import { StudentAssignmentsContComponent } from './student/assignments/student-assignments.container';
@@ -15,7 +15,7 @@ import { TeacherStudentsContComponent } from './teacher/students/teacher-student
 const routes  = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent},
-  { path: 'teacher/courses/:courseAcronym', //apa
+  { path: 'teacher/courses/:courseId',
     component: TeacherComponent, 
     canActivate: [AuthGuard],
     data: { roles: [Role.Teacher, Role.Admin] },
@@ -23,10 +23,10 @@ const routes  = [
       { path: '', redirectTo: 'students', pathMatch: 'full'},
       { path: 'students', component: TeacherStudentsContComponent},
       { path: 'vms', component: VmsContComponent},
-      { path: 'assignments', component: AssignmentsContComponent}
+      { path: 'assignments', component: TeacherAssignmentsContComponent}
       ]
     },
-    { path: 'student/courses/:courseAcronym',
+    { path: 'student/courses/:courseId',
     component: StudentComponent, 
     canActivate: [AuthGuard],
     data: { roles: [Role.Student, Role.Admin] },

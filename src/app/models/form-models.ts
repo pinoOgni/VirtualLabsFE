@@ -1,3 +1,5 @@
+import { InputFile } from "./input-file.model";
+
 export interface LoginModel {
   username: string;
   password: string;
@@ -14,16 +16,21 @@ export interface RegisterModel {
 
 export interface EditCourseModel{
   acronym: string;
-  fullName: string;
-  minStudentsForTeam: string;
-  maxStudentsForTeam: string;
-  // heldBy: number[]; // da aggiungere poi forse la di aggiungere altri prof
+  name: string;
+  min: string;
+  max: string;
   enabled: string;
-  vcpus: number;
-  diskSpace: number;
-  ramSize: number;
+  vcpu: number;
+  disk: number;
+  memory: number;
 
 
+}
+
+export interface CreateAssignment{
+  name: string;
+  content: InputFile;
+  expiryDate: string;
 }
 
 

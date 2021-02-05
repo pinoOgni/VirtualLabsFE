@@ -127,13 +127,13 @@ export class AppComponent implements OnDestroy, OnInit {
                     const newCourse = new Course(
                         course.id,
                         editedCourse.acronym,
-                        editedCourse.fullName,
-                        editedCourse.minStudentsForTeam,
-                        editedCourse.maxStudentsForTeam,
-                        editedCourse.enable,
-                        editedCourse.vcpus,
-                        editedCourse.diskSpace,
-                        editedCourse.ramSize);
+                        editedCourse.name,
+                        editedCourse.min,
+                        editedCourse.max,
+                        editedCourse.enabled,
+                        editedCourse.vcpu,
+                        editedCourse.disk,
+                        editedCourse.memory);
                     this.teacherService.update(newCourse).subscribe(
                         result => {
                             this.refillCourses();
@@ -159,12 +159,12 @@ export class AppComponent implements OnDestroy, OnInit {
                         -1,
                         nCourse.acronym,
                         nCourse.name,
-                        nCourse.minStudentsForTeam,
-                        nCourse.maxStudentsForTeam,
-                        nCourse.enable,
-                        nCourse.vcpus,
-                        nCourse.diskSpace,
-                        nCourse.ramSize
+                        nCourse.min,
+                        nCourse.max,
+                        nCourse.enabled,
+                        nCourse.vcpu,
+                        nCourse.disk,
+                        nCourse.memory
                     );
                     this.teacherService.addCourse(newCourse).subscribe(
                         result => {
@@ -194,10 +194,6 @@ export class AppComponent implements OnDestroy, OnInit {
             }
         );
 
-    }
-
-    getHomeworks(ass: Observable<Assignment>): Observable<Homework[]> {
-        return this.courseService.getHomeworkOfAssignmentOfCourse("a",ass.)
     }
 
     private refillCourses(): void {
