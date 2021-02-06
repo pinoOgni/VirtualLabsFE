@@ -16,7 +16,7 @@ import { Homework, HomeworkStatus } from '../models/homework.model';
 export class CourseService {
 
   public course: BehaviorSubject<Course>;
-  public currentCourseIdSubject: BehaviorSubject<string>;
+  public currentCourseIdSubject: BehaviorSubject<number>;
  
   //test
   enrolledAvailableStudents: Student[] = [
@@ -37,7 +37,7 @@ export class CourseService {
     this.course = new BehaviorSubject<Course>(null);
     // test 
     // this.course = new BehaviorSubject<Course>(new Course("APA","Algoritmi e Programmazione Avanzata",3,4,true));
-    this.currentCourseIdSubject = new BehaviorSubject<string>(null);
+    this.currentCourseIdSubject = new BehaviorSubject<number>(null);
   }
 
   /**
@@ -52,7 +52,7 @@ export class CourseService {
    * This method is used to enable a course
    * @param courseId 
    */
-  enableCourse(courseId: string = this.currentCourseIdSubject.value): Observable<boolean> {
+  enableCourse(courseId: number = this.currentCourseIdSubject.value): Observable<boolean> {
     const url = `${environment.base_url_course}/${courseId}/enableCourse`
     return this.httpClient.put<boolean>(url,{},environment.http_options)
       .pipe(
@@ -69,7 +69,7 @@ export class CourseService {
    * This method is used to disable a course
    * @param courseId 
    */
-  disableCourse(courseId: string = this.currentCourseIdSubject.value): Observable<boolean> {
+  disableCourse(courseId: number = this.currentCourseIdSubject.value): Observable<boolean> {
     const url = `${environment.base_url_course}/${courseId}/disableCourse`
     return this.httpClient.put<boolean>(url,{},environment.http_options)
       .pipe(
@@ -107,7 +107,7 @@ export class CourseService {
    * 
    * @param courseId is the id of the course (APA)
    */
-  getThisCourse(courseId: string): Observable<Course> {
+  getThisCourse(courseId: number): Observable<Course> {
     const url = `${environment.base_url_course}/${courseId}`;
     return this.httpClient
       .get<Course>(url).pipe( tap(() =>
@@ -144,7 +144,7 @@ export class CourseService {
   }
 
 
-  setNextCourse(courseId: string) {
+  setNextCourse(courseId: number) {
     this.currentCourseIdSubject.next(courseId);
     if (!courseId) {
       this.course.next(null);
@@ -162,7 +162,7 @@ export class CourseService {
    * @param courseId given a courseId this will give the list of student of that course
    * that are available (not in a team)
    */
-  getEnrolledAvailableStudentsForCourse(courseId: string = this.currentCourseIdSubject.value): Observable<Student[]> {
+  getEnrolledAvailableStudentsForCourse(courseId: number = this.currentCourseIdSubject.value): Observable<Student[]> {
     //test
     //return of<Student[]>(this.enrolledAvailableStudents);
     const url = `${environment.base_url_course}/${courseId}/availableStudents`;
@@ -192,13 +192,13 @@ export class CourseService {
    * This method returns all students of a course
    * @param courseId 
    */
-  getEnrolledStudents(courseId: string = this.currentCourseIdSubject.value): Observable<Student[]> {
+  getEnrolledStudents(courseId: number = this.currentCourseIdSubject.value): Observable<Student[]> {
     const url = `${environment.base_url_course}/${courseId}/enrolled`;
     return this.httpClient
       .get<Student[]>(url).pipe( tap(() =>
-          console.log(`getEnrolledStudents ${courseId}`)
+          console.log(`getEnrolledStudents error ${courseId}`)
         ),
-        catchError(this.handleError<any>(`getEnrolledStudents(${courseId})`,[]))
+        catchError(this.handleError<any>(`getEnrolledStudents ok ${courseId}`,[]))
       );
   }
 
@@ -208,7 +208,7 @@ export class CourseService {
    * This method is used to delete a course
    * @param courseId 
    */
-  deleteCourse(courseId: string = this.currentCourseIdSubject.value) {
+  deleteCourse(courseId: number = this.currentCourseIdSubject.value) {
     const url = `${environment.base_url_course}/${courseId}`
     return this.httpClient.delete<Course>(url)
     .pipe(
@@ -239,7 +239,7 @@ export class CourseService {
    * @param student the student to enroll
    * @param courseId the id of the course
    */
-  enrollStudentToCourse(student: Student,courseId: string): Observable<Student> {
+  enrollStudentToCourse(student: Student,courseId: number): Observable<Student> {
     const url =  `${environment.base_url_course}/${courseId}/enrollOne`
     return this.httpClient.put<Student>(url, {studentId: student.id},environment.http_options)
     .pipe(
@@ -258,7 +258,7 @@ export class CourseService {
    * @param students 
    * @param courseId 
    */
-  enrollStudentsToCourse(students: Student[], courseId: string = this.currentCourseIdSubject.value): Observable<Student[]> {
+  enrollStudentsToCourse(students: Student[], courseId: number = this.currentCourseIdSubject.value): Observable<Student[]> {
     const temp$ = new Array<Observable<Student>>();
     students.forEach(student => temp$.push(this.enrollStudentToCourse(student, courseId)));
   return forkJoin(temp$);
@@ -270,7 +270,7 @@ export class CourseService {
    * @param student 
    * @param courseId 
    */
-  unenrollStudentFromCourse(student: Student, courseId: string) {
+  unenrollStudentFromCourse(student: Student, courseId: number) {
     const url =  `${environment.base_url_course}/${courseId}/unenrollStudent`
     return this.httpClient.put<Student>(url,{ studentId: student.id },environment.http_options)
       .pipe(
@@ -289,7 +289,7 @@ export class CourseService {
    * @param students 
    * @param courseId 
    */
-  unenrollStudentsFromCourse(students: Student[], courseId: string = this.currentCourseIdSubject.value): Observable<Student[]> {
+  unenrollStudentsFromCourse(students: Student[], courseId: number = this.currentCourseIdSubject.value): Observable<Student[]> {
     const temp$ = new Array<Observable<Student>>();
     students.forEach(student => temp$.push(this.unenrollStudentFromCourse(student, courseId)));
   return forkJoin(temp$);
@@ -340,7 +340,7 @@ export class CourseService {
    * This method is used to retrieve all assignments of a course
    * @param courseId 
    */
-  getAssignmentsOfCourse(courseId: string): Observable<Assignment[]> {
+  getAssignmentsOfCourse(courseId: number): Observable<Assignment[]> {
     //    return of(this.exampleAssignments);
     const url = `${environment.base_url_course}/${courseId}/assignments`
     return this.httpClient.get<Assignment[]>(url)

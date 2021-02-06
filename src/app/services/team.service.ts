@@ -55,7 +55,7 @@ export class TeamService {
     * @param courseId the acronym of a team
     * @param studentId the student id that is equal of the user username of a user logged
     */
-  getTeamOfStudent(courseId: string = this.courseService.currentCourseIdSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Team> {
+  getTeamOfStudent(courseId: number = this.courseService.currentCourseIdSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Team> {
     //this method will done a get
     //test
     //return from(this.currentTeamSubject);
@@ -73,7 +73,7 @@ export class TeamService {
 }
 
 
-getMembersOfTeam(teamId: string, courseId: string = this.courseService.currentCourseIdSubject.value): Observable<Student[]> {
+getMembersOfTeam(teamId: string, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Student[]> {
   //this method will done a get
   //test
   //return from(this.currentTeamSubject);
@@ -97,7 +97,7 @@ getMembersOfTeam(teamId: string, courseId: string = this.courseService.currentCo
    * @param courseId the acronym of a course
    * @param proposalOfTeam proposal of a team
    */
-  createTeam(courseId: string, proposalOfTeam: ProposalOfTeam): Observable<Team> {
+  createTeam(courseId: number, proposalOfTeam: ProposalOfTeam): Observable<Team> {
     const url = `${environment.base_url_course}/${courseId}/teams`
     return this.httpClient.post<Team>(url,proposalOfTeam,environment.http_options)
         .pipe(tap(() =>

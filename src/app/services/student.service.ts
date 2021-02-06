@@ -77,7 +77,7 @@ export class StudentService {
    * @param courseId acronym of the course
    * @param name the first name or the last name of the student
    */
-  searchingAvailableStudentsInCourseByName(name: string, courseId: string = this.courseService.currentCourseIdSubject.value): Observable<Student[]> {
+  searchingAvailableStudentsInCourseByName(name: string, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Student[]> {
     //return of<Student[]>(this.searchingStudents)
     const url = `${environment.base_url_course}/${courseId}/availableStudents`
     //copiare funzione dal lab5 PROF
@@ -134,7 +134,7 @@ export class StudentService {
    * @param courseId the acronym of the course
    * @param studentId the id of the student
    */
-  getProposalsInCourse(courseId: string = this.courseService.currentCourseIdSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Proposal[]> {
+  getProposalsInCourse(courseId: number = this.courseService.currentCourseIdSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Proposal[]> {
     // return of<Proposal[]>(this.exampleProposals)
     const url = `${environment.base_url_students}/${studentId}/proposalsOfCourse/${courseId}`
     return this.httpClient.get<Proposal[]>(url, environment.http_options)
