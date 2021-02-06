@@ -3,18 +3,20 @@ import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from './modals/login-dialog/login-dialog.component';
 import {AuthService} from './auth/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, Subscription} from 'rxjs';
+import {Observable, pipe, Subscription} from 'rxjs';
 import {RegisterDialogComponent} from './modals/register-dialog/register-dialog.component';
 import {User} from './models/user.model';
 import {Course} from './models/course.model';
-import {first} from 'rxjs/operators';
+import {first, flatMap, tap} from 'rxjs/operators';
 import {EditCourseDialogComponent} from './modals/edit-course-dialog/edit-course-dialog.component';
 import {TeacherService} from './services/teacher.service';
 import {StudentService} from './services/student.service';
 import {VmModelsService} from './services/vm-models.service';
-import {VmModel} from './models/vm-model.model';
 import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-dialog.component';
 import {ConfirmationDialogComponent} from './modals/confirmation-dialog/confirmation-dialog.component';
+import { CourseService } from './services/course.service';
+import { flatten } from '@angular/compiler';
+import { Assignment } from './models/assignment.model';
 
 
 @Component({
@@ -39,6 +41,7 @@ export class AppComponent implements OnDestroy, OnInit {
         private vmModelsService: VmModelsService,
         private teacherService: TeacherService,
         private studentsService: StudentService,
+        private courseService: CourseService,
         public dialog: MatDialog,
         private authService: AuthService,
         private router: Router,
@@ -109,139 +112,68 @@ export class AppComponent implements OnDestroy, OnInit {
     }
 
     public openDialogEditCourse(course: Course): void {
-        let vmModel: VmModel;
-        this.vmModelsService.getVmModelByCourseId(course.id).subscribe(
-            //   this.vmModelsService.query().subscribe(
+        const dialogRef = this.dialog.open(EditCourseDialogComponent, {
+            data: {
+                editedCourse: course
+            }
+        });
+        dialogRef.afterClosed().subscribe(
             result => {
-
-                vmModel = result;
-                console.log('vmModel: ' + typeof (result.courseId));
-                const dialogRef = this.dialog.open(EditCourseDialogComponent, {
-                    data: {
-                        courseFullName: course.fullName,
-                        courseAcronym: course.acronym,
-                        maxStudents: course.maxStudentsForTeam,
-                        minStudents: course.minStudentsForTeam,
-                        enabled: course.enabled,
-                        vModel: vmModel
-                    }
-                }); // {disableClose: true}
-
-                dialogRef.afterClosed().subscribe(
-                    result => {
-                        if (result === undefined) {
-                            return;
+                if (result === undefined) {
+                    return;
+                }
+                if (result.logged) {
+                    const editedCourse = result.editedCourse;
+                    const newCourse = new Course(
+                        course.id,
+                        editedCourse.acronym,
+                        editedCourse.name,
+                        editedCourse.min,
+                        editedCourse.max,
+                        editedCourse.enabled,
+                        editedCourse.vcpu,
+                        editedCourse.disk,
+                        editedCourse.memory);
+                    this.teacherService.update(newCourse).subscribe(
+                        result => {
+                            this.refillCourses();
                         }
-                        if (result.logged === true) {
-                            const updatedCourse = result.newCourseModel;
-                            // TODO gestire heldBy
-                            const editedCourse = new Course(
-                                course.id,
-                                updatedCourse.acronym,
-                                updatedCourse.fullName,
-                                updatedCourse.minStudentsForTeam,
-                                updatedCourse.maxStudentsForTeam,
-                                updatedCourse.enabled);
-                            const updatedVmModel = result.newVmModel;
-                            const editedVmModel = new VmModel(
-                                vmModel.id,
-                                updatedVmModel.name,
-                                vmModel.courseId,
-                                updatedVmModel.vcpus,
-                                updatedVmModel.diskSpace,
-                                updatedVmModel.ramSize
-                            );
-                            this.teacherService.update(editedCourse).subscribe(
-                                r => {
-                                    this.refillCourses();
-                                }
-                            );
-                            this.vmModelsService.update(editedVmModel).subscribe(
-                                r => {
-                                    console.log(r); // TODO aggiornare vmModel locale
-                                }
-                            );
-                            this.router.navigate(['/home']);
-                        }
-                    }
-                );
+                    );
+                }
             }
         );
-
-
     }
 
     public openDialogAddCourse() {
-        const dialogRef = this.dialog.open(AddCourseDialogComponent);
+        const dialogRef = this.dialog.open(AddCourseDialogComponent,
+        );
 
         dialogRef.afterClosed().subscribe(
             result => {
                 if (result === undefined) {
                     return;
                 }
-                if (result.logged === true) {
-                    const updatedCourse = result.newCourseModel;
-                    // TODO gestire generazione id di course e vmModel
-                    const editedCourse = new Course(
+                if (result.logged) {
+                    const nCourse = result.newCourseModel;
+                    const newCourse = new Course(
                         -1,
-                        updatedCourse.acronym,
-                        updatedCourse.fullName,
-                        updatedCourse.minStudentsForTeam,
-                        updatedCourse.maxStudentsForTeam,
-                        updatedCourse.enabled);
-                    const updatedVmModel = result.newVmModel;
-                    const editedVmModel = new VmModel(
-                        -1,
-                        updatedVmModel.name,
-                        -1,
-                        updatedVmModel.vcpus,
-                        updatedVmModel.diskSpace,
-                        updatedVmModel.ramSize
+                        nCourse.acronym,
+                        nCourse.name,
+                        nCourse.min,
+                        nCourse.max,
+                        nCourse.enabled,
+                        nCourse.vcpu,
+                        nCourse.disk,
+                        nCourse.memory
                     );
-                    this.teacherService.addCourse(editedCourse).subscribe(
-                        r => {
-                            console.log('Nuovo corso: ' + r);
+                    this.teacherService.addCourse(newCourse).subscribe(
+                        result => {
                             this.refillCourses();
                         }
                     );
-                    this.vmModelsService.addVmModel(editedVmModel).subscribe(
-                        r => {
-                            console.log(r); // TODO aggiornare vmModel locale
-                        }
-                    );
-
                 }
             }
         );
-
-
-    }
-
-    private refillCourses() {
-        if (this.currentUser) {
-            if (this.currentUser.roles.includes('ROLE_STUDENT')) {
-                this.courses = this.studentsService
-                    .getCoursesOfStudentById(this.currentUser.email)  //this will be id??
-                    .pipe(
-                        first()
-                    );
-            }
-            if (this.currentUser.roles.includes('ROLE_TEACHER')) {
-                //     console.log('sto chiamando popopo');
-                this.courses = this.teacherService.query()
-                    .pipe(
-                        first()
-                    );
-            }
-            if (this.currentUser.roles.includes('ROLE_ADMIN')) {
-                //     console.log('pocibomboli lembe');
-                this.courses = this.teacherService.query()
-                    .pipe(
-                        first()
-                    );
-            }
-
-        }
     }
 
     openDialogDeleteCourse(course: Course): void {
@@ -263,6 +195,40 @@ export class AppComponent implements OnDestroy, OnInit {
         );
 
     }
+
+    private refillCourses(): void {
+        //test ale
+        let exampleAssignments =  this.courseService.getAssignmentsOfCourse("aa");
+        exampleAssignments.pipe(
+            flatMap(x => x)
+        ).subscribe( y =>
+            console.log(`a `, y.id),
+
+        )
+
+
+        if (this.currentUser) {
+            if (this.currentUser.roles.includes('ROLE_STUDENT')) {
+                console.log('refill courses role student');
+                this.courses = this.studentsService.getCoursesOfStudentById()
+                    .pipe(
+                        tap(() =>
+                            console.log(`refill courses  getCoursesOfStudentById `, this.courses)
+                        ),
+                    );
+            } else if (this.currentUser.roles.includes('ROLE_TEACHER')) {
+                console.log('refill courses role teacher');
+                this.courses = this.teacherService.getCoursesOfTeacherById()
+                    .pipe(
+                        tap(() =>
+                            console.log(`refill courses  getCoursesOfTeacherById `, this.courses)
+                        ),
+                    );
+            }
+        }
+    }
+
+
 }
 
 

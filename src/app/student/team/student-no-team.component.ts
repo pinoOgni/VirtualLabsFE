@@ -77,7 +77,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
    * take the course from the container and set it
    */
   @Input() set setCurrentCourse(currentCourse: Course) {
-    console.log("ciao ", currentCourse.fullName);
+    console.log("ciao ", currentCourse.name);
     this.currentCourse = currentCourse;
   }
 
@@ -201,7 +201,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   addStudentToTeam(selectedStudent: Student) {
     if (!this.selectedStudents.find((s) => s.id === selectedStudent.id)) {
-      if (this.selectedStudents.length + 2 > this.currentCourse.maxStudentsForTeam) {
+      if (this.selectedStudents.length + 2 > this.currentCourse.max) {
         return;
       }
       this.selectedStudents.push(selectedStudent);
@@ -222,7 +222,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   createTeam() {
     console.log('createTeam')
-    if (this.selectedStudents.length + 1 < this.currentCourse.minStudentsForTeam) {
+    if (this.selectedStudents.length + 1 < this.currentCourse.min) {
       console.log('error number of student for the team is low')
       return;
     }

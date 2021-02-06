@@ -99,7 +99,7 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
        * Then enrolledAvailableStudents is passed to student-no-team-component
        */
       this.courseService
-      .getEnrolledAvailableStudents().pipe(first())
+      .getEnrolledAvailableStudentsForCourse().pipe(first())
       .subscribe((students) => (this.enrolledAvailableStudents = students));
 
       /**
@@ -114,7 +114,7 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
       .asObservable()
       .pipe(takeUntil(this.destroy$))
       .subscribe(course => this.currentCourse = course);
-      console.log("student-team-container ", this.currentCourse.fullName);
+      console.log("student-team-container ", this.currentCourse.name);
 
       /**
        *  the searchedStudents is subscribed to the searchOptions 
@@ -160,7 +160,7 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
 
   createTeam(proposalOfTeam: ProposalOfTeam): void {
     this.teamService
-      .createTeam(this.courseService.currentCourseAcrSubject.value,proposalOfTeam)
+      .createTeam(this.courseService.currentCourseIdSubject.value,proposalOfTeam)
       .pipe(first()).subscribe(team => {
         if (team && proposalOfTeam.selectedStudentIds.length === 1) {
           //TODO 

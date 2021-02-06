@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Create a new assignment for this course</h1>
+
+<div mat-dialog-content>
+    <form [formGroup]="assignmentForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="all-width">
+            <input matInput type="text" formControlName="name" placeholder="Name of assignment" required/>
+            <mat-error>Assignment name invalid. Rules (min: 2, max: 20)</mat-error>
+        </mat-form-field>
+        <mat-form-field class="all-width">
+            <ngx-mat-file-input formControlName="content" placeholder="Assignment content"
+             accept=".jpeg, .jpg, .png, .pdf" required></ngx-mat-file-input>
+            <mat-icon matSuffix>folder</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="all-width">
+            <mat-label>Pick the expiry date for this assignment</mat-label>
+            <input matInput disabled required formControlName="selectedDate"
+                   [min]="minDateAssignment" [max]="maxDateAssignment" [matDatepicker]="picker"
+                   (dateChange)="setSelectedDate($event.value.toString())"/>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker disabled="false" #picker></mat-datepicker>
+        </mat-form-field>
+        <div mat-dialog-actions class="button-centered">
+            <button mat-button style="color: red;" mat-dialog-close>Close</button>
+            <button mat-button style="color: green;" [disabled]="assignmentForm.invalid">Create</button>
+        </div>
+    </form>
+</div>
+

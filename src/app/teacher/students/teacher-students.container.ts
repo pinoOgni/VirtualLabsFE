@@ -58,7 +58,7 @@ export class TeacherStudentsContComponent implements OnDestroy, OnInit {
         this.navSubElement = this.router.events
         .pipe(filter((event) => event instanceof NavigationEnd))
         .subscribe((event: NavigationEnd) => {
-          if (!this.lastUrl.includes(this.courseService.currentCourseAcrSubject.value)) {
+          if (!this.lastUrl.includes(this.courseService.currentCourseIdSubject.value)) {
             this.refillEnrolledStudents();
           }
           this.lastUrl = event.url;
@@ -78,7 +78,7 @@ export class TeacherStudentsContComponent implements OnDestroy, OnInit {
 
     /**
     * This method will call the method from the courseService
-    * The courseAcronym is taken by the service
+    * The courseId is taken by the service
     * @param students the list of students to be enrolled in a course 
     */
     enrollStudentsToCourse(students: Student[]) {
@@ -90,7 +90,7 @@ export class TeacherStudentsContComponent implements OnDestroy, OnInit {
 
     /**
     * This method will call the method from the courseService
-    * The courseAcronym is taken by the service
+    * The courseId is taken by the service
     * @param students the list of students to be unenrolled from a course 
      */
     unenrollStudentsFromCourse(students: Student[]) {
@@ -112,11 +112,11 @@ export class TeacherStudentsContComponent implements OnDestroy, OnInit {
     private refillEnrolledStudents() {
         // control if the current course is not undefined
         // ALE HELP ME
-        if (!this.courseService.currentCourseAcrSubject.value) {
+        if (!this.courseService.currentCourseIdSubject.value) {
             this.enrolledStudents = [];
             return;
         }
-        this.courseService.getEnrolledStudents(this.courseService.currentCourseAcrSubject.value)
+        this.courseService.getEnrolledStudents(this.courseService.currentCourseIdSubject.value)
             .pipe(first()).subscribe((enrolledStudents) => (this.enrolledStudents = enrolledStudents));
     }
 

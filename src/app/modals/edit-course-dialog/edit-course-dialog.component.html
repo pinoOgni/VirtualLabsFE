@@ -2,10 +2,10 @@
 <mat-dialog-content class="md-dialog-container">
     <form [formGroup]="editCourseForm" (ngSubmit)="submit()">
         <h3 mat-dialog-title>Course details:</h3>
-        <mat-label for="courseFullName">Fullname:</mat-label>
+        <mat-label for="courseName">Name:</mat-label>
         <mat-form-field floatLabel="never" class="md-form-dialog-container">
 
-            <input   autocomplete="on" formControlName="courseFullName" type="text" matInput id="courseFullName" name="courseFullName"
+            <input   autocomplete="on" formControlName="courseName" type="text" matInput id="courseName" name="courseName"
                     required >
 
         </mat-form-field>
@@ -20,18 +20,18 @@
         </mat-form-field>
         <br>
 
-        <mat-label for="courseMinStudents">Minimum team size:</mat-label>
+        <mat-label for="courseMin">Minimum team size:</mat-label>
         <mat-form-field floatLabel="never" class="md-form-dialog-container">
 
-            <input   autocomplete="on" formControlName="courseMinStudents" type="text" matInput id="courseMinStudents" name="courseMinStudents"
+            <input   autocomplete="on" formControlName="courseMin" type="text" matInput id="courseMin" name="courseMin"
                       required >
 
         </mat-form-field>
 
-        <mat-label for="courseMaxStudents">Maximum team size:</mat-label>
+        <mat-label for="courseMax">Maximum team size:</mat-label>
         <mat-form-field floatLabel="never" class="md-form-dialog-container">
 
-            <input   autocomplete="on" formControlName="courseMaxStudents" type="text" matInput id="courseMaxStudents" name="courseMaxStudents"
+            <input   autocomplete="on" formControlName="courseMax" type="text" matInput id="courseMax" name="courseMax"
                       required >
 
         </mat-form-field>
@@ -59,30 +59,30 @@
         </mat-form-field>
 
         <br>
-        <mat-label for="vmModelVcpus">VM Model vCPUs number:</mat-label>
+        <mat-label for="vmModelVcpu">VM Model vCPUs number:</mat-label>
         <mat-form-field class="md-form-dialog-container" floatLabel="never">
 
-            <input autocomplete="on" formControlName="vmModelVcpus" id="vmModelVcpus" matInput name="vmModelVcpus"
+            <input autocomplete="on" formControlName="vmModelVcpu" id="vmModelVcpu" matInput name="vmModelVcpu"
                    required
                    type="text">
 
         </mat-form-field>
 
         <br>
-        <mat-label for="vmModelDiskSpace">VM Model Disk Space:</mat-label>
+        <mat-label for="vmModelDisk">VM Model Disk Space:</mat-label>
         <mat-form-field class="md-form-dialog-container" floatLabel="never">
 
-            <input autocomplete="on" formControlName="vmModelDiskSpace" id="vmModelDiskSpace" matInput
-                   name="vmModelDiskSpace" required
+            <input autocomplete="on" formControlName="vmModelDisk" id="vmModelDisk" matInput
+                   name="vmModelDisk" required
                    type="text">
 
         </mat-form-field>
 
         <br>
-        <mat-label for="vmModelRamSize">VM Model RAM size:</mat-label>
+        <mat-label for="vmModelMemory">VM Model RAM size:</mat-label>
         <mat-form-field class="md-form-dialog-container" floatLabel="never">
 
-            <input autocomplete="on" formControlName="vmModelRamSize" id="vmModelRamSize" matInput name="vmModelRamSize"
+            <input autocomplete="on" formControlName="vmModelMemory" id="vmModelMemory" matInput name="vmModelMemory"
                    required
                    type="text">
 
