@@ -1,10 +1,11 @@
-import { Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
-import { first, takeUntil } from 'rxjs/operators';
-import { AuthService } from '../auth/auth.service';
-import { CourseService } from '../services/course.service';
-import { TeamService } from '../services/team.service';
+import {Component, OnDestroy} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {Subject} from 'rxjs';
+import {first, takeUntil} from 'rxjs/operators';
+import {AuthService} from '../auth/auth.service';
+import {CourseService} from '../services/course.service';
+import {TeamService} from '../services/team.service';
+
 /**
  * The StudentComponent is responsible for the student view (3 tabs: teams, vms, assignments)
  */
@@ -33,10 +34,10 @@ export class StudentComponent implements OnDestroy {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       //test
       this.courseService.setNextCourse(params.courseAcronym);
-      console.log("setNextCourse ", params.courseAcronym)
+      console.log('setNextCourse ', params.courseAcronym);
       this.teamService
-        .getTeamOfStudent(this.authService.currentUserValue.username, this.courseService.currentCourseAcrSubject.value)
-        .pipe(first()).subscribe(team => team ? this.teamService.currentTeamSubject.next(team) : this.teamService.currentTeamSubject.next(null));
+          .getTeamOfStudent(this.authService.currentUserValue.username, this.courseService.currentCourseIdSubject.value)
+          .pipe(first()).subscribe(team => team ? this.teamService.currentTeamSubject.next(team) : this.teamService.currentTeamSubject.next(null));
     });
 
   }

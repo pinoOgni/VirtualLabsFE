@@ -1,20 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, from, Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { AuthService } from '../auth/auth.service';
-import { ProposalOfTeam } from '../models/proposal-of-team.model';
-import { Student } from '../models/student.model';
-import { Team } from '../models/team.model';
-import { CourseService } from './course.service';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {environment} from 'src/environments/environment';
+import {AuthService} from '../auth/auth.service';
+import {ProposalOfTeam} from '../models/proposal-of-team.model';
+import {Student} from '../models/student.model';
+import {Team} from '../models/team.model';
+import {CourseService} from './course.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TeamService {
 
-    /**
+  /**
    * list of students used for test, instead of use the json-auth-server
    */
   members: Student[] = [
@@ -148,6 +148,7 @@ getMembersOfTeam(teamId: string, courseId: string = this.courseService.currentCo
   }
 
 
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
@@ -159,5 +160,6 @@ getMembersOfTeam(teamId: string, courseId: string = this.courseService.currentCo
       return of(result as T);
     };
   }
+
 
 }

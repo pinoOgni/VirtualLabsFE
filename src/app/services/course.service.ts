@@ -1,14 +1,14 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, forkJoin, from, Observable, of } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { Course } from '../models/course.model';
-import { catchError, first, mergeMap, tap } from 'rxjs/operators';
-import { Student } from '../models/student.model';
-import { CourseModel, CreateAssignment } from '../models/form-models';
-import { Teacher } from '../models/teacher.model';
-import { Assignment } from '../models/assignment.model';
-import { Homework, HomeworkStatus } from '../models/homework.model';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, forkJoin, Observable, of} from 'rxjs';
+import {environment} from 'src/environments/environment';
+import {Course} from '../models/course.model';
+import {catchError, first, tap} from 'rxjs/operators';
+import {Student} from '../models/student.model';
+import {CourseModel, CreateAssignment} from '../models/form-models';
+import {Teacher} from '../models/teacher.model';
+import {Assignment} from '../models/assignment.model';
+import {Team} from '../models/team.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class CourseService {
 
   public course: BehaviorSubject<Course>;
   public currentCourseIdSubject: BehaviorSubject<string>;
- 
+
   //test
   enrolledAvailableStudents: Student[] = [
     {id: "s200001@studenti.polito.it", email: "string", firstName: "cazzo", lastName: "culo"},
@@ -338,19 +338,29 @@ export class CourseService {
 
   /**
    * This method is used to retrieve all assignments of a course
-   * @param courseId 
+   * @param courseId
    */
-  getAssignmentsOfCourse(courseId: string): Observable<Assignment[]> {
+  getAssignmentsOfCourse(courseId: string = this.currentCourseIdSubject.value): Observable<Assignment[]> {
     //    return of(this.exampleAssignments);
-    const url = `${environment.base_url_course}/${courseId}/assignments`
+    const url = `${environment.base_url_course}/${courseId}/assignments`;
     return this.httpClient.get<Assignment[]>(url)
-      .pipe( tap(() =>
-          console.log(`getAssignmentsOfCourse ok ${courseId}`)
-        ),
-        catchError(this.handleError<any>(`getAssignmentsOfCourse(${courseId})`,[]))
-      );
+        .pipe(tap(() =>
+                console.log(`getAssignmentsOfCourse ok ${courseId}`)
+            ),
+            catchError(this.handleError<any>(`getAssignmentsOfCourse(${courseId})`, []))
+        );
   }
-    
-  
+
+  public getTeamsOfCourse(courseId: string = this.currentCourseIdSubject.value): Observable<Team[]> {
+    const url = `${environment.base_url_course}/${courseId}/teams`;
+    console.log('url vale' + url);
+    return this.httpClient.get<Team[]>(url)
+        .pipe(tap(() =>
+                console.log(`getTeamsOfCourse ok ${courseId}`)
+            ),
+            catchError(this.handleError<any>(`getTeamsOfCourse(${courseId})`, []))
+        );
+  }
+
 
 }
