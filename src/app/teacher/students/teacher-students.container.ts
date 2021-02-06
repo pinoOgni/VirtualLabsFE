@@ -58,7 +58,7 @@ export class TeacherStudentsContComponent implements OnDestroy, OnInit {
         this.navSubElement = this.router.events
         .pipe(filter((event) => event instanceof NavigationEnd))
         .subscribe((event: NavigationEnd) => {
-          if (!this.lastUrl.includes(this.courseService.currentCourseIdSubject.value)) {
+          if (!this.lastUrl.includes(this.courseService.currentCourseIdSubject.value.toString())) {
             this.refillEnrolledStudents();
           }
           this.lastUrl = event.url;
@@ -113,10 +113,12 @@ export class TeacherStudentsContComponent implements OnDestroy, OnInit {
         // control if the current course is not undefined
         // ALE HELP ME
         if (!this.courseService.currentCourseIdSubject.value) {
+            console.log('rerefillEnrolledStudents if')
             this.enrolledStudents = [];
             return;
         }
-        this.courseService.getEnrolledStudents(this.courseService.currentCourseIdSubject.value)
+        console.log('rerefillEnrolledStudents no if')
+        this.courseService.getEnrolledStudents()
             .pipe(first()).subscribe((enrolledStudents) => (this.enrolledStudents = enrolledStudents));
     }
 

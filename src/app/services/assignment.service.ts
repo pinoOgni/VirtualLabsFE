@@ -33,7 +33,7 @@ export class AssignmentService {
    * @param assignmentId 
    * @param courseId 
    */
-  getContentAssignment(assignmentId: number,courseId: string = this.courseService.currentCourseIdSubject.value): Observable<any> {
+  getContentAssignment(assignmentId: number,courseId: number = this.courseService.currentCourseIdSubject.value): Observable<any> {
     const url = `${environment.base_url_course}/${courseId}/assignments/${assignmentId}/content`
     return this.httpClient.get(url, {
       responseType: 'blob', //Blob object containing the binary data. document:
@@ -49,7 +49,7 @@ export class AssignmentService {
    * @param assignmentId 
    * @param courseId 
    */
-  getHomeworksOfAssignment(assignmentId: number,courseId: string = this.courseService.currentCourseIdSubject.value): Observable<Homework[]> {
+  getHomeworksOfAssignment(assignmentId: number,courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Homework[]> {
     /**
      const url = `${environment.base_url_course}/${courseId}/assignments/${assignmentId}/homeworks`
     return this.httpClient.get<Homework[]>(url)
@@ -70,7 +70,7 @@ export class AssignmentService {
    * @param studentId 
    * @param courseId 
    */
-  public getHomeworkVersionsOfStudent(assignmentId: number, studentId: string, courseId: string = this.courseService.currentCourseIdSubject.value): Observable<HomeworkVersion[]> {
+  public getHomeworkVersionsOfStudent(assignmentId: number, studentId: string, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<HomeworkVersion[]> {
     const url = `${environment.base_url_course}/${courseId}/assignments/${assignmentId}/homework/${studentId}/versions`
     return this.httpClient.get<HomeworkVersion[]>(url)
         .pipe(
@@ -84,7 +84,7 @@ export class AssignmentService {
    * @param studentId 
    * @param courseId 
    */
-  addScoreToHomework(score: number, assignmentId: number, studentId: string, courseId: string = this.courseService.currentCourseIdSubject.value): Observable<Homework> {
+  addScoreToHomework(score: number, assignmentId: number, studentId: string, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Homework> {
     const url = `${environment.base_url_course}/${courseId}/assignment/${assignmentId}/homework/${studentId}/setScore`
     return this.httpClient.post<Homework>(url, {score}, environment.http_options
     ).pipe(

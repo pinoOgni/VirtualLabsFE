@@ -27,8 +27,9 @@ export class VmModelsService {
 
   getVmModelByCourseId(courseId: number): Observable<VmModel> {
     const url = `${this.base_URL}/vmModels/`;
-    const headers = new HttpHeaders({courseId: String(courseId)});
-    /*// const header: HttpHeaders = new HttpHeaders({courseId: String(courseId)});
+    // ale
+    // const headers = new HttpHeaders({courseId: number(courseId)});
+    /*// const header: HttpHeaders = new HttpHeaders({courseId: number(courseId)});
      console.log(headers.get('courseId'));
      return this.http.get<VmModel>(url, {headers})
          .pipe(
