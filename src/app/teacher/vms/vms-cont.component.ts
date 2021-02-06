@@ -3,6 +3,8 @@ import {Team} from '../../models/team.model';
 import {TeacherService} from '../../services/teacher.service';
 import {CourseService} from '../../services/course.service';
 import {TeamService} from '../../services/team.service';
+import {Observable} from 'rxjs';
+
 
 @Component({
   selector: 'app-vms-cont',
@@ -11,16 +13,16 @@ import {TeamService} from '../../services/team.service';
 })
 export class VmsContComponent implements OnInit {
 
-  teams: Team[];
+
+  teams: Observable<Team[]>;
 
   constructor(private teamService: TeamService, private courseService: CourseService, private teacherService: TeacherService) {
   }
 
   ngOnInit(): void {
     console.log('sono un ciumbolombolo');
-    this.courseService.getTeamsOfCourse().subscribe(
-        x => console.log('ciombolo: ' + x)
-    );
+    this.teams = this.courseService.getTeamsOfCourse();
+
   }
 
 }

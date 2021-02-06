@@ -1,2 +1,38 @@
-<h3>Vms</h3>
-<app-vms></app-vms>
+<mat-card *ngFor="let team of teams | async" class="border">
+    <mat-card-header>
+        <div class="teamLogo" mat-card-avatar></div>
+        <mat-card-title>
+            <b> {{team.name}} </b>
+        </mat-card-title>
+
+        <mat-card-subtitle>
+            <div><b>ID:</b>  {{team.id}}</div>
+            <div><b>Maximum number of CPUs:</b> {{team.maxVCpu}} </div>
+            <div><b>Maximum disk space: </b>{{team.maxDiskSpace}} </div>
+            <div><b>Maximum memory:</b> {{team.maxRam}} </div>
+            <div><b>Maximum instances allowed:</b> {{team.maxTotalInstances}} </div>
+            <div><b>Maximum running instances allowed:</b> {{team.maxRunningInstances}} </div>
+
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <!--  <div><p> <b>Virtual machines:</b></p></div>
+          <div>
+          <mat-list>
+              <mat-list-item *ngFor="let team1 of teams | async">
+                  {{team1.name}}
+              </mat-list-item>
+          </mat-list>
+          </div>-->
+        <div>
+            <p>Resources currently used:</p>
+        </div>
+    </mat-card-content>
+    <mat-card-actions>
+        <button color="primary" mat-raised-button>Edit Team Resources</button>
+
+    </mat-card-actions>
+</mat-card>
+
+
+<!--<app-vms></app-vms>-->
