@@ -11,7 +11,7 @@ export enum HomeworkStatus {
     NULL = 'NULL', 
     READ = 'READ',
     SUBMITTED = 'SUBMITTED',
-    REVIEWED = 'REVIEWED',
+    REVIEWED = 'REVIEWED', 
     DEFINITELY_REVIEWED = 'DEFINITELY_REVIEWED',
     SCORED = 'SCORED'
 }
@@ -24,13 +24,19 @@ export enum HomeworkStatus {
 export class Homework {
     assignment_id: number;
     student_id: string;
-    status: HomeworkStatus;
+    currentStatus: HomeworkStatus;
     score: number;
 
-    constructor(assignment_id: number, student_id: string , status: number = 0, score: number = 0) {
+    constructor(assignment_id: number, student_id: string , currentStatus: number = 0, score: number = 0) {
         this.assignment_id = assignment_id;
         this.student_id = student_id;
-        this.status = HomeworkStatus[HomeworkStatus[status]];
+        this.currentStatus = HomeworkStatus[HomeworkStatus[currentStatus]];
         this.score = score;
     }
+
+
+static compareHomework(a: Homework, b: Homework) {
+        return a.currentStatus.localeCompare(b.currentStatus);
+      }
+
 }

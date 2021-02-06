@@ -1,13 +1,13 @@
-import {Injectable} from '@angular/core';
-import {Student} from '../models/student.model';
-import {Course} from '../models/course.model';
-import {Observable, of} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
-import {catchError, tap} from 'rxjs/operators';
-import {environment} from '../../environments/environment';
-import {Proposal} from '../models/proposal.model';
-import {AuthService} from '../auth/auth.service';
-import {CourseService} from './course.service';
+import { Injectable } from '@angular/core';
+import { Student } from '../models/student.model';
+import { Course } from '../models/course.model';
+import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { catchError, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { Proposal } from '../models/proposal.model';
+import { AuthService } from '../auth/auth.service';
+import { CourseService } from './course.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +34,8 @@ export class StudentService {
 
   //test
   searchingStudents: Student[] = [
-    { id: "11", email: "string", firstName: "aaaa", lastName: "bbbbbbbb"},
-    { id: "12", email: "string", firstName: "aaaa", lastName: "cccccccc"},
+    { id: "11", email: "string", firstName: "aaaa", lastName: "bbbbbbbb" },
+    { id: "12", email: "string", firstName: "aaaa", lastName: "cccccccc" },
   ];
 
   private handleError<T>(operation = 'operation', result?: T) {
@@ -52,6 +52,19 @@ export class StudentService {
 
 
   /**
+   * This methdo return a student given a studentId
+   * @param studentId 
+   */
+  getStudent(studentId: string): Observable<Student> {
+    const url = `${environment.base_url_students}/${studentId}`
+    return this.httpClient.get<Student>(url).pipe(tap(() =>
+      console.log(`getStudent ${studentId}`)
+    ),
+      catchError(this.handleError<any>(`getStudent error ${studentId}`))
+    );
+
+  }
+  /**
    * TODO
    * uploadStudentAssignment: metodo per caricare l'assignment di uno studente. Ritorna un Observable<UploadAssignment>
    */
@@ -59,16 +72,16 @@ export class StudentService {
 
   /**
    * This method is used to make a request to the the server and retrieve all the available
-   * students of the course with courseAcronym and ad criteria is used the name
-   * If the courseAcronym is undefined it returns an empty Observable<[]>
-   * @param courseAcronym acronym of the course
+   * students of the course with courseId and ad criteria is used the name
+   * If the courseId is undefined it returns an empty Observable<[]>
+   * @param courseId acronym of the course
    * @param name the first name or the last name of the student
    */
-  searchingAvailableStudentsInCourseByName(name: string, courseAcronym: string = this.courseService.currentCourseAcrSubject.value): Observable<Student[]> {
+  searchingAvailableStudentsInCourseByName(name: string, courseId: string = this.courseService.currentCourseIdSubject.value): Observable<Student[]> {
     //return of<Student[]>(this.searchingStudents)
-    const url = `${environment.base_url_course}/${courseAcronym}/availableStudents`
+    const url = `${environment.base_url_course}/${courseId}/availableStudents`
     //copiare funzione dal lab5 PROF
-    if (typeof name !== 'string' || courseAcronym === undefined) {
+    if (typeof name !== 'string' || courseId === undefined) {
       return of([]);
     } else {
       //whitespaces
@@ -83,7 +96,7 @@ export class StudentService {
           console.log(`searchingAvailableStudentsInCourseByName  ${s.length} for criteria ${name}`
           )
         ),
-        catchError(this.handleError<Student[]>(`searchingAvailableStudentsInCourseByName error ${name})`,[])
+        catchError(this.handleError<Student[]>(`searchingAvailableStudentsInCourseByName error ${name})`, [])
         )
       );
   }
@@ -118,19 +131,19 @@ export class StudentService {
   /**
    * The parametrers are taken by the courseService and authService, exploiting the injection and the 
    * power of BehaviorSubject
-   * @param courseAcronym the acronym of the course
+   * @param courseId the acronym of the course
    * @param studentId the id of the student
    */
-  getProposalsInCourse(courseAcronym: string = this.courseService.currentCourseAcrSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Proposal[]> {
+  getProposalsInCourse(courseId: string = this.courseService.currentCourseIdSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Proposal[]> {
     // return of<Proposal[]>(this.exampleProposals)
-    const url = `${environment.base_url_students}/${studentId}/proposalsOfCourse/${courseAcronym}`
+    const url = `${environment.base_url_students}/${studentId}/proposalsOfCourse/${courseId}`
     return this.httpClient.get<Proposal[]>(url, environment.http_options)
       .pipe(
         tap(() =>
-          console.log(`getProposalsInCourse ok studentId ${studentId}, course ${courseAcronym}`)
+          console.log(`getProposalsInCourse ok studentId ${studentId}, course ${courseId}`)
         ),
         catchError(
-          this.handleError<Proposal[]>(`getTeamProposalsForCourse error studentId ${studentId}, course ${courseAcronym})`, []))
+          this.handleError<Proposal[]>(`getTeamProposalsForCourse error studentId ${studentId}, course ${courseId})`, []))
       );
   }
 

@@ -33,8 +33,7 @@ import {AuthInterceptor} from './auth/auth.interceptor';
 import {ErrorInterceptor} from './helpers/error.interceptor';
 import {RegisterDialogComponent} from './modals/register-dialog/register-dialog.component';
 import {VmsResourcesComponent} from './teacher/vms/vms-resources.component';
-import {AssignmentsComponent} from './teacher/assignments/assignments.component';
-import {AssignmentsContComponent} from './teacher/assignments/assignments-cont.component';
+import {TeacherAssignmentsContComponent} from './teacher/assignments/teacher-assignments.container';
 import {TeacherComponent} from './teacher/teacher.component';
 import {StudentNoTeamComponent} from './student/team/student-no-team.component';
 import {StudentTeamComponent} from './student/team/student-team.component';
@@ -53,6 +52,12 @@ import {MatSelectModule} from '@angular/material/select';
 import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-dialog.component';
 
 import {MatNativeDateModule} from '@angular/material/core';
+import { TeacherAssignmentsComponent } from './teacher/assignments/teacher-assignments.component';
+import { CreateAssignmentComponent } from './modals/create-assignment/create-assignment.component';
+import { ViewContentAssignmentComponent } from './modals/view-content-assignment/view-content-assignment.component';
+import { ViewHomeworkVersionComponent } from './modals/view-homework-version/view-homework-version.component';
+import { ScoreDialogComponent } from './score-dialog/score-dialog.component';
+import { ViewContentHomeworkVersionComponent } from './view-content-homework-version/view-content-homework-version.component';
 
 @NgModule({
   declarations: [
@@ -65,8 +70,7 @@ import {MatNativeDateModule} from '@angular/material/core';
     RegisterDialogComponent,
     VmsComponent,
     VmsResourcesComponent,
-    AssignmentsComponent,
-    AssignmentsContComponent,
+    TeacherAssignmentsContComponent,
     TeacherComponent,
     StudentNoTeamComponent,
     StudentTeamComponent,
@@ -78,7 +82,13 @@ import {MatNativeDateModule} from '@angular/material/core';
     TeacherStudentsContComponent,
     EditCourseDialogComponent,
     StudentComponent,
-      AddCourseDialogComponent
+      AddCourseDialogComponent,
+      TeacherAssignmentsComponent,
+      CreateAssignmentComponent,
+      ViewContentAssignmentComponent,
+      ViewHomeworkVersionComponent,
+      ScoreDialogComponent,
+      ViewContentHomeworkVersionComponent
   ],
     imports: [
         MatNativeDateModule,

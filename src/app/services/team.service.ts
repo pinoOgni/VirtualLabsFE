@@ -52,40 +52,40 @@ export class TeamService {
 
    /**
     * This method get the team of a student 
-    * @param courseAcronym the acronym of a team
+    * @param courseId the acronym of a team
     * @param studentId the student id that is equal of the user username of a user logged
     */
-  getTeamOfStudent(courseAcronym: string = this.courseService.currentCourseAcrSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Team> {
+  getTeamOfStudent(courseId: string = this.courseService.currentCourseIdSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Team> {
     //this method will done a get
     //test
     //return from(this.currentTeamSubject);
-    const url = `${environment.base_url_students}/${studentId}/teams/${courseAcronym}`
+    const url = `${environment.base_url_students}/${studentId}/teams/${courseId}`
     return this.httpClient
     .get<Team>(url).pipe(
         tap(() =>
-            console.log(`getTeamOfStudent ok studentId ${studentId} course ${courseAcronym}`
+            console.log(`getTeamOfStudent ok studentId ${studentId} course ${courseId}`
             )
         ),
         catchError(
-            this.handleError<Team>(`getTeamOfStudent error studentId ${studentId} course ${courseAcronym}`)
+            this.handleError<Team>(`getTeamOfStudent error studentId ${studentId} course ${courseId}`)
         )
     );
 }
 
 
-getMembersOfTeam(teamId: string, courseAcronym: string = this.courseService.currentCourseAcrSubject.value): Observable<Student[]> {
+getMembersOfTeam(teamId: string, courseId: string = this.courseService.currentCourseIdSubject.value): Observable<Student[]> {
   //this method will done a get
   //test
   //return from(this.currentTeamSubject);
-  const url = `${environment.base_url_course}/${courseAcronym}/teams/${teamId}/students`
+  const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/students`
   return this.httpClient
   .get<Student[]>(url).pipe(
       tap(() =>
-          console.log(`getMembersOfTeam ok studentId ${teamId} course ${courseAcronym}`
+          console.log(`getMembersOfTeam ok studentId ${teamId} course ${courseId}`
           )
       ),
       catchError(
-          this.handleError<Student[]>(`getMembersOfTeam error studentId ${teamId} course ${courseAcronym}`,[])
+          this.handleError<Student[]>(`getMembersOfTeam error studentId ${teamId} course ${courseId}`,[])
       )
   );
 }
@@ -94,11 +94,11 @@ getMembersOfTeam(teamId: string, courseAcronym: string = this.courseService.curr
 
   /**
    * This method create a team given a course and a proposal of team
-   * @param courseAcronym the acronym of a course
+   * @param courseId the acronym of a course
    * @param proposalOfTeam proposal of a team
    */
-  createTeam(courseAcronym: string, proposalOfTeam: ProposalOfTeam): Observable<Team> {
-    const url = `${environment.base_url_course}/${courseAcronym}/teams`
+  createTeam(courseId: string, proposalOfTeam: ProposalOfTeam): Observable<Team> {
+    const url = `${environment.base_url_course}/${courseId}/teams`
     return this.httpClient.post<Team>(url,proposalOfTeam,environment.http_options)
         .pipe(tap(() =>
                 console.log(`createTeam ${proposalOfTeam.teamName}`)

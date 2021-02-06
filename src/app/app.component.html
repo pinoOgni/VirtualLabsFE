@@ -40,10 +40,8 @@
 
         <mat-list-item *ngFor="let course of (courses | async); index as i ">
           <a [routerLink]="[
-        currentUser.roles[0].toLowerCase().replace('role_', '') +
-          '/courses/' +
-          course.id
-      ]"> {{course.fullName}} </a>
+        currentUser.roles[0].toLowerCase().replace('role_', '') + '/courses/' + course.id
+      ]"> {{course.name}} </a>
 
           <button *ngIf="currentUser.roles[0] === 'ROLE_TEACHER'" [matMenuTriggerFor]="menu" mat-button mat-icon-button>
             <mat-icon>more_vert</mat-icon>

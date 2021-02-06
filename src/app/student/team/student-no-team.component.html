@@ -12,9 +12,9 @@
             <mat-error>Your name is not valid, try again</mat-error>
         </mat-form-field>
         <br />
-        <h2>Select students to create your team for {{currentCourse ? currentCourse.fullName: ''}}</h2>
-        <h4>Team minimum size is {{currentCourse ? currentCourse.minStudentsForTeam : ''}} and team max size is
-            {{currentCourse ? currentCourse.maxStudentsForTeam : ''}}</h4>
+        <h2>Select students to create your team for {{currentCourse ? currentCourse.name: ''}}</h2>
+        <h4>Team minimum size is {{currentCourse ? currentCourse.min : ''}} and team max size is
+            {{currentCourse ? currentCourse.max : ''}}</h4>
         <mat-form-field style="width: 50%">
             <mat-label>ADD STUDENT</mat-label>
             <input type="search" matInput [formControl]="studentControl" placeholder="Search a student by last name"
@@ -144,7 +144,7 @@
     </mat-list>
 
     <button mat-flat-button style="color: darkgreen;"
-        [disabled]="!teamNameControl.valid || selectedStudents.length + 1 < currentCourse.minStudentsForTeam || (!this.selectedDate && selectedStudents.length > 0)"
+        [disabled]="!teamNameControl.valid || selectedStudents.length + 1 < currentCourse.min || (!this.selectedDate && selectedStudents.length > 0)"
         (click)="createTeam()">
         Create team
     </button>

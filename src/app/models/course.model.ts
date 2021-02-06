@@ -1,36 +1,43 @@
+
 /**
  * This class represents the model for a Course
  */
 export class Course {
     id: number;
     acronym: string; //apa
-    fullName: string; //algoritmi-e-prgrammazione
-    minStudentsForTeam: number;
-    maxStudentsForTeam: number;
+    name: string; //algoritmi-e-prgrammazione
+    min: number;
+    max: number;
     enabled: boolean;
-    vcpus: number;
-    diskSpace: number;
-    ramSize: number;
+    vcpu: number;
+    disk: number;
+    memory: number;
+    maxVmIstance: number;
+    maxRunningVmInstance: number;
 
     constructor(
         id: number,
         acronym: string,
         name: string,
-        minStudentsForTeam: number,
-        maxStudentsForTeam: number,
+        min: number,
+        max: number,
         enabled: boolean,
-        vcpus: number,
-        diskSpace: number,
-        ramSize: number
+        vcpu: number,
+        disk: number,
+        memory: number,
+        maxVmIstance: number = 0,
+        maxRunningVmInstance: number = 0
     ) {
         this.id = id;
         this.acronym = acronym;
-        this.fullName = name;
-        this.minStudentsForTeam = minStudentsForTeam;
-        this.maxStudentsForTeam = maxStudentsForTeam;
+        this.name = name;
+        this.min = min;
+        this.max= max;
         this.enabled = enabled;
-        this.vcpus = vcpus;
-        this.diskSpace = diskSpace;
-        this.ramSize = ramSize;
+        this.vcpu = vcpu;
+        this.disk = disk;
+        this.memory = memory;
+        this.maxVmIstance = maxVmIstance;
+        this.maxRunningVmInstance = maxRunningVmInstance;
     }
 }
