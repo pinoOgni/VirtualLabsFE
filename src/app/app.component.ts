@@ -197,16 +197,6 @@ export class AppComponent implements OnDestroy, OnInit {
     }
 
     private refillCourses(): void {
-        //test ale
-        let exampleAssignments =  this.courseService.getAssignmentsOfCourse("aa");
-        exampleAssignments.pipe(
-            flatMap(x => x)
-        ).subscribe( y => 
-            console.log(`a `, y.id),
-            
-        )
-
-
         if (this.currentUser) {
             if (this.currentUser.roles.includes('ROLE_STUDENT')) {
                 console.log('refill courses role student');

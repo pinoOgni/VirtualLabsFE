@@ -86,6 +86,7 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
    * this is used to set the enrolledStudents, taken from the container
    */
   @Input() set enrolledStudents(enrolledStudents: Student[]) {
+    console.log('set enrolledStudents')
     this.dataSource.data = enrolledStudents;
   }
 
