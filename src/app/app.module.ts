@@ -58,6 +58,7 @@ import {ViewHomeworkVersionComponent} from './modals/view-homework-version/view-
 import {ScoreDialogComponent} from './score-dialog/score-dialog.component';
 import {ViewContentHomeworkVersionComponent} from './view-content-homework-version/view-content-homework-version.component';
 import {EditVmResourceSettingsComponent} from './modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
+import {MatBadgeModule} from '@angular/material/badge';
 
 @NgModule({
     declarations: [
@@ -116,7 +117,8 @@ import {EditVmResourceSettingsComponent} from './modals/edit-vm-resource-setting
         ReactiveFormsModule,
         MatMenuModule,
         MatSelectModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        MatBadgeModule
 
     ],
     exports:[
