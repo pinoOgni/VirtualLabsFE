@@ -79,7 +79,7 @@ export class EditCourseDialogComponent implements OnInit {
             this.dialogRef.close(
                 {
                     logged: true,
-                    newCourseModel: this.model,
+                    editedCourse: this.model,
                 }
             );
         }
