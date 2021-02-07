@@ -57,13 +57,17 @@ export class VmsComponent implements OnInit {
     this.usedVcpu = 0;
     this.usedDisk = 0;
     this.usedMemory = 0;
+    this.runningInstances = 0;
     this.vmsInstances.forEach(
         y => {
-          this.usedVcpu += y.vcpu;
-          this.usedDisk += y.disk;
-          this.usedMemory += y.memory;
+          if (y.status === 'RUNNING') {
+            this.usedVcpu += y.vcpu;
+            this.usedDisk += y.disk;
+            this.usedMemory += y.memory;
+            this.runningInstances++;
+          }
         }
     );
-    this.runningInstances = this.vmsInstances.length;
+
   }
 }

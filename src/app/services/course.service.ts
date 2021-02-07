@@ -424,7 +424,7 @@ export class CourseService {
           3,
           500,
           500,
-          'RUNNING'
+          'SUSPENDED'
       ),
     ]);
   }
