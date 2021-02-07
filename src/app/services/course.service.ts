@@ -9,6 +9,7 @@ import {CourseModel, CreateAssignment} from '../models/form-models';
 import {Teacher} from '../models/teacher.model';
 import {Assignment} from '../models/assignment.model';
 import {Team} from '../models/team.model';
+import {VmInstanceModel} from '../models/vm-instance-model';
 
 @Injectable({
   providedIn: 'root'
@@ -399,4 +400,37 @@ export class CourseService {
   }
 
 
+  getVmInstancesOfTeam(teamId: number): Observable<VmInstanceModel[]> {
+    return of([
+      new VmInstanceModel(
+          1,
+          'lab1',
+          3,
+          500,
+          500,
+          'RUNNING'
+      ),
+      new VmInstanceModel(
+          2,
+          'lab2',
+          3,
+          500,
+          500,
+          'RUNNING'
+      ),
+      new VmInstanceModel(
+          3,
+          'lab3',
+          3,
+          500,
+          500,
+          'RUNNING'
+      ),
+    ]);
+  }
+
+  updateTeamVmResources(id: number, editedTeam: Team): Observable<Team> {
+    // aspettare ad hamza che faccia l'endpoint POST
+    return of(editedTeam);
+  }
 }

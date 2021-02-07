@@ -12,7 +12,7 @@ export class Course {
     vcpu: number;
     disk: number;
     memory: number;
-    maxVmIstance: number;
+    maxVmInstance: number;
     maxRunningVmInstance: number;
 
     constructor(
@@ -37,7 +37,7 @@ export class Course {
         this.vcpu = vcpu;
         this.disk = disk;
         this.memory = memory;
-        this.maxVmIstance = maxVmIstance;
+        this.maxVmInstance = maxVmIstance;
         this.maxRunningVmInstance = maxRunningVmInstance;
     }
 }

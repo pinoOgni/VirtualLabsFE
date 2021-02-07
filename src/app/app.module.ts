@@ -57,6 +57,7 @@ import {ViewContentAssignmentComponent} from './modals/view-content-assignment/v
 import {ViewHomeworkVersionComponent} from './modals/view-homework-version/view-homework-version.component';
 import {ScoreDialogComponent} from './score-dialog/score-dialog.component';
 import {ViewContentHomeworkVersionComponent} from './view-content-homework-version/view-content-homework-version.component';
+import {EditVmResourceSettingsComponent} from './modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
 
 @NgModule({
     declarations: [
@@ -76,18 +77,19 @@ import {ViewContentHomeworkVersionComponent} from './view-content-homework-versi
     StudentAssignmentsContComponent,
     StudentAssignmentsComponent,
     StudentVmsContComponent,
-    StudentTeamContComponent,
-    TeacherStudentsContComponent,
-    EditCourseDialogComponent,
-    StudentComponent,
-      AddCourseDialogComponent,
-      TeacherAssignmentsComponent,
-      CreateAssignmentComponent,
-      ViewContentAssignmentComponent,
-      ViewHomeworkVersionComponent,
-      ScoreDialogComponent,
-      ViewContentHomeworkVersionComponent
-  ],
+        StudentTeamContComponent,
+        TeacherStudentsContComponent,
+        EditCourseDialogComponent,
+        StudentComponent,
+        AddCourseDialogComponent,
+        TeacherAssignmentsComponent,
+        CreateAssignmentComponent,
+        ViewContentAssignmentComponent,
+        ViewHomeworkVersionComponent,
+        ScoreDialogComponent,
+        ViewContentHomeworkVersionComponent,
+        EditVmResourceSettingsComponent
+    ],
     imports: [
         MatNativeDateModule,
         BrowserModule,

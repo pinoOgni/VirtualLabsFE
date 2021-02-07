@@ -4,6 +4,8 @@ import {TeacherService} from '../../services/teacher.service';
 import {CourseService} from '../../services/course.service';
 import {TeamService} from '../../services/team.service';
 import {Observable} from 'rxjs';
+import {VmInstanceModel} from '../../models/vm-instance-model';
+import {VmModelsService} from '../../services/vm-models.service';
 
 
 @Component({
@@ -16,7 +18,7 @@ export class VmsContComponent implements OnInit {
 
   teams: Observable<Team[]>;
 
-  constructor(private teamService: TeamService, private courseService: CourseService, private teacherService: TeacherService) {
+  constructor(private vmModelService: VmModelsService, private teamService: TeamService, private courseService: CourseService, private teacherService: TeacherService) {
   }
 
   ngOnInit(): void {
@@ -25,4 +27,11 @@ export class VmsContComponent implements OnInit {
 
   }
 
+  getTeamVmsInstances(teamId: number): Observable<VmInstanceModel[]> {
+    return this.courseService.getVmInstancesOfTeam(teamId);
+  }
+
+
 }
+
+

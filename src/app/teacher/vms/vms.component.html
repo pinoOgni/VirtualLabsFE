@@ -1,1 +1,50 @@
-<h2> ciribomboli </h2>
+<mat-card>
+    <mat-card-header>
+        <div class="teamLogo" mat-card-avatar></div>
+        <mat-card-title>
+            <b> {{team.name}} </b>
+        </mat-card-title>
+
+        <mat-card-subtitle>
+            <div><b>ID:</b>  {{team.id}}</div>
+            <div><b>Maximum number of CPUs:</b> {{team.maxVCpu}} </div>
+            <div><b>Maximum disk space: </b>{{team.maxDiskSpace}} </div>
+            <div><b>Maximum memory:</b> {{team.maxRam}} </div>
+            <div><b>Maximum instances allowed:</b> {{team.maxTotalInstances}} </div>
+            <div><b>Maximum running instances allowed:</b> {{team.maxRunningInstances}} </div>
+
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <!--  <div><p> <b>Virtual machines:</b></p></div>
+          <div>
+          <mat-list>
+              <mat-list-item *ngFor="let team1 of teams | async">
+                  {{team1.name}}
+              </mat-list-item>
+          </mat-list>
+          </div>-->
+
+        <div>
+            <p><b>Resources currently used:</b></p>
+        </div>
+        <div>
+            <b> Currently running: {{runningInstances}} Instances</b>
+        </div>
+        <div>
+            <b> Used vCPUs: {{usedVcpu}} CPUs</b>
+        </div>
+        <div>
+            <b> Used Memory: {{usedMemory}} MB</b>
+        </div>
+        <div>
+            <b> Used Disk: {{usedDisk}} MB</b>
+        </div>
+    </mat-card-content>
+    <mat-card-actions>
+        <button (click)="openEditResourcesDialog(team)" color="primary" mat-raised-button>Edit Team Maximum Resources
+            Settings
+        </button>
+
+    </mat-card-actions>
+</mat-card>
