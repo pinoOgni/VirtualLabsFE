@@ -15,6 +15,12 @@
 
         </mat-card-subtitle>
     </mat-card-header>
+    <mat-card-actions>
+        <button (click)="openEditResourcesDialog(team)" color="primary" mat-raised-button>Edit Team Maximum Resources
+            Settings
+        </button>
+
+    </mat-card-actions>
     <mat-card-content>
         <!--  <div><p> <b>Virtual machines:</b></p></div>
           <div>
@@ -41,7 +47,7 @@
         <mat-divider></mat-divider>
         <br>
         <div><b>VMs Instances:</b></div>
-
+        <br>
         <div *ngFor="let vm of vmsInstances" class="border">
             <b>
                 <span *ngIf="vm.status === 'RUNNING'; else elseblock" matBadge="‎" matBadgeColor="primary"></span>
@@ -53,15 +59,13 @@
                 <span> vCPUs: {{vm.vcpu}} </span> <br>
                 <span> Disk Size: {{vm.memory}} MB </span> <br>
                 <span> Memory Size: {{vm.disk}} MB </span> <br>
+                <span *ngIf="(getVmCreator(this.team.id, vm.id) | async) as student">
+                    Created by: {{student.firstName}} {{student.lastName}}  {{student.id}}
+                </span>
                 <mat-divider></mat-divider>
             </b>
         </div>
 
     </mat-card-content>
-    <mat-card-actions>
-        <button (click)="openEditResourcesDialog(team)" color="primary" mat-raised-button>Edit Team Maximum Resources
-            Settings
-        </button>
 
-    </mat-card-actions>
 </mat-card>

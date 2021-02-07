@@ -4,6 +4,8 @@ import {CourseService} from '../../services/course.service';
 import {VmInstanceModel} from '../../models/vm-instance-model';
 import {MatDialog} from '@angular/material/dialog';
 import {EditVmResourceSettingsComponent} from '../../modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
+import {Student} from '../../models/student.model';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-vms',
@@ -18,12 +20,12 @@ export class VmsComponent implements OnInit {
   usedMemory: number;
   runningInstances: number;
 
+
   constructor(public dialog: MatDialog, private courseService: CourseService) {
     this.usedVcpu = 0;
     this.usedDisk = 0;
     this.usedMemory = 0;
     this.runningInstances = 0;
-
   }
 
   ngOnInit(): void {
@@ -69,5 +71,9 @@ export class VmsComponent implements OnInit {
         }
     );
 
+  }
+
+  getVmCreator(teamId: number, vmInstanceId: number): Observable<Student> {
+    return this.courseService.getVmInstanceCreator(teamId, vmInstanceId);
   }
 }

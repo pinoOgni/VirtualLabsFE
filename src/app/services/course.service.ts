@@ -433,4 +433,10 @@ export class CourseService {
     // aspettare ad hamza che faccia l'endpoint POST
     return of(editedTeam);
   }
+
+  getVmInstanceCreator(teamId: number, vmInstanceId: number): Observable<Student> {
+    // /{courseId}/teams/{tid}/vmInstances/{vmid}/getCreator  ----> FARE LA GET
+    const prova = new Student('260005', 'alex.pagano@studenti.polito.it', 'Alessandro', 'Pagano');
+    return of(prova);
+  }
 }
