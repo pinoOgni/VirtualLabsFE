@@ -15,26 +15,14 @@ export class AssignmentService {
   constructor(private courseService: CourseService, private httpClient: HttpClient) { }
 
 
-  //test
-  exampleHomeworks_1: Homework[] = [
-    {assignment_id: 1, student_id: "aa" , currentStatus: HomeworkStatus.NULL, score: 0},
-    {assignment_id: 1, student_id: "bb" , currentStatus: HomeworkStatus.NULL, score: 0}
-  ];
-  
-  exampleHomeworks_2: Homework[] = [
-    {assignment_id: 2, student_id: "cc" , currentStatus: HomeworkStatus.NULL, score: 0},
-    {assignment_id: 2, student_id: "dd" , currentStatus: HomeworkStatus.NULL, score: 0}
-  ];
-
-
   /**
    * This method is used to retrieve the content of an assignment
    * Is used when the student/teacher click on a icon
    * @param assignmentId 
    * @param courseId 
    */
-  getContentAssignment(assignmentId: number,courseId: number = this.courseService.currentCourseIdSubject.value): Observable<any> {
-    const url = `${environment.base_url_course}/${courseId}/assignments/${assignmentId}/content`
+  getContentAssignment(assignmentId: number,courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Blob> {
+    const url = `${environment.base_url_course}/${courseId}/assignment/${assignmentId}/content`
     return this.httpClient.get(url, {
       responseType: 'blob', //Blob object containing the binary data. document:
     }).pipe(
@@ -50,17 +38,12 @@ export class AssignmentService {
    * @param courseId 
    */
   getHomeworksOfAssignment(assignmentId: number,courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Homework[]> {
-    /**
-     const url = `${environment.base_url_course}/${courseId}/assignments/${assignmentId}/homeworks`
+     const url = `${environment.base_url_course}/${courseId}/assignment/${assignmentId}/homeworks`
+     console.log(url)
     return this.httpClient.get<Homework[]>(url)
         .pipe(
-          tap(() => console.log(`getHomeworksOfAssignments ok ${assignmentId}`)),
+          tap((homeworks) => console.log(`getHomeworksOfAssignments ok ${assignmentId}, homeworks, ${homeworks}`)),
           catchError(this.handleError<Homework[]>(`getHomeworksOfAssignments error ${assignmentId}`,[])));
-     */
-      if(assignmentId === 1) 
-      return of(this.exampleHomeworks_1);
-    else
-      return of(this.exampleHomeworks_2);
   }
 
   /**
@@ -71,7 +54,7 @@ export class AssignmentService {
    * @param courseId 
    */
   public getHomeworkVersionsOfStudent(assignmentId: number, studentId: string, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<HomeworkVersion[]> {
-    const url = `${environment.base_url_course}/${courseId}/assignments/${assignmentId}/homework/${studentId}/versions`
+    const url = `${environment.base_url_course}/${courseId}/assignment/${assignmentId}/homework/${studentId}/versions`
     return this.httpClient.get<HomeworkVersion[]>(url)
         .pipe(
             tap(() => console.log(`getHomeworkVersionsOfStudent ok ${assignmentId} and ${studentId} `)),

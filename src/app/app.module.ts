@@ -3,7 +3,10 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import  {  PdfViewerModule  }  from  'ng2-pdf-viewer';
 
+
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 import {MatCardModule} from '@angular/material/card';
 import {TeacherStudentsComponent} from './teacher/students/teacher-students.component';
@@ -44,11 +47,13 @@ import {StudentAssignmentsComponent} from './student/assignments/student-assignm
 import {StudentAssignmentsContComponent} from './student/assignments/student-assignments.container';
 import {StudentComponent} from './student/student.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-
+import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import {EditCourseDialogComponent} from './modals/edit-course-dialog/edit-course-dialog.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSelectModule} from '@angular/material/select';
 import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-dialog.component';
+import { ToastrModule } from 'ngx-toastr';
 
 import {MatNativeDateModule} from '@angular/material/core';
 import {TeacherAssignmentsComponent} from './teacher/assignments/teacher-assignments.component';
@@ -70,6 +75,7 @@ import {MatBadgeModule} from '@angular/material/badge';
         LoginDialogComponent,
         RegisterDialogComponent,
     VmsComponent,
+    VmsResourcesComponent,
     TeacherAssignmentsContComponent,
     TeacherComponent,
     StudentNoTeamComponent,
@@ -109,7 +115,8 @@ import {MatBadgeModule} from '@angular/material/badge';
         MatPaginatorModule,
         MatCheckboxModule,
         MatTabsModule,
-        MatTableModule,
+        MaterialFileInputModule,
+        MatProgressSpinnerModule,
         AppRoutingModule,
         HttpClientModule,
         MatDialogModule,
@@ -117,16 +124,26 @@ import {MatBadgeModule} from '@angular/material/badge';
         ReactiveFormsModule,
         MatMenuModule,
         MatSelectModule,
+        MatBadgeModule,
         MatDatepickerModule,
-        MatBadgeModule
+        PdfViewerModule,
+        ToastrModule.forRoot({
+          preventDuplicates: true,
+          timeOut: 3000,
+          progressBar: true,
 
+        }),
     ],
     exports:[
-        MatFormFieldModule,
-        MatInputModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        MatMenuModule,
+        FormsModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
     ],
   providers: [
+    MatDatepickerModule,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],

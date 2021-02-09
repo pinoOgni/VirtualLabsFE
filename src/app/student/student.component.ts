@@ -34,10 +34,10 @@ export class StudentComponent implements OnDestroy {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       //test
       this.courseService.setNextCourse(params.courseAcronym);
-      console.log('setNextCourse ', params.courseAcronym);
+      console.log("setNextCourse ", params.courseAcronym)
       this.teamService
-          .getTeamOfStudent(this.courseService.currentCourseIdSubject.value, this.authService.currentUserValue.username)
-          .pipe(first()).subscribe(team => team ? this.teamService.currentTeamSubject.next(team) : this.teamService.currentTeamSubject.next(null));
+        .getTeamOfStudent(this.authService.currentUserValue.username, this.courseService.currentCourseAcrSubject.value)
+        .pipe(first()).subscribe(team => team ? this.teamService.currentTeamSubject.next(team) : this.teamService.currentTeamSubject.next(null));
     });
 
   }

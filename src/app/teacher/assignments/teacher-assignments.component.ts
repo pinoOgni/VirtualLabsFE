@@ -7,10 +7,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { HomeworkStatus } from 'src/app/models/homework.model';
+import { Homework, HomeworkStatus } from 'src/app/models/homework.model';
 import { ViewHomeworkVersionComponent } from 'src/app/modals/view-homework-version/view-homework-version.component';
 import { first } from 'rxjs/operators';
 import { ScoreDialogComponent } from 'src/app/score-dialog/score-dialog.component';
+import { SpinnerService } from 'src/app/services/spinner.service';
 
 @Component({
   selector: 'app-teacher-assignments',
@@ -26,6 +27,10 @@ import { ScoreDialogComponent } from 'src/app/score-dialog/score-dialog.componen
 })
 export class TeacherAssignmentsComponent implements AfterViewInit {
 
+
+  showSpinner: boolean;
+
+
   selectedAssignmentId: number;
 
   selectedStudentId: string;
@@ -36,11 +41,12 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
   assignmentsDataSource = new MatTableDataSource<Assignment>();
 
   homeworksInfoStudentsDataSource = new MatTableDataSource<HomeworkInfoStudent>();
-
+  homeworksDataSource = new MatTableDataSource<Homework>();
 
   assignmentColumnsToDisplay = ['name', 'releaseDate', 'expiryDate', 'content', 'homeworks'];
+  homeworksColumnsToDisplay = ['student_id', 'currentStatus', 'currentStatusToString', 'score'];
 
-  homeworksInfoStudentsColumnsToDisplay = ['studentId', 'studentName', 'studentLastName', 'currentStatus', 'currentStatusToString', 'score', 'versions']
+  homeworksInfoStudentsColumnsToDisplay = ['student_id', 'studentFirstName', 'studentLastName', 'currentStatus', 'currentStatusToString', 'score', 'versions']
 
 
   filteredStatuses: string[] = [];
@@ -52,14 +58,20 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
 
   expandedAssignment: Assignment | null;
 
-  expandHomeworksInfoStudents: HomeworkInfoStudent | null;
+  // expandHomeworksInfoStudents: HomeworkInfoStudent | null;
 
   @Input() set assignments(assignments: Assignment[]) {
     this.assignmentsDataSource.data = assignments.sort(Assignment.compareAssignment);
   }
 
-  @Input() set homeworksInfoStudents(homeworksInfoStudents: HomeworkInfoStudent[]) {
+  @Input() set setHomeworksInfoStudents(homeworksInfoStudents: HomeworkInfoStudent[]) {
+    console.log('set homeworksInfoStudents ', homeworksInfoStudents)
     this.homeworksInfoStudentsDataSource.data = homeworksInfoStudents;
+  }
+
+  @Input() set setHomeworks(val: Homework[]) {
+    console.log('set homeworks ', val)
+    this.homeworksDataSource.data = val;
   }
 
   @Output() homeworksInfoStudentsEvent = new EventEmitter<number>();
@@ -74,7 +86,7 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
 
 
 
-  constructor(public dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
+  constructor(public spinnerService: SpinnerService, public dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
 
   ngAfterViewInit(): void {
     this.assignmentsDataSource.paginator = this.paginator;
@@ -118,7 +130,7 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
     if (this.expandedAssignment === null) {
       return;
     }
-    this.selectedAssignmentId = selectedAssignment.id; //to ViewHomeworkVersionComponent
+    // this.selectedAssignmentId = selectedAssignment.id; //to ViewHomeworkVersionComponent
     this.homeworksInfoStudentsEvent.emit(selectedAssignment.id);
   }
 
@@ -163,12 +175,13 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
     }
     // in questo modo se il prof vuole vedere il contenuto di una versione ho già l'id 
     // dell'assignment e dello studente, con i query params mi prndo l'id di una versione
-    this.selectedAssignmentId = assignmentId;
-    this.selectedStudentId = studentId;
+
+    // this.selectedAssignmentId = assignmentId;
+    // this.selectedStudentId = studentId;
     const dialogRef = this.dialog.open(ViewHomeworkVersionComponent, {
       width: '60%',
       data: {
-        assignment_Id: assignmentId,
+        assignmentId: assignmentId,
         studentId: studentId
       }
     });

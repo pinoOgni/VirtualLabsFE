@@ -31,7 +31,7 @@ export class TeacherStudentsContComponent implements OnDestroy, OnInit {
      * The list of students entrolled in all course
      * In this way the teacher can add a student 
      */
-    enrolledStudents: Student[] = []
+    enrolledStudents: Student[] = [];
 
     /**
      * A Subject is like an Observable, but can multicast to many Observers. 
@@ -53,7 +53,7 @@ export class TeacherStudentsContComponent implements OnDestroy, OnInit {
 
     navSubElement;
 
-    //ALE HELP ME
+    
     constructor(private router: Router, private studentService: StudentService, private courseService: CourseService) {
         this.navSubElement = this.router.events
         .pipe(filter((event) => event instanceof NavigationEnd))
@@ -104,22 +104,29 @@ export class TeacherStudentsContComponent implements OnDestroy, OnInit {
      * 
      * @param formData 
      */
-    enrollStudentsToCourseWithCsv(formData: FormData) { }
+    enrollStudentsToCourseWithCsv(csvFormData: FormData) { 
+        this.courseService.enrollStudentsToCourseWithCSV(csvFormData)
+        .pipe(first(), finalize(() => this.refillEnrolledStudents())).subscribe();
+    }
 
     /**
      * 
     */
     private refillEnrolledStudents() {
         // control if the current course is not undefined
-        // ALE HELP ME
         if (!this.courseService.currentCourseIdSubject.value) {
             console.log('rerefillEnrolledStudents if')
             this.enrolledStudents = [];
             return;
         }
         console.log('rerefillEnrolledStudents no if')
-        this.courseService.getEnrolledStudents()
-            .pipe(first()).subscribe((enrolledStudents) => (this.enrolledStudents = enrolledStudents));
+        this.courseService.getEnrolledStudents(this.courseService.currentCourseIdSubject.value)
+            .pipe(first()).subscribe((results) => {
+                console.log(results);
+                this.enrolledStudents = results;
+                console.log('this.enrolledStudents ', this.enrolledStudents)
+            }
+                );
     }
 
 
@@ -129,6 +136,9 @@ export class TeacherStudentsContComponent implements OnDestroy, OnInit {
     ngOnDestroy() {
         this.destroy$.next(true);
         this.destroy$.unsubscribe();
+        if (this.navSubElement) {
+            this.navSubElement.unsubscribe();
+          }
     }
 
     ngOnInit() {

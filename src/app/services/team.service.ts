@@ -14,20 +14,6 @@ import {CourseService} from './course.service';
 })
 export class TeamService {
 
-  /**
-   * list of students used for test, instead of use the json-auth-server
-   */
-  members: Student[] = [
-    {id: "1", email: "string", firstName: "pino", lastName: "ogni"},
-    {id: "2", email: "string", firstName: "ale", lastName: "pag"} 
-  ];
-
-  //test
-  newMembers: Student[] = [
-    {id: "9", email: "string", firstName: "giacomo", lastName: "carlo"},
-    {id: "10", email: "string", firstName: "beppe", lastName: "olio"} 
-  ];
-
   //test
   exampleTeam: Team = new Team("New Team", 2,1,1,1,1,1,1,true)
 
@@ -148,7 +134,6 @@ getMembersOfTeam(teamId: string, courseId: number = this.courseService.currentCo
   }
 
 
-
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
@@ -160,6 +145,5 @@ getMembersOfTeam(teamId: string, courseId: number = this.courseService.currentCo
       return of(result as T);
     };
   }
-
 
 }

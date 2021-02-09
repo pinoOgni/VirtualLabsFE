@@ -32,12 +32,6 @@ export class StudentService {
     { teamName: "Argonauti", creator: "ALALA", membersWithState: ["Ale Pag 1", "Jack Am 4"], deadline: "14-12-2021", isValid: true, token: "aaaaaa" }
   ]
 
-  //test
-  searchingStudents: Student[] = [
-    { id: "11", email: "string", firstName: "aaaa", lastName: "bbbbbbbb" },
-    { id: "12", email: "string", firstName: "aaaa", lastName: "cccccccc" },
-  ];
-
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 

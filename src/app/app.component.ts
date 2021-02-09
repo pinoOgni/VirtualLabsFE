@@ -22,7 +22,7 @@ import {CourseService} from './services/course.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnDestroy, OnInit {
+export class AppComponent implements OnDestroy {
 
     // @ViewChild('sidenav') sidenav: MatSidenav;
 
@@ -44,12 +44,15 @@ export class AppComponent implements OnDestroy, OnInit {
         private authService: AuthService,
         private router: Router,
         private route: ActivatedRoute) {
-        // Here we subscribe to the currentUser and then call the refillCourses method
+        
+        /**
+         * Here we subscribe to the currentUser and then call the refillCourses method
+         */
         this.authService.getCurrentUserserObservable().subscribe((u: User) => {
             this.currentUser = u;
+            this.refillCourses();
             if (u) {
                 this.navBarOpened = true;
-                this.refillCourses();
             }
         });
 
@@ -60,13 +63,16 @@ export class AppComponent implements OnDestroy, OnInit {
                 this.openDialogRegister();
             }
         });
+        /**
+         * Subscribe to the course in course service
+         */
+        this.courseService.course.asObservable().subscribe((c) => {
+            this.course = c;
+          });
+
 
     }
 
-    ngOnInit(): void {
-//    this.refillCourses();
-
-    }
 
     ngOnDestroy() {
         this.routeQueryParams$.unsubscribe();

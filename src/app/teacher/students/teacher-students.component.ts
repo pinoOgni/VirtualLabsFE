@@ -1,12 +1,10 @@
 import {Component, ViewChild, AfterViewInit, OnInit, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
 
 import {Student} from '../../models/student.model';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatTableDataSource} from '@angular/material/table';
 
 import {SelectionModel} from '@angular/cdk/collections';
-import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {MatInput} from '@angular/material/input';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
 import { FormControl } from '@angular/forms';
@@ -38,8 +36,6 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
    */
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-
-
   @ViewChild('autoComplete') autoComplete: MatAutocomplete;
 
   // columnsToDisplay = ['select'].concat(Object.keys(DB_STUDENT[0]));
@@ -47,17 +43,17 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
   /**
    * columns to use in table to display the students
    */
-  columnsToDisplay: string[] = ['select', 'id', 'firstName', 'lastName', 'team']; //'teamId'
+  columnsToDisplay = ['select', 'id', 'firstName', 'lastName', 'team']; //'teamId'
 
   /**
    * datasource for the students
    */
-  dataSource: MatTableDataSource<Student>;
+  dataSource = new MatTableDataSource<Student>();
 
   /**
    * is used to take track of the selected row in the table
    */
-  selection: SelectionModel<Student>;
+  selection = new SelectionModel<Student>(true, []);
 
   /**
    * this is the form control to input the student 
@@ -86,7 +82,7 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
    * this is used to set the enrolledStudents, taken from the container
    */
   @Input() set enrolledStudents(enrolledStudents: Student[]) {
-    console.log('set enrolledStudents')
+    console.log('set enrolledStudents', enrolledStudents)
     this.dataSource.data = enrolledStudents;
   }
 
@@ -98,7 +94,7 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
   /**
    * event emitter used to unenroll students from course
    */
-  @Output() unenrollStudentsToCourseEvent = new EventEmitter<Student[]>();
+  @Output() unenrollStudentsFromCourseEvent = new EventEmitter<Student[]>();
 
   /**
    * Mat paginator for the table of the students
@@ -108,7 +104,7 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
   /**
    * event emitter used to enroll students to course with csv
    */
-  @Output() enrollStudentsToCourseWithCsv = new EventEmitter<FormData>();
+  @Output() enrollStudentsToCourseWithCsvEvent = new EventEmitter<FormData>();
 
   constructor() { }
 
@@ -124,7 +120,7 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
     const formData = new FormData();
     const fileInput: InputFile = this.addStudentsCsvControl.value;
     formData.append('file', fileInput.files[0]);
-    this.enrollStudentsToCourseWithCsv.emit(formData);
+    this.enrollStudentsToCourseWithCsvEvent.emit(formData);
     this.addStudentsCsvControl.reset();
   }
 
@@ -136,7 +132,6 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
    * {emitEvent: false} as a function argument.
   */
     ngOnInit(): void {
-      // ALE
          this.addStudentControl.valueChanges
          .pipe(
              takeUntil(this.destroy$), // Emits the values emitted by the source Observable until a notifier Observable emits a value.
@@ -152,8 +147,8 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
    * manage the paginator and the sort for the table of the students
    */
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
     console.log('On after view init, students component');
   }
 
@@ -162,16 +157,23 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
   */
   masterToggle() {
     this.isFirstPageSelected() ?
-      this.selection.deselect(...this.dataSource._pageData(this.dataSource._orderData(this.dataSource.filteredData))) :
-      this.selection.select(...this.dataSource._pageData(this.dataSource._orderData(this.dataSource.filteredData)))
+      this.selection.deselect(...this.getDataFirstPage()) :
+      this.selection.select(...this.getDataFirstPage())
   }
 
-  // ALE
+  getDataFirstPage() {
+    return this.dataSource._pageData(
+      this.dataSource._orderData(this.dataSource.filteredData)
+    );
+  }
+
   /**
    * how to know if the first page is selected
    */
   isFirstPageSelected() {
-    return this.dataSource._pageData(this.dataSource._orderData(this.dataSource.filteredData)).every((row) => this.selection.isSelected(row));
+    return  this.getDataFirstPage().every((r) =>
+       this.selection.isSelected(r)
+       );
   }
 
   /**
@@ -207,7 +209,7 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
    */
   deleteSelected() {
     if(this.selection.selected!==null) {
-      this.unenrollStudentsToCourseEvent.emit(this.selection.selected);
+      this.unenrollStudentsFromCourseEvent.emit(this.selection.selected);
       this.selection.clear();
     }
   }

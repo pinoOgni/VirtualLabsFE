@@ -41,9 +41,9 @@ export class TeacherComponent implements OnInit {
   ngOnInit(): void { }
 
   ngOnDestroy(): void {
+    this.courseService.setNextCourse(null);
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
-    this.courseService.setNextCourse(null);
   }
 
 

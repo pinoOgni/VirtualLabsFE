@@ -24,11 +24,17 @@ export class ViewHomeworkVersionComponent {
   constructor(public dialogRef: MatDialogRef<ViewHomeworkVersionComponent>, public dialog: MatDialog,
     private route: ActivatedRoute, private router: Router, private assignmentService: AssignmentService, private studentService: StudentService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.studentService.getStudent(data.student_id).subscribe(
-      (s) => this.student = s
+      console.log('constructor ViewHomeworkVersionComponent')
+    this.studentService.getStudent(data.studentId).subscribe(
+      s => this.student = s
     );
-    this.assignmentService.getHomeworkVersionsOfStudent(data.assignment_Id, data.student_id).pipe(first()).subscribe(
-      homeworkVersions => this.homeworkVersionDataSource.data = homeworkVersions.sort(HomeworkVersion.compareHomeworkVersion));
+    this.assignmentService.getHomeworkVersionsOfStudent(data.assignmentId, data.studentId).pipe(first())
+    .subscribe(
+      homeworkVersions => {
+        console.log('ciao ', homeworkVersions);
+        this.homeworkVersionDataSource.data = homeworkVersions.sort(HomeworkVersion.compareHomeworkVersion)
+      }
+        );
   }
 
 
