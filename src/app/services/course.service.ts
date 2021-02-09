@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { Course } from '../models/course.model';
 import { catchError, first, mergeMap, tap } from 'rxjs/operators';
 import { Student } from '../models/student.model';
-import { CourseModel, CreateAssignment } from '../models/form-models';
+import { CourseModel } from '../models/form-models';
 import { Teacher } from '../models/teacher.model';
 import { Assignment } from '../models/assignment.model';
 import { Homework, HomeworkStatus } from '../models/homework.model';
@@ -18,24 +18,8 @@ export class CourseService {
   public course: BehaviorSubject<Course>;
   public currentCourseIdSubject: BehaviorSubject<number>;
  
-  //test
-  enrolledAvailableStudents: Student[] = [
-    {id: "s200001@studenti.polito.it", email: "string", firstName: "cazzo", lastName: "culo"},
-    {id: "3", email: "string", firstName: "hamza", lastName: "r"},
-    {id: "4", email: "string", firstName: "leo", lastName: "t"},
-    {id: "5", email: "string", firstName: "jack", lastName: "r"},
-    {id: "6", email: "string", firstName: "john", lastName: "t"} 
-  ];
-  //test 
-  exampleAssignments: Assignment[] = [
-    {id: 1, releaseDate:"bbb", expiryDate:"cccc", name: "aaaa",content: "aaaaaaaa"},
-    {id: 2, releaseDate:"eee", expiryDate:"ffff", name: "dddd", content: "bbbbbbbb"}
-  ];
-
-
   constructor(private httpClient: HttpClient) {
     this.course = new BehaviorSubject<Course>(null);
-    // test 
     // this.course = new BehaviorSubject<Course>(new Course("APA","Algoritmi e Programmazione Avanzata",3,4,true));
     this.currentCourseIdSubject = new BehaviorSubject<number>(null);
   }
@@ -121,7 +105,7 @@ export class CourseService {
    * This method is used to create an assignment for a given course
    * @param formCreateAssignment 
    */
-  createAssignment(formCreateAssignment: CreateAssignment): Observable<Assignment> {
+  createAssignment(formCreateAssignment: FormData): Observable<Assignment> {
     const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/assignment`
     return this.httpClient.post<Assignment>(url,formCreateAssignment)
       .pipe(
@@ -163,8 +147,6 @@ export class CourseService {
    * that are available (not in a team)
    */
   getEnrolledAvailableStudentsForCourse(courseId: number = this.currentCourseIdSubject.value): Observable<Student[]> {
-    //test
-    //return of<Student[]>(this.enrolledAvailableStudents);
     const url = `${environment.base_url_course}/${courseId}/availableStudents`;
     return this.httpClient
       .get<Student[]>(url).pipe( tap(() =>
@@ -189,16 +171,17 @@ export class CourseService {
 
 
   /**
-   * This method returns all students of a course
+   * Tis method returns all students of a courseh
    * @param courseId 
    */
   getEnrolledStudents(courseId: number = this.currentCourseIdSubject.value): Observable<Student[]> {
     const url = `${environment.base_url_course}/${courseId}/enrolled`;
+    console.log('getEnrolledStudents course-service ', url) 
     return this.httpClient
-      .get<Student[]>(url).pipe( tap(() =>
-          console.log(`getEnrolledStudents error ${courseId}`)
+      .get<Student[]>(url).pipe(tap(() =>
+          console.log(`getEnrolledStudents ok ${courseId}`)
         ),
-        catchError(this.handleError<any>(`getEnrolledStudents ok ${courseId}`,[]))
+        catchError(this.handleError<Student[]>(`getEnrolledStudents error ${courseId}`,[]))
       );
   }
 
@@ -241,7 +224,10 @@ export class CourseService {
    */
   enrollStudentToCourse(student: Student,courseId: number): Observable<Student> {
     const url =  `${environment.base_url_course}/${courseId}/enrollOne`
-    return this.httpClient.put<Student>(url, {studentId: student.id},environment.http_options)
+    console.log('800A enrollStudentToCourse ', student.id)
+    const studentFormData = new FormData();
+    studentFormData.append('studentId',student.id)
+    return this.httpClient.post<Student>(url, studentFormData)
     .pipe(
       tap(() => {
         console.log(`enrollStudentToCourse ok ${student.id}`);
@@ -272,7 +258,9 @@ export class CourseService {
    */
   unenrollStudentFromCourse(student: Student, courseId: number) {
     const url =  `${environment.base_url_course}/${courseId}/unenrollStudent`
-    return this.httpClient.put<Student>(url,{ studentId: student.id },environment.http_options)
+    const studentFormData = new FormData();
+    studentFormData.append('studentId',student.id)
+    return this.httpClient.put<Student>(url,studentFormData)
       .pipe(
         tap((student) => {
           console.log(`unenrollStudentFromCourse ok ${student.id}`
@@ -343,14 +331,28 @@ export class CourseService {
   getAssignmentsOfCourse(courseId: number): Observable<Assignment[]> {
     //    return of(this.exampleAssignments);
     const url = `${environment.base_url_course}/${courseId}/assignments`
+    console.log(url)
     return this.httpClient.get<Assignment[]>(url)
       .pipe( tap(() =>
           console.log(`getAssignmentsOfCourse ok ${courseId}`)
         ),
-        catchError(this.handleError<any>(`getAssignmentsOfCourse(${courseId})`,[]))
+        catchError(this.handleError<Assignment[]>(`getAssignmentsOfCourse(${courseId})`,[]))
       );
   }
     
-  
+  enrollStudentsToCourseWithCSV(csvFormData: FormData, courseId: number = this.currentCourseIdSubject.value) {
+    const url = `${environment.base_url_course}/${courseId}/enrollMany`
+    return this.httpClient.post<boolean[]>(url,csvFormData).pipe(
+      tap((results) => {
+        if(results.includes(false)) {
+          console.log(`enrollStudentsToCourseWithCSV there are some students already enrolled in ${courseId}`)
+        } else{
+          console.log(`enrollStudentsToCourseWithCSV ok in ${courseId}`)
+        }
+      } 
+    ),catchError(
+      this.handleError<boolean[]>(`enrollStudentsToCourseWithCSV ${courseId}`)
+    ));
+  }
 
 }
