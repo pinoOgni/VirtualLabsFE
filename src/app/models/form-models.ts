@@ -27,13 +27,6 @@ export interface EditCourseModel{
 
 }
 
-export interface CreateAssignment{
-  name: string;
-  content: InputFile;
-  expiryDate: string;
-}
-
-
 
 export interface CourseModel{
   //tutto il corso

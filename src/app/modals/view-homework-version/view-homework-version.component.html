@@ -1,7 +1,7 @@
-<h1 mat-dialog-title>Homework version of {{displayFn(student)}} </h1>
+<h1 mat-dialog-title> Homework version </h1>
 <div mat-dialog-content>
     <table mat-table [dataSource]="homeworkVersionDataSource" class="mat-elevation-z8" style="width: 100%" matSort>
-        <ng-container matColumnDef="status">
+        <ng-container matColumnDef="versionStatus">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Version status</th>
             <td mat-cell *matCellDef="let element"> {{element.versionStatus}} </td>
         </ng-container>
@@ -13,7 +13,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Content</th>
             <td mat-cell *matCellDef="let element">
                 <button mat-button [routerLink]="" 
-                        [queryParams]="{teacherContentVersion: element.id, homeworkAssignment: data.assignment_id, homeworkStudent: data.student_id}">View content</button></td>
+                        [queryParams]="{teacherContentVersion: element.id, homeworkAssignment: data.assignmentId, homeworkStudent: data.studentId}">View content</button></td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
         <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>

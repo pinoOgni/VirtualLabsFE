@@ -1,1 +1,19 @@
-<p>view-content works!</p>
+<div>
+    <h2 mat-dialog-title>Title: {{name}}</h2>
+<div mat-dialog-actions>
+    <button mat-button style="color: darkred;" (click)="dialogRef.close()">Close</button>
+    <button mat-button style="color: darkgreen;" (click)="downloadAssignmentFile()" title="The file is .{{fileType}}">Download file</button>
+</div>
+<br/>
+
+<div  class=".all-width" mat-dialog-content *ngIf="fileType === 'jpeg' || fileType === 'jpg' || fileType === 'png'" >
+    <img [src]="assignmentUrl">
+</div>
+<div  class=".all-width" mat-dialog-content *ngIf="fileType === 'txt'" >
+    {{content}}
+</div>
+
+<div class=".all-width" *ngIf="fileType === 'pdf'">
+    <pdf-viewer [src]="assignmentUrl" [original-size]="false" [autoresize]="true" ></pdf-viewer>
+</div>
+</div>

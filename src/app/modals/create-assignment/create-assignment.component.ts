@@ -5,7 +5,6 @@ import { first } from 'rxjs/operators';
 import { InputFile } from 'src/app/models/input-file.model';
 import { CourseService } from 'src/app/services/course.service';
 import * as moment from 'moment';
-import { CreateAssignment } from 'src/app/models/form-models';
 
 @Component({
   selector: 'app-create-assignment',
@@ -31,25 +30,18 @@ export class CreateAssignmentComponent {
   maxDateAssignment = moment(this.minDateAssignment).add(1, 'M').format('YYYY-MM-DD');
 
   /**
-   * A model which is filled with data and put in the correct method
-   * of the course service
-   */
-  model: CreateAssignment;
-
-  /**
-   * In the constructor there is the initialization of the model
-   * and also of the form
+   * In the constructor there is the initialization of the form
    * @param courseService 
    * @param formBuilder 
    * @param dialogRef 
    */
 
   constructor(private courseService: CourseService, private formBuilder: FormBuilder, public dialogRef: MatDialogRef<CreateAssignmentComponent>) {
-    this.model = {name: '', content: null, expiryDate: ''}
     this.assignmentForm = this.formBuilder.group({
       name: ['', [Validators.pattern('^[A-Za-z0-9 -]{2,32}$')]],
-      content: [''],
+      content: '',
       expiryDate: ['']
+      , disabled: true
     });
   }
 
@@ -63,14 +55,17 @@ export class CreateAssignmentComponent {
     if (this.assignmentForm.invalid) {
       return;
     }
-    this.model.name = this.assignmentForm.get('name').value;
+    const assignmentFormData = new FormData();
+
+    assignmentFormData.append('name',this.assignmentForm.get('name').value)
     const expiryDate = new Date(this.selectedDate);
     expiryDate.setDate(expiryDate.getDate() + 1);
-    this.model.expiryDate = expiryDate.getTime().toString(10);
+    assignmentFormData.append('expiryDate',expiryDate.getTime().toString(10));
+    console.log('create assignment, ', expiryDate.getTime().toString(10))
     const fileInput: InputFile = this.assignmentForm.get('content').value;
-    this.model.content.files[0] = fileInput.files[0];
+    assignmentFormData.append('content',fileInput.files[0]);
 
-    this.courseService.createAssignment(this.model).pipe(first()).subscribe((assignment) => {
+    this.courseService.createAssignment(assignmentFormData).pipe(first()).subscribe((assignment) => {
       if (assignment) {
         this.dialogRef.close(assignment);
       }
