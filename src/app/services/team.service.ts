@@ -1,13 +1,14 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, from, Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { AuthService } from '../auth/auth.service';
-import { ProposalOfTeam } from '../models/proposal-of-team.model';
-import { Student } from '../models/student.model';
-import { Team } from '../models/team.model';
-import { CourseService } from './course.service';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {environment} from 'src/environments/environment';
+import {AuthService} from '../auth/auth.service';
+import {ProposalOfTeam} from '../models/proposal-of-team.model';
+import {Student} from '../models/student.model';
+import {Team} from '../models/team.model';
+import {CourseService} from './course.service';
+import {TeamStatus} from '../models/team-status';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ import { CourseService } from './course.service';
 export class TeamService {
 
   //test
-  exampleTeam: Team = new Team("New Team", 2,1,1,1,1,1,1,true)
+  exampleTeam: Team = new Team('New Team', 2, 1, 1, 1, 1, 1, 1, TeamStatus.ACTIVE);
 
    /**
    * The RxJS BehaviorSubject is a special type of Subject that 

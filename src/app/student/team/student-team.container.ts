@@ -1,25 +1,25 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
-import { first, switchMap, takeUntil } from 'rxjs/operators';
-import { Course } from 'src/app/models/course.model';
-import { ProposalOfTeam } from 'src/app/models/proposal-of-team.model';
-import { Proposal } from 'src/app/models/proposal.model';
-import { Student } from 'src/app/models/student.model';
-import { Team } from 'src/app/models/team.model';
-import { CourseService } from 'src/app/services/course.service';
-import { StudentService } from 'src/app/services/student.service';
-import { TeamService } from 'src/app/services/team.service';
+import {Router} from '@angular/router';
+import {Observable, Subject} from 'rxjs';
+import {first, switchMap, takeUntil} from 'rxjs/operators';
+import {Course} from 'src/app/models/course.model';
+import {ProposalOfTeam} from 'src/app/models/proposal-of-team.model';
+import {Proposal} from 'src/app/models/proposal.model';
+import {Student} from 'src/app/models/student.model';
+import {Team} from 'src/app/models/team.model';
+import {CourseService} from 'src/app/services/course.service';
+import {StudentService} from 'src/app/services/student.service';
+import {TeamService} from 'src/app/services/team.service';
 
 
 @Component({
-  selector: 'app-student-team-cont',
-  templateUrl: './student-team.container.html',
+    selector: 'app-student-team-cont',
+    templateUrl: './student-team.container.html',
 })
 export class StudentTeamContComponent implements OnInit, OnDestroy {
 
-  /**
-   * things to pass to app-student-team: team
+    /**
+     * things to pass to app-student-team: team
    * things to pass to app-student-no-team: proposals, course students who are free, course,
    * requests accepted, requests deleted, requests rejected, options students for the research
    */
@@ -187,8 +187,8 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
     .pipe(first())
     .subscribe(r => {
       if (r) {
-        this.teamService
-          .getStudentTeams()
+          this.teamService
+              .getTeamOfStudent()
           .pipe(first())
           .subscribe((team) => this.teamService.currentTeamSubject.next(team));
         this.router.navigate([this.router.url]);

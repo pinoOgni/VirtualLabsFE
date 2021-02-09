@@ -1,2 +1,71 @@
-<h2> vms component </h2>
-  
+<mat-card class="border">
+    <mat-card-header>
+        <div class="teamLogo" mat-card-avatar></div>
+        <mat-card-title>
+            <b> {{team.name}} </b>
+        </mat-card-title>
+
+        <mat-card-subtitle>
+            <div><b>ID:</b>  {{team.id}}</div>
+            <div><b>Maximum number of CPUs:</b> {{team.vcpuMAX}} </div>
+            <div><b>Maximum disk space: </b>{{team.diskMAX}} </div>
+            <div><b>Maximum memory:</b> {{team.memoryMAX}} </div>
+            <div><b>Maximum instances allowed:</b> {{team.maxVmInstance}} </div>
+            <div><b>Maximum running instances allowed:</b> {{team.runningVmInstance}} </div>
+
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-actions>
+        <button (click)="openEditResourcesDialog(team)" color="primary" mat-raised-button>Edit Team Maximum Resources
+            Settings
+        </button>
+
+    </mat-card-actions>
+    <mat-card-content>
+        <!--  <div><p> <b>Virtual machines:</b></p></div>
+          <div>
+          <mat-list>
+              <mat-list-item *ngFor="let team1 of teams | async">
+                  {{team1.name}}
+              </mat-list-item>
+          </mat-list>
+          </div>-->
+
+
+        <div>
+            <b> Currently running: {{runningInstances}} Instances</b>
+        </div>
+        <div>
+            <b> Used vCPUs: {{usedVcpu}} vCPUs</b>
+        </div>
+        <div>
+            <b> Used Memory: {{usedMemory}} MB</b>
+        </div>
+        <div>
+            <b> Used Disk: {{usedDisk}} MB</b>
+        </div>
+        <mat-divider></mat-divider>
+        <br>
+        <div><b>VMs Instances:</b></div>
+        <br>
+        <div *ngFor="let vm of vmsInstances" class="border">
+            <b>
+                <span *ngIf="vm.status === 'RUNNING'; else elseblock" matBadge="‎" matBadgeColor="primary"></span>
+                <ng-template #elseblock><span matBadge="‎" matBadgeColor="warn"></span></ng-template>
+                <br>
+                <span>Virtual Machine name: {{vm.name}}</span> <br>
+                <span> Virtual Machine ID: {{vm.id}} </span> <br>
+                <span> Status: {{vm.status}} </span> <br>
+                <span> vCPUs: {{vm.vcpu}} </span> <br>
+                <span> Disk Size: {{vm.memory}} MB </span> <br>
+                <span> Memory Size: {{vm.disk}} MB </span> <br>
+                <span *ngIf="(getVmCreator(this.team.id, vm.id) | async) as student">
+                    Created by: {{student.firstName}} {{student.lastName}}  {{student.id}}
+                </span>
+                <mat-divider></mat-divider>
+            </b>
+        </div>
+
+    </mat-card-content>
+
+</mat-card>

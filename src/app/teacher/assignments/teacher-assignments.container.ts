@@ -1,18 +1,16 @@
-import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
-import { first } from 'rxjs/operators';
-import { CreateAssignmentComponent } from 'src/app/modals/create-assignment/create-assignment.component';
-import { ViewContentAssignmentComponent } from 'src/app/modals/view-content-assignment/view-content-assignment.component';
-import { Assignment } from 'src/app/models/assignment.model';
-import { HomeworkInfoStudent } from 'src/app/models/homework-info-student.model';
-import { HomeworkVersion } from 'src/app/models/homework-version.model';
-import { Homework, HomeworkStatus } from 'src/app/models/homework.model';
-import { Student } from 'src/app/models/student.model';
-import { AssignmentService } from 'src/app/services/assignment.service';
-import { CourseService } from 'src/app/services/course.service';
-import { StudentService } from 'src/app/services/student.service';
-import { ViewContentHomeworkVersionComponent } from 'src/app/view-content-homework-version/view-content-homework-version.component';
+import {Component, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {ActivatedRoute, Router} from '@angular/router';
+import {first} from 'rxjs/operators';
+import {CreateAssignmentComponent} from 'src/app/modals/create-assignment/create-assignment.component';
+import {ViewContentAssignmentComponent} from 'src/app/modals/view-content-assignment/view-content-assignment.component';
+import {Assignment} from 'src/app/models/assignment.model';
+import {HomeworkInfoStudent} from 'src/app/models/homework-info-student.model';
+import {Homework} from 'src/app/models/homework.model';
+import {AssignmentService} from 'src/app/services/assignment.service';
+import {CourseService} from 'src/app/services/course.service';
+import {StudentService} from 'src/app/services/student.service';
+import {ViewContentHomeworkVersionComponent} from 'src/app/view-content-homework-version/view-content-homework-version.component';
 
 /**
  * this represents the container fot the teacher-assignements view component
@@ -21,7 +19,7 @@ import { ViewContentHomeworkVersionComponent } from 'src/app/view-content-homewo
   selector: 'app-teacher-assignments-cont',
   templateUrl: './teacher-assignments.container.html',
 })
-export class TeacherAssignmentsContComponent {
+export class TeacherAssignmentsContComponent implements OnInit {
 
   /**
    * List of all assignments of this course
@@ -32,7 +30,7 @@ export class TeacherAssignmentsContComponent {
 
   homeworks: Homework[] = [];
 
-  homeworksInfoStudents: HomeworkInfoStudent[] = [];
+  homeworksInfoStudents: HomeworkInfoStudent[];
 
 
   constructor(private studentService: StudentService, public dialog: MatDialog, private router: Router, private route: ActivatedRoute, private courseService: CourseService, private assignmentService: AssignmentService) {
@@ -48,12 +46,12 @@ export class TeacherAssignmentsContComponent {
      */
     this.courseService.getAssignmentsOfCourse(this.courseService.currentCourseIdSubject.value)
       .pipe(first()).subscribe(assignments => {
-        this.assignments = assignments;
-        console.log(assignments)
-        console.log(this.assignments)
-        this.route.queryParams.subscribe((queryParam) =>
+      this.assignments = assignments;
+      console.log(assignments);
+      console.log(this.assignments);
+      this.route.queryParams.subscribe((queryParam) =>
           queryParam && queryParam.teacherContentAssignment ? this.openViewContentAssignmentDialog(queryParam.teacherContentAssignment) : null);
-      });
+    });
   }
 
   /**
@@ -106,47 +104,41 @@ export class TeacherAssignmentsContComponent {
   }
 
 
-
   /**
    * This method first retrieve all homeworks of an assignment
    * then retrieve all info about a student fot that assignment
-   * @param assignmentId 
+   * @param assignmentId
+   */
+  /**
+   * List of all homeworks of this course
+   * with one get
+   */
+
+  // test
+  /**
+   let homeworks: Homework[] = [
+   {assignment_id: 1, student_id: "s111111", currentStatus: HomeworkStatus.READ, score:0}
+   ];
    */
   getHomeworksInfoStudents(assignmentId: number) {
-    /**
-     * List of all homeworks of this course
-     * with one get
-     */
-    // test
-    /**
-     let homeworks: Homework[] = [
-      {assignment_id: 1, student_id: "s111111", currentStatus: HomeworkStatus.READ, score:0}
-    ];
-     */
-     this.assignmentService.getHomeworksOfAssignment(assignmentId).pipe(first()).subscribe(
-      (solutions) => 
-        { 
-          this.homeworks = solutions.sort(Homework.compareHomework)
-          console.log('homeworks', this.homeworks)
-          this.homeworks.forEach(homework =>
-            this.studentService.getStudent(homework.student_id).pipe(first()).subscribe(
-              (x) => {
-                this.homeworksInfoStudents = [];
-                this.homeworksInfoStudents.push({
-                assignment_id: assignmentId, student_id: x.id,
-                studentFirstName: x.firstName, studentLastName: x.lastName,
-                currentStatus: homework.currentStatus,
-                currentStatusToString: homework.currentStatus.toString(),
-                score: homework.score
-              })
-              console.log('hamza bomber ', this.homeworksInfoStudents)
-            }
-            ));
-            console.log('getHomeworksInfoStudents homeworksInfoStudents ', this.homeworksInfoStudents)
-        }
-      );
-      
-      console.log('2 getHomeworksInfoStudents homeworksInfoStudents ', this.homeworksInfoStudents)
+    /*this.assignmentService.getHomeworksOfAssignment(assignmentId).pipe(
+        flatMap( x => x),
+        map( homework => {
+          let homeWorkInfoStudent: HomeworkInfoStudent = new HomeworkInfoStudent();
+          return this.studentService.getStudent(homework.student_id);
+        }),
+        flatMap( x => x ),
+        map( student =>{
+          homeWorkInfoStudent.studentFirstName(student.firstName);
+          homeWorkInfoStudent.studentLastName(student.lastName);
+          homeWorkInfoStudent.student_id(student.id);
+
+          return homeWorkInfoStudent;
+        }),
+        map( homeWorkInfoStudent => {
+
+        })
+    )*/
   }
 
 
@@ -168,6 +160,10 @@ export class TeacherAssignmentsContComponent {
         this.router.navigate([this.router.url.split('?')[0]], {queryParams: {solution: object.solId}});
       });
     });
+  }
+
+  ngOnInit(): void {
+    this.homeworksInfoStudents = [];
   }
 
 

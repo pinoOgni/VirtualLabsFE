@@ -1,17 +1,17 @@
-import { Student } from "./student.model";
+import {TeamStatus} from './team-status';
+
 /**
  * This class represents a model for the Team
  */
 export class Team {
     name: string;
     id: number;
-    courseId: number;
-    maxVCpu: number; 
-    maxDiskSpace: number;
-    maxRam: number;
-    maxRunningInstances: number;
-    maxTotalInstances: number;
-    isActive: boolean;
+    vcpuMAX: number;
+    diskMAX: number;
+    memoryMAX: number;
+    runningVmInstance: number;
+    maxVmInstance: number;
+    status: TeamStatus;
 
 
     constructor(
@@ -23,16 +23,15 @@ export class Team {
         maxRam: number,
         maxRunningInstances: number,
         maxTotalInstances: number,
-        isActive: boolean,
+        isActive: TeamStatus,
     ) {
         this.name = name;
         this.id = id;
-        this.courseId = courseId;
-        this.maxVCpu = maxVCpu;
-        this.maxDiskSpace = maxDiskSpace;
-        this.maxRam = maxRam;
-        this.maxRunningInstances = maxRunningInstances;
-        this.maxTotalInstances = maxTotalInstances;
-        this.isActive = isActive;
+        this.vcpuMAX = maxVCpu;
+        this.diskMAX = maxDiskSpace;
+        this.memoryMAX = maxRam;
+        this.runningVmInstance = maxRunningInstances;
+        this.maxVmInstance = maxTotalInstances;
+        this.status = isActive;
     }
 }

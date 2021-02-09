@@ -3,20 +3,18 @@ import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from './modals/login-dialog/login-dialog.component';
 import {AuthService} from './auth/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, pipe, Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {RegisterDialogComponent} from './modals/register-dialog/register-dialog.component';
 import {User} from './models/user.model';
 import {Course} from './models/course.model';
-import {first, flatMap, tap} from 'rxjs/operators';
+import {first, tap} from 'rxjs/operators';
 import {EditCourseDialogComponent} from './modals/edit-course-dialog/edit-course-dialog.component';
 import {TeacherService} from './services/teacher.service';
 import {StudentService} from './services/student.service';
 import {VmModelsService} from './services/vm-models.service';
 import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-dialog.component';
 import {ConfirmationDialogComponent} from './modals/confirmation-dialog/confirmation-dialog.component';
-import { CourseService } from './services/course.service';
-import { flatten } from '@angular/compiler';
-import { Assignment } from './models/assignment.model';
+import {CourseService} from './services/course.service';
 
 
 @Component({

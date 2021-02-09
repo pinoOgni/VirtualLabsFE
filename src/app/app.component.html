@@ -37,7 +37,6 @@
   <mat-sidenav #sidebar mode="side" position="start" class="sidenav">
     <div *ngIf="currentUser" class=“container-small”>
       <mat-nav-list>
-
         <mat-list-item *ngFor="let course of (courses | async); index as i ">
           <a [routerLink]="[
         currentUser.roles[0].toLowerCase().replace('role_', '') + '/courses/' + course.id

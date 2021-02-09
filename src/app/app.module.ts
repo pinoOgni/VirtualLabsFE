@@ -3,10 +3,10 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import  {  PdfViewerModule  }  from  'ng2-pdf-viewer';
+import {PdfViewerModule} from 'ng2-pdf-viewer';
 
 
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'; 
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 import {MatCardModule} from '@angular/material/card';
 import {TeacherStudentsComponent} from './teacher/students/teacher-students.component';
@@ -35,7 +35,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthInterceptor} from './auth/auth.interceptor';
 import {ErrorInterceptor} from './helpers/error.interceptor';
 import {RegisterDialogComponent} from './modals/register-dialog/register-dialog.component';
-import {VmsResourcesComponent} from './teacher/vms/vms-resources.component';
 import {TeacherAssignmentsContComponent} from './teacher/assignments/teacher-assignments.container';
 import {TeacherComponent} from './teacher/teacher.component';
 import {StudentNoTeamComponent} from './student/team/student-no-team.component';
@@ -48,33 +47,33 @@ import {StudentAssignmentsComponent} from './student/assignments/student-assignm
 import {StudentAssignmentsContComponent} from './student/assignments/student-assignments.container';
 import {StudentComponent} from './student/student.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import { MaterialFileInputModule } from 'ngx-material-file-input';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import {MaterialFileInputModule} from 'ngx-material-file-input';
 import {EditCourseDialogComponent} from './modals/edit-course-dialog/edit-course-dialog.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSelectModule} from '@angular/material/select';
 import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-dialog.component';
-import { ToastrModule } from 'ngx-toastr';
+import {ToastrModule} from 'ngx-toastr';
 
 import {MatNativeDateModule} from '@angular/material/core';
-import { TeacherAssignmentsComponent } from './teacher/assignments/teacher-assignments.component';
-import { CreateAssignmentComponent } from './modals/create-assignment/create-assignment.component';
-import { ViewContentAssignmentComponent } from './modals/view-content-assignment/view-content-assignment.component';
-import { ViewHomeworkVersionComponent } from './modals/view-homework-version/view-homework-version.component';
-import { ScoreDialogComponent } from './score-dialog/score-dialog.component';
-import { ViewContentHomeworkVersionComponent } from './view-content-homework-version/view-content-homework-version.component';
+import {TeacherAssignmentsComponent} from './teacher/assignments/teacher-assignments.component';
+import {CreateAssignmentComponent} from './modals/create-assignment/create-assignment.component';
+import {ViewContentAssignmentComponent} from './modals/view-content-assignment/view-content-assignment.component';
+import {ViewHomeworkVersionComponent} from './modals/view-homework-version/view-homework-version.component';
+import {ScoreDialogComponent} from './score-dialog/score-dialog.component';
+import {ViewContentHomeworkVersionComponent} from './view-content-homework-version/view-content-homework-version.component';
+import {EditVmResourceSettingsComponent} from './modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
+import {MatBadgeModule} from '@angular/material/badge';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    TeacherStudentsComponent,
-    PageNotFoundComponent,
-    HomeComponent,
-    VmsContComponent,
-    LoginDialogComponent,
-    RegisterDialogComponent,
+    declarations: [
+        AppComponent,
+        TeacherStudentsComponent,
+        PageNotFoundComponent,
+        HomeComponent,
+        VmsContComponent,
+        LoginDialogComponent,
+        RegisterDialogComponent,
     VmsComponent,
-    VmsResourcesComponent,
     TeacherAssignmentsContComponent,
     TeacherComponent,
     StudentNoTeamComponent,
@@ -83,18 +82,19 @@ import { ViewContentHomeworkVersionComponent } from './view-content-homework-ver
     StudentAssignmentsContComponent,
     StudentAssignmentsComponent,
     StudentVmsContComponent,
-    StudentTeamContComponent,
-    TeacherStudentsContComponent,
-    EditCourseDialogComponent,
-    StudentComponent,
-      AddCourseDialogComponent,
-      TeacherAssignmentsComponent,
-      CreateAssignmentComponent,
-      ViewContentAssignmentComponent,
-      ViewHomeworkVersionComponent,
-      ScoreDialogComponent,
-      ViewContentHomeworkVersionComponent,
-  ],
+        StudentTeamContComponent,
+        TeacherStudentsContComponent,
+        EditCourseDialogComponent,
+        StudentComponent,
+        AddCourseDialogComponent,
+        TeacherAssignmentsComponent,
+        CreateAssignmentComponent,
+        ViewContentAssignmentComponent,
+        ViewHomeworkVersionComponent,
+        ScoreDialogComponent,
+        ViewContentHomeworkVersionComponent,
+        EditVmResourceSettingsComponent
+    ],
     imports: [
         MatNativeDateModule,
         BrowserModule,
@@ -122,13 +122,14 @@ import { ViewContentHomeworkVersionComponent } from './view-content-homework-ver
         ReactiveFormsModule,
         MatMenuModule,
         MatSelectModule,
+        MatBadgeModule,
         MatDatepickerModule,
         PdfViewerModule,
         ToastrModule.forRoot({
           preventDuplicates: true,
           timeOut: 3000,
           progressBar: true,
-          
+
         }),
     ],
     exports:[
