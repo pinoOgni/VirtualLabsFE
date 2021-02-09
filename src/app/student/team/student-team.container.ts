@@ -188,7 +188,7 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
     .subscribe(r => {
       if (r) {
         this.teamService
-          .getTeamOfStudent()
+          .getStudentTeams()
           .pipe(first())
           .subscribe((team) => this.teamService.currentTeamSubject.next(team));
         this.router.navigate([this.router.url]);

@@ -1,6 +1,7 @@
 /**
  * This class represents a proposal of a team from a student
  * An instance of this class is used to create a team (in student-no-team-component)
+ * In the server there is the RequestTeamDTO
  */
 
 export class ProposalOfTeam {

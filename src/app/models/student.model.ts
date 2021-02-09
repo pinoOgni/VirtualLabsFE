@@ -12,9 +12,11 @@ export class Student {
     email: string; // s200001@studenti.polito.it
     firstName: string; //Giacomo
     lastName: string; //Leopardi
+    avatar: string;
     
 
-    constructor(id: string, email: string, firstName: string, lastName: string) {
+    constructor(id: string, email: string, firstName: string, lastName: string, avatar: string) {
+        this.avatar = avatar;
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -23,6 +25,6 @@ export class Student {
 
 
     static toString(student: Student): string {
-        return student.firstName + ' ' + student.lastName + 'id[' + student.id + ']';
+        return student.firstName + ' ' + student.lastName + ' id [ ' + student.id + ' ]';
       }
 }

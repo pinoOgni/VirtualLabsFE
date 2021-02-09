@@ -103,7 +103,7 @@ export class AuthService{
               //jwt response, I'm logged
               //jwt è un json con chiave "token" asfajscbiasoc.acnasicansocas.coacoasbnsoc
               // "email": caicao
-              // "roles": suca hamza
+              // "roles": 800A hamza
               //
               console.log('800A ', JSON.parse(atob(authResult.token.split('.')[1])).sub);
               const user = new User(
@@ -132,7 +132,7 @@ export class AuthService{
   }
 
   register(model: RegisterModel) {
-    return this.httpClient.post(environment.register_url, model).pipe(
+    return this.httpClient.post(environment.register_url, model,environment.http_options).pipe(
       map((result) => {
         console.log("result register ", result)
         return result;

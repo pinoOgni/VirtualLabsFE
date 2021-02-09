@@ -17,7 +17,7 @@ export const environment = {
   base_url_teachers: `${BASE_URL_API}teachers`,
   http_options: {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-  } 
+  }
 };
 
 /*
