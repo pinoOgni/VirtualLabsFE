@@ -7,7 +7,7 @@ import { ViewContentAssignmentComponent } from 'src/app/modals/view-content-assi
 import { Assignment } from 'src/app/models/assignment.model';
 import { HomeworkInfoStudent } from 'src/app/models/homework-info-student.model';
 import { HomeworkVersion } from 'src/app/models/homework-version.model';
-import { Homework } from 'src/app/models/homework.model';
+import { Homework, HomeworkStatus } from 'src/app/models/homework.model';
 import { Student } from 'src/app/models/student.model';
 import { AssignmentService } from 'src/app/services/assignment.service';
 import { CourseService } from 'src/app/services/course.service';
@@ -30,6 +30,8 @@ export class TeacherAssignmentsContComponent {
   assignments: Assignment[] = [];
 
 
+  homeworks: Homework[] = [];
+
   homeworksInfoStudents: HomeworkInfoStudent[] = [];
 
 
@@ -47,6 +49,8 @@ export class TeacherAssignmentsContComponent {
     this.courseService.getAssignmentsOfCourse(this.courseService.currentCourseIdSubject.value)
       .pipe(first()).subscribe(assignments => {
         this.assignments = assignments;
+        console.log(assignments)
+        console.log(this.assignments)
         this.route.queryParams.subscribe((queryParam) =>
           queryParam && queryParam.teacherContentAssignment ? this.openViewContentAssignmentDialog(queryParam.teacherContentAssignment) : null);
       });
@@ -82,10 +86,15 @@ export class TeacherAssignmentsContComponent {
         this.router.navigate([this.router.url.split('?')[0]]);
         return;
       }
+      console.log('blob text', c.text())
       const url = URL.createObjectURL(c);
       const dialogRef = this.dialog.open(ViewContentAssignmentComponent, {
+        // height: '60%',
+        // width: '60%',
         data: {
-          assignmentId: assignment.id,
+          content: c.text(),
+          type: c.type,
+          assignmentUrl: url,
           name: assignment.name,
         }
       });
@@ -108,20 +117,36 @@ export class TeacherAssignmentsContComponent {
      * List of all homeworks of this course
      * with one get
      */
-    let homeworks: Homework[] = [];
-
-    this.assignmentService.getHomeworksOfAssignment(assignmentId).pipe(first()).subscribe(
-      solutions => homeworks = solutions.sort(Homework.compareHomework));
-    homeworks.forEach(homework =>
-      this.studentService.getStudent(homework.student_id).pipe(first()).subscribe(
-        (x) => this.homeworksInfoStudents.push({
-          assignment_id: assignmentId, student_id: x.id,
-          studentName: x.firstName, studentLastName: x.lastName,
-          currentStatus: homework.currentStatus,
-          currentStatusToString: homework.currentStatus.toString(),
-          score: homework.score
-        })
-      ));
+    // test
+    /**
+     let homeworks: Homework[] = [
+      {assignment_id: 1, student_id: "s111111", currentStatus: HomeworkStatus.READ, score:0}
+    ];
+     */
+     this.assignmentService.getHomeworksOfAssignment(assignmentId).pipe(first()).subscribe(
+      (solutions) => 
+        { 
+          this.homeworks = solutions.sort(Homework.compareHomework)
+          console.log('homeworks', this.homeworks)
+          this.homeworks.forEach(homework =>
+            this.studentService.getStudent(homework.student_id).pipe(first()).subscribe(
+              (x) => {
+                this.homeworksInfoStudents = [];
+                this.homeworksInfoStudents.push({
+                assignment_id: assignmentId, student_id: x.id,
+                studentFirstName: x.firstName, studentLastName: x.lastName,
+                currentStatus: homework.currentStatus,
+                currentStatusToString: homework.currentStatus.toString(),
+                score: homework.score
+              })
+              console.log('hamza bomber ', this.homeworksInfoStudents)
+            }
+            ));
+            console.log('getHomeworksInfoStudents homeworksInfoStudents ', this.homeworksInfoStudents)
+        }
+      );
+      
+      console.log('2 getHomeworksInfoStudents homeworksInfoStudents ', this.homeworksInfoStudents)
   }
 
 

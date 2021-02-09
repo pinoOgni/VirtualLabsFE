@@ -3,8 +3,8 @@
   <div class="container">
   <mat-form-field>
     <mat-label>ADD STUDENT</mat-label>
-    <input type="search" matInput [formControl]="addStudentControl" placeholder="Search a student" title="Firstname, name or id" [matAutocomplete]="autoComplete" #searchInput/>
-    <mat-autocomplete #autoComplete [displayWith]="displayFn" >
+    <input type="search" matInput [formControl]="addStudentControl" placeholder="Search a student" title="Firstname, name or id" [matAutocomplete]="autoComplete"/>
+    <mat-autocomplete #autoComplete="matAutocomplete" [displayWith]="displayFn" >
       <mat-option *ngFor="let option of searchedStudents | async" [value]="option">
         {{displayFn(option)}}
       </mat-option>
@@ -14,12 +14,11 @@
   </div>
 
   <mat-form-field>
-    <ngx-mat-file-input accept=".csv" placeholder="Add students with CSV file"  
-        [formControl]="addStudentsCsvControl">
+    <ngx-mat-file-input accept=".csv" placeholder="Add students with CSV file" [formControl]="addStudentsCsvControl">
     </ngx-mat-file-input>
     <mat-icon matSuffix>folder</mat-icon>
   </mat-form-field>
-  <button mat-button (click)="addStudentsWithCsv()">Add with CSV</button><br />
+  <button mat-button (click)="addStudentsWithCsv()">Add with CSV</button>
 
     <button mat-button color="primary" (click)="deleteSelected()">Delete Selected</button>
 
@@ -68,11 +67,11 @@
       <!-- Team Column -->
       <ng-container matColumnDef="team">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Team </th>
-        <td mat-cell *matCellDef="let element"> {{ element.team && element.team.active ? element.team.name : '' }} </td> <!-- // TODO {{element.team}} -->
+        <td mat-cell *matCellDef="let element"> {{ element.team && element.team.isActive ? element.team.name : '' }} </td>
       </ng-container>
   
       <tr mat-header-row *matHeaderRowDef="columnsToDisplay" ></tr>
       <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" ></tr> <!-- (click)="selection.toggle(row)" -->
     </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>
