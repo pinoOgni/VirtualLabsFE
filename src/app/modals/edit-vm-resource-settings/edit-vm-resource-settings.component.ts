@@ -28,10 +28,10 @@ export class EditVmResourceSettingsComponent implements OnInit {
     });
     this.team = data.t;
 
-    this.editResourcesForm.controls.maxVCpu.setValue(this.team.maxVCpu);
-    this.editResourcesForm.controls.maxDiskSpace.setValue(this.team.maxDiskSpace);
-    this.editResourcesForm.controls.maxRam.setValue(this.team.maxRam);
-    this.editResourcesForm.controls.maxTotalInstances.setValue(this.team.maxTotalInstances);
+    this.editResourcesForm.controls.maxVCpu.setValue(this.team.vcpuMAX);
+    this.editResourcesForm.controls.maxDiskSpace.setValue(this.team.diskMAX);
+    this.editResourcesForm.controls.maxRam.setValue(this.team.memoryMAX);
+    this.editResourcesForm.controls.maxTotalInstances.setValue(this.team.maxVmInstance);
   }
 
   ngOnInit(): void {
@@ -39,10 +39,10 @@ export class EditVmResourceSettingsComponent implements OnInit {
 
   submit() {
     if (this.editResourcesForm.valid) {
-      this.team.maxVCpu = this.editResourcesForm.controls.maxVCpu.value;
-      this.team.maxDiskSpace = this.editResourcesForm.controls.maxDiskSpace.value;
-      this.team.maxRam = this.editResourcesForm.controls.maxRam.value;
-      this.team.maxTotalInstances = this.editResourcesForm.controls.maxTotalInstances.value;
+      this.team.vcpuMAX = this.editResourcesForm.controls.maxVCpu.value;
+      this.team.diskMAX = this.editResourcesForm.controls.maxDiskSpace.value;
+      this.team.memoryMAX = this.editResourcesForm.controls.maxRam.value;
+      this.team.maxVmInstance = this.editResourcesForm.controls.maxTotalInstances.value;
       this.dialogRef.close(
           {
             ok: true,
