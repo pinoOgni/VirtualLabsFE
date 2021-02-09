@@ -1,16 +1,16 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, forkJoin, from, Observable, of } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { Course } from '../models/course.model';
-import { catchError, first, mergeMap, tap } from 'rxjs/operators';
-import { Student } from '../models/student.model';
-import { CourseModel } from '../models/form-models';
-import { Teacher } from '../models/teacher.model';
-import { Assignment } from '../models/assignment.model';
-import { Homework, HomeworkStatus } from '../models/homework.model';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, forkJoin, Observable, of} from 'rxjs';
+import {environment} from 'src/environments/environment';
+import {Course} from '../models/course.model';
+import {catchError, first, tap} from 'rxjs/operators';
+import {Student} from '../models/student.model';
+import {CourseModel} from '../models/form-models';
+import {Teacher} from '../models/teacher.model';
+import {Assignment} from '../models/assignment.model';
 import {Team} from '../models/team.model';
 import {VmInstanceModel} from '../models/vm-instance-model';
+import {TeamStatus} from '../models/team-status';
 
 @Injectable({
   providedIn: 'root'
@@ -376,7 +376,7 @@ export class CourseService {
           1,
           1,
           1,
-          true
+          TeamStatus.ACTIVE
       ),
       new Team(
           'New Team1',
@@ -387,7 +387,7 @@ export class CourseService {
           1,
           1,
           1,
-          true
+          TeamStatus.ACTIVE
       ),
       new Team(
           'New Team2',
@@ -398,7 +398,7 @@ export class CourseService {
           1,
           1,
           1,
-          true
+          TeamStatus.ACTIVE
       )
 
     ]);
@@ -441,7 +441,7 @@ export class CourseService {
 
   getVmInstanceCreator(teamId: number, vmInstanceId: number): Observable<Student> {
     // /{courseId}/teams/{tid}/vmInstances/{vmid}/getCreator  ----> FARE LA GET
-    const prova = new Student('260005', 'alex.pagano@studenti.polito.it', 'Alessandro', 'Pagano');
+    const prova = new Student('260005', 'alex.pagano@studenti.polito.it', 'Alessandro', 'Pagano', 'A');
     return of(prova);
   }
 }

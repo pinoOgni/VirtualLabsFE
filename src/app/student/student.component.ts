@@ -36,7 +36,7 @@ export class StudentComponent implements OnDestroy {
       this.courseService.setNextCourse(params.courseAcronym);
       console.log("setNextCourse ", params.courseAcronym)
       this.teamService
-        .getTeamOfStudent(this.authService.currentUserValue.username, this.courseService.currentCourseAcrSubject.value)
+          .getTeamOfStudent(this.courseService.currentCourseIdSubject.value, this.authService.currentUserValue.username)
         .pipe(first()).subscribe(team => team ? this.teamService.currentTeamSubject.next(team) : this.teamService.currentTeamSubject.next(null));
     });
 

@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import  {  PdfViewerModule  }  from  'ng2-pdf-viewer';
+import {PdfViewerModule} from 'ng2-pdf-viewer';
 
 
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
@@ -47,13 +47,12 @@ import {StudentAssignmentsComponent} from './student/assignments/student-assignm
 import {StudentAssignmentsContComponent} from './student/assignments/student-assignments.container';
 import {StudentComponent} from './student/student.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import { MaterialFileInputModule } from 'ngx-material-file-input';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import {MaterialFileInputModule} from 'ngx-material-file-input';
 import {EditCourseDialogComponent} from './modals/edit-course-dialog/edit-course-dialog.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSelectModule} from '@angular/material/select';
 import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-dialog.component';
-import { ToastrModule } from 'ngx-toastr';
+import {ToastrModule} from 'ngx-toastr';
 
 import {MatNativeDateModule} from '@angular/material/core';
 import {TeacherAssignmentsComponent} from './teacher/assignments/teacher-assignments.component';
@@ -75,7 +74,6 @@ import {MatBadgeModule} from '@angular/material/badge';
         LoginDialogComponent,
         RegisterDialogComponent,
     VmsComponent,
-    VmsResourcesComponent,
     TeacherAssignmentsContComponent,
     TeacherComponent,
     StudentNoTeamComponent,
