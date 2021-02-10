@@ -1,8 +1,6 @@
 import {HomeworkStatus} from './homework.model';
 
 export class HomeworkInfoStudent {
-    constructor() {
-    }
 
     private _assignment_id: number;
 
@@ -24,17 +22,9 @@ export class HomeworkInfoStudent {
         this._student_id = value;
     }
 
+    constructor() {
 
-    /*constructor(assignment_id: number, student_id: string, studentFirstName: string, studentLastName: string,
-        currentStatus: HomeworkStatus, currentStatusToString: string, score : number) {
-            this._assignment_id = assignment_id;
-            this._student_id = student_id;
-            this._studentFirstName = studentFirstName;
-            this._studentLastName = studentLastName;
-            this._currentStatus = currentStatus;
-            this._currentStatusToString = currentStatusToString;
-            this._score = score;
-        }*/
+    }
 
     private _studentFirstName: string;
 
@@ -66,15 +56,13 @@ export class HomeworkInfoStudent {
         this._currentStatus = value;
     }
 
-    private _currentStatusToString: string;
+/**
+  private _currentStatusToString: string;
 
     get currentStatusToString(): string {
         return this._currentStatusToString;
     }
-
-    set currentStatusToString(value: string) {
-        this._currentStatusToString = value;
-    }
+ */
 
     private _score: number;
 
