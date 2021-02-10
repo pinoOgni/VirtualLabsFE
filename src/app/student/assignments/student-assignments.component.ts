@@ -1,17 +1,36 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { first } from 'rxjs/operators';
+import { NewHomeworkVersionDialogComponent } from 'src/app/modals/new-homework-version-dialog/new-homework-version-dialog.component';
+import { AssignmentHomeworkStudent } from 'src/app/models/assignment-homework-student.model';
 import { Assignment } from 'src/app/models/assignment.model';
 import { HomeworkVersion } from 'src/app/models/homework-version.model';
+import { HomeworkStatus } from 'src/app/models/homework.model';
+import { SpinnerService } from 'src/app/services/spinner.service';
 
 @Component({
   selector: 'app-student-assignments',
   templateUrl: './student-assignments.component.html',
-  styleUrls: ['./student-assignments.component.css']
+  styleUrls: ['./student-assignments.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
-export class StudentAssignmentsComponent implements AfterViewInit {
+export class StudentAssignmentsComponent {
+
+  /**
+   * boolean variable to know if the student can upload a new version for that homework
+   */
+  canUploadNewVersion: boolean;
+
 
 
   selectedAssignmentId: number;
@@ -19,42 +38,98 @@ export class StudentAssignmentsComponent implements AfterViewInit {
   /** 
    * data source for the list of assignments
    */
-  assignmentsDataSource = new MatTableDataSource<Assignment>();
+  assignmentHomeworksDataSource = new MatTableDataSource<AssignmentHomeworkStudent>();
 
+
+  /**
+   * data source for the list of versions
+   */
   versionsDataSource = new MatTableDataSource<HomeworkVersion>();
 
 
-  assignmentColumnsToDisplay = ['name','releaseDate','expiryDate','content','versions'];
+  /**
+   * columns for the table of assignemtns
+   */
+  assignmentHomeworksColumnsToDisplay = ['name','releaseDate','expiryDate','currentStatus','score','content','versions'];
 
-  versionsColumnsToDisplay = ['currentStatus', 'score','content']
+  /**
+   * columns for the table of the homework versions
+   */
+  versionsColumnsToDisplay = ['versionStatus', 'timestamp', 'content']
 
+  /**
+   * expanded element for the table
+   */
+  expandedAssignmentHomework: AssignmentHomeworkStudent | null;
 
-  expandedAssignment: Assignment | null;
-
-  @Input() set assignments(assignments: Assignment[]) {
-    this.assignmentsDataSource.data = assignments.sort(Assignment.compareAssignment);
+  /**
+   * set the list of assignments from the container
+   */
+  @Input() set assignmentHomeworks(assignmentHomeworks: AssignmentHomeworkStudent[]) {
+    this.assignmentHomeworksDataSource.data = assignmentHomeworks;
   }
 
-  @Input() set versionsStudents(versionsStudents: HomeworkVersion[]) {
-    this.versionsDataSource.data = versionsStudents;
+  /**
+   * set the list of the versions from the container
+   */
+  @Input() set versions(versions: HomeworkVersion[]) {
+    this.versionsDataSource.data = versions.sort(HomeworkVersion.compareHomeworkVersion);
   }
 
-  @Output() versionStudentsEvent = new EventEmitter<number>();
+  /**
+   * emitter fot the homework versions
+   */
+  @Output() getHomeworkVersionEvent = new EventEmitter<number>();
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort; 
+  /**
+   * emitter for the homework versions, to update them
+   */
+  @Output() refillHomeworkVersionsEvent = new EventEmitter<number>();
 
-  constructor(public dialog: MatDialog,private router: Router, private route: ActivatedRoute) { }
 
-  ngAfterViewInit(): void {
-    this.assignmentsDataSource.sort = this.sort;
+  constructor(public spinnerService: SpinnerService, public dialog: MatDialog,private router: Router, private route: ActivatedRoute) {
+    this.route.queryParams.subscribe((queryParams) =>
+    queryParams && queryParams.studentNewVersion ? this.newHomeworkVersion(queryParams.studentNewVersion) : null
+    );
+   }
 
+
+
+   showHomeworkVersions(selected: AssignmentHomeworkStudent) {
+    this.expandedAssignmentHomework = this.expandedAssignmentHomework === selected ? null : selected;
+    if (this.expandedAssignmentHomework === null) {
+      return;
+    }
+    this.canUploadNewVersion = selected.currentStatus === HomeworkStatus.READ || selected.currentStatus === HomeworkStatus.REVIEWED;
+    this.getHomeworkVersionEvent.emit(selected.assignment_id);
   }
+  
 
-
-  showHomeworkInfoStudents(selectedVersion: HomeworkVersion) {
+  /**
+   * This method is used to open a new dialog and to give the 
+   * possibility to upload a new version of a homework for a given assignment
+   * @param assignmentId 
+   */
+  newHomeworkVersion(assignmentId: number) {
+    console.log('newHomeworkVersion')
+    const dialogRef = this.dialog.open(NewHomeworkVersionDialogComponent, {
+      width: '60%',
+        data: { 
+          assignmentId: assignmentId,
+          assignmentName: this.expandedAssignmentHomework.name
+        }
+      });
+  dialogRef.afterClosed().pipe(first()).subscribe((result) => {
+        if (result) {
+          this.refillHomeworkVersionsEvent.emit(this.expandedAssignmentHomework.assignment_id);
+          this.expandedAssignmentHomework.currentStatus = HomeworkStatus.SUBMITTED;
+          // this.expandedAssignmentHomework.currentStatusTs = result.timestamp;
+          this.canUploadNewVersion = false;
+        }
+        this.router.navigate([this.router.url.split('?')[0]]);
+      });
   }
-
-
+  
 
   dateToString(date: string): string {
     const newDate = new Date(date);
@@ -65,10 +140,6 @@ export class StudentAssignmentsComponent implements AfterViewInit {
     );
   }
 
-
-  canUploadNewVersion(): boolean {
-    return true;
-  }
 
 
 }

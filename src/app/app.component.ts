@@ -207,7 +207,7 @@ export class AppComponent implements OnDestroy {
                 this.courses = this.studentsService.getCoursesOfStudentById()
                     .pipe(
                         tap(() =>
-                            console.log(`refill courses  getCoursesOfStudentById `, this.courses)
+                            console.log(`refill courses  getCoursesOfStudentById `)
                         ),
                     );
             } else if (this.currentUser.roles.includes('ROLE_TEACHER')) {
@@ -215,7 +215,7 @@ export class AppComponent implements OnDestroy {
                 this.courses = this.teacherService.getCoursesOfTeacherById()
                     .pipe(
                         tap(() =>
-                            console.log(`refill courses  getCoursesOfTeacherById `, this.courses)
+                            console.log(`refill courses  getCoursesOfTeacherById `)
                         ),
                     );
             }

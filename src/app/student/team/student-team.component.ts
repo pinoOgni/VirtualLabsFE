@@ -17,9 +17,17 @@ export class StudentTeamComponent {
   dataSource = new MatTableDataSource<Student>();
   columnsToDisplay = ['firstName', 'lastName', 'id'];
 
+  /**
+   * Take the team form the container, we use to set the teamName
+   */
   @Input() set team(team: Team) {
     this.teamName = team.name;
-    // TODO
-    // this.dataSource.data = team.members;
+  }
+
+  /**
+   * Take the members of the team from the container
+   */
+  @Input() set members(members: Student[]) {
+    this.dataSource.data = members;
   }
 }

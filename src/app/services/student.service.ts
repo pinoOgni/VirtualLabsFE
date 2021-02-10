@@ -58,11 +58,6 @@ export class StudentService {
     );
 
   }
-  /**
-   * TODO
-   * uploadStudentAssignment: metodo per caricare l'assignment di uno studente. Ritorna un Observable<UploadAssignment>
-   */
-
 
   /**
    * This method is used to make a request to the the server and retrieve all the available
@@ -130,7 +125,7 @@ export class StudentService {
    */
   getProposalsInCourse(courseId: number = this.courseService.currentCourseIdSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Proposal[]> {
     // return of<Proposal[]>(this.exampleProposals)
-    const url = `${environment.base_url_students}/${studentId}/proposalsOfCourse/${courseId}`
+    const url = `${environment.base_url_course}/${courseId}/proposalNotifications}`
     return this.httpClient.get<Proposal[]>(url, environment.http_options)
       .pipe(
         tap(() =>

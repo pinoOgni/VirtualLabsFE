@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { AuthService } from '../auth/auth.service';
 import { HomeworkVersion } from '../models/homework-version.model';
 import { Homework, HomeworkStatus } from '../models/homework.model';
 import { CourseService } from './course.service';
@@ -12,7 +13,7 @@ import { CourseService } from './course.service';
 })
 export class AssignmentService {
 
-  constructor(private courseService: CourseService, private httpClient: HttpClient) { }
+  constructor(private authService: AuthService, private courseService: CourseService, private httpClient: HttpClient) { }
 
 
   /**
@@ -30,7 +31,6 @@ export class AssignmentService {
       catchError(this.handleError<any>(`getContentAssignment error ${assignmentId}`))
     );
   }
-
 
   /**
    * This method is used to retrieve all the homeworks 
@@ -67,9 +67,9 @@ export class AssignmentService {
    * @param studentId 
    * @param courseId 
    */
-  addScoreToHomework(score: number, assignmentId: number, studentId: string, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Homework> {
+  addScoreToHomework(score: FormData, assignmentId: number, studentId: string, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Homework> {
     const url = `${environment.base_url_course}/${courseId}/assignment/${assignmentId}/homework/${studentId}/setScore`
-    return this.httpClient.post<Homework>(url, {score}, environment.http_options
+    return this.httpClient.post<Homework>(url, score
     ).pipe(
         tap(() => console.log(`addScoreToHomework ok ${assignmentId} and ${studentId} `)),
         catchError(this.handleError<Homework>(`addScoreToHomework error ok ${assignmentId} and ${studentId}`))
@@ -98,8 +98,9 @@ export class AssignmentService {
    * @param versionId 
    * @param courseId 
    */
-  getContentHomeworkVersion(assignmetId: number, studentId: string, versionId: number, courseId = this.courseService.currentCourseIdSubject.value): Observable<any> {
-    const url = `${environment.base_url_course}/${courseId}/assignment/${assignmetId}/homework/${studentId}/version/${versionId}`
+  getContentHomeworkVersion(assignmetId: number, studentId: string, versionId: number, courseId = this.courseService.currentCourseIdSubject.value): Observable<Blob> {
+    const url = `${environment.base_url_course}/${courseId}/assignment/${assignmetId}/homework/${studentId}/version/${versionId}/content`
+    console.log('getContentHomeworkversion ', url)
     return this.httpClient.get(url, {
       responseType: 'blob',
     }).pipe(
@@ -107,5 +108,22 @@ export class AssignmentService {
         catchError(this.handleError<any>(`getContentHomeworkVersion error ${versionId}`))
     );
   }
+
+
+/**
+ * This method is used to upload a new version for a given of assignment
+ * @param homeworkVersion 
+ * @param assignmentId 
+ * @param studentId 
+ * @param courseId 
+ */
+newHomeworkVersion(homeworkVersion: FormData, assignmentId: number, studentId: string = this.authService.currentUserValue.username, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<HomeworkVersion> {
+  const url = `${environment.base_url_course}/${courseId}/assignment/${assignmentId}/homework/${studentId}/submit`
+  return this.httpClient.post<HomeworkVersion>(url, homeworkVersion
+  ).pipe(
+      tap(() => console.log(`newHomeworkVersion ok ${assignmentId} and ${studentId} `)),
+      catchError(this.handleError<HomeworkVersion>(`newHomeworkVersion error ok ${assignmentId} and ${studentId}`))
+  );
+}
 
 }

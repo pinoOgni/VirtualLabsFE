@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {BehaviorSubject, from, Observable, of} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {environment} from 'src/environments/environment';
 import {AuthService} from '../auth/auth.service';
@@ -9,14 +9,21 @@ import {Student} from '../models/student.model';
 import {Team} from '../models/team.model';
 import {CourseService} from './course.service';
 import {TeamStatus} from '../models/team-status';
+import { Proposal } from '../models/proposal.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TeamService {
 
-  //test
+  // test
   exampleTeam: Team = new Team('New Team', 2, 1, 1, 1, 1, 1, 1, TeamStatus.ACTIVE);
+
+  // test
+  exampleMembers: Student[] = [
+    {id: "s123456", email: "string", firstName: "Giacomo", lastName: "Leopardi", avatar: "string"},
+    {id: "s987654", email: "string", firstName: "Alessandro", lastName: "Manzoni", avatar: "string"}
+  ]
 
    /**
    * The RxJS BehaviorSubject is a special type of Subject that 
@@ -25,11 +32,12 @@ export class TeamService {
    * Subjects don't store the current value and only emit 
    * values that are published after a subscription is created
    */
-  public currentTeamSubject: BehaviorSubject<Team>; 
+  public currentTeamSubject: BehaviorSubject<Team>;
+  
+
   constructor(private httpClient: HttpClient, private authService: AuthService, private courseService: CourseService) { 
     //test
-    //this.currentTeamSubject = new BehaviorSubject<Team>(new Team("Argonauti", 1, this.members,1,1,1,1,1,1,true));
-    this.currentTeamSubject = new BehaviorSubject<Team>(null)
+    this.currentTeamSubject = new BehaviorSubject<Team>(null);
   }
 
   /**
@@ -43,10 +51,10 @@ export class TeamService {
     * @param studentId the student id that is equal of the user username of a user logged
     */
   getTeamOfStudent(courseId: number = this.courseService.currentCourseIdSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Team> {
-    //this method will done a get
-    //test
-    //return from(this.currentTeamSubject);
-    const url = `${environment.base_url_students}/${studentId}/teams/${courseId}`
+    // test
+    // return of(this.exampleTeam);
+    // return of(null);
+     const url = `${environment.base_url_students}/${studentId}/courses/${courseId}/team`
     return this.httpClient
     .get<Team>(url).pipe(
         tap(() =>
@@ -60,11 +68,11 @@ export class TeamService {
 }
 
 
-getMembersOfTeam(teamId: string, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Student[]> {
+getMembersOfTeam(teamId: number, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Student[]> {
   //this method will done a get
   //test
-  //return from(this.currentTeamSubject);
-  const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/students`
+  // return of(this.exampleMembers);
+     const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/students`
   return this.httpClient
   .get<Student[]>(url).pipe(
       tap(() =>
@@ -84,13 +92,15 @@ getMembersOfTeam(teamId: string, courseId: number = this.courseService.currentCo
    * @param courseId the acronym of a course
    * @param proposalOfTeam proposal of a team
    */
-  createTeam(courseId: number, proposalOfTeam: ProposalOfTeam): Observable<Team> {
+  createTeam(courseId: number, proposalOfTeam: ProposalOfTeam): Observable<Proposal> {
+    proposalOfTeam.deadline = '86400000';
+    console.log('create team ', proposalOfTeam)
     const url = `${environment.base_url_course}/${courseId}/teams`
-    return this.httpClient.post<Team>(url,proposalOfTeam,environment.http_options)
+    return this.httpClient.post<Proposal>(url,proposalOfTeam)
         .pipe(tap(() =>
                 console.log(`createTeam ${proposalOfTeam.teamName}`)
             ),
-            catchError(this.handleError<Team>(`createTeam ${proposalOfTeam.teamName}`) )
+            catchError(this.handleError<Proposal>(`createTeam ${proposalOfTeam.teamName}`) )
         );
   }
 

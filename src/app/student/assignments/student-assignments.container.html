@@ -1,2 +1,6 @@
-<app-student-assignments>
+<app-student-assignments
+                             [assignmentHomeworks]="assignmentHomeworks"
+                             [versions]="homeworkVersions"
+                             (getHomeworkVersionEvent)="getHomeworkVersions($event)"
+                             (refillHomeworkVersionsEvent)="refillHomeworkVersions($event)">
 </app-student-assignments>
