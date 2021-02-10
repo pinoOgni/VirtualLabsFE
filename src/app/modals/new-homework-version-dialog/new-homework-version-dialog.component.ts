@@ -23,7 +23,6 @@ export class NewHomeworkVersionDialogComponent{
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private assignmentService: AssignmentService, private formBuilder: FormBuilder, public dialogRef: MatDialogRef<NewHomeworkVersionDialogComponent>) {
     this.assignmentId = data.assignmentId;
     this.assignmentName = data.assignmentName;
-    
     this.homeworkVersionForm = this.formBuilder.group({
       content: ''
     });

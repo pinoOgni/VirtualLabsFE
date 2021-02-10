@@ -1,6 +1,6 @@
 <h1 mat-dialog-title> Homework version </h1>
-<div mat-dialog-content>
-    <table mat-table [dataSource]="homeworkVersionDataSource" class="mat-elevation-z8" style="width: 100%" matSort>
+<div mat-dialog-content >
+    <table mat-table [dataSource]="homeworkVersionDataSource" class="table" matSort>
         <ng-container matColumnDef="versionStatus">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Version status</th>
             <td mat-cell *matCellDef="let element"> {{element.versionStatus}} </td>
@@ -19,10 +19,17 @@
         <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
     </table>
 </div>
-<div mat-dialog-actions style="justify-content: center">
-    <button mat-button style="color: red" (click)="dialogRef.close()">Close</button>
-
-    <!-- se è SUBMITTED--> 
-    <button mat-button *ngIf="isUploadable()" style="color: green;" [routerLink]=""
-    [queryParams]="{teacherUploadReview: true, homeworkAssignment: data.assignment_id, homeworkStudent: data.student_id}">Upload Review</button>
+<div>
+    <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+        <mat-form-field *ngIf="isUploadable()" class="all-width">
+            <ngx-mat-file-input formControlName="review" placeholder="Homework review"
+             accept=".jpeg, .jpg, .png, .pdf, .txt" required></ngx-mat-file-input>
+            <mat-icon matSuffix>folder</mat-icon>
+        </mat-form-field>
+        <div mat-dialog-actions class="button-centered">
+            <button mat-button style="color: red;" mat-dialog-close>Close</button>
+            <button *ngIf="isUploadable()" mat-button style="color: green;" (click)="setCanReSubmit(true)" [disabled]="reviewForm.invalid">Upload review</button>
+            <button *ngIf="isUploadable()" mat-button style="color: green;" (click)="setCanReSubmit(false)" [disabled]="reviewForm.invalid">Upload review definitely</button>
+        </div>
+    </form>
 </div>

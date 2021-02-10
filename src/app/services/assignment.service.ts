@@ -126,4 +126,20 @@ newHomeworkVersion(homeworkVersion: FormData, assignmentId: number, studentId: s
   );
 }
 
+/**
+ * This method is used to upload a new review for a homework
+ * @param homeworkVersion 
+ * @param assignmentId 
+ * @param studentId 
+ * @param courseId 
+ */
+newReviewToHomework(reviewHomework: FormData, canReSubmitValue: boolean, assignmentId: number, studentId: string, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<HomeworkVersion> {
+  const url = `${environment.base_url_course}/${courseId}/assignment/${assignmentId}/homework/${studentId}/review?canReSubmit=${canReSubmitValue}`
+  return this.httpClient.post<HomeworkVersion>(url, reviewHomework
+  ).pipe(
+      tap(() => console.log(`newReviewToHomework ok ${assignmentId} and ${studentId} `)),
+      catchError(this.handleError<HomeworkVersion>(`newReviewToHomework error ok ${assignmentId} and ${studentId}`))
+  );
+}
+
 }

@@ -11,6 +11,7 @@ import {AssignmentService} from 'src/app/services/assignment.service';
 import {CourseService} from 'src/app/services/course.service';
 import {StudentService} from 'src/app/services/student.service';
 import {ViewContentHomeworkVersionComponent} from 'src/app/modals/view-content-homework-version/view-content-homework-version.component';
+import { AuthService } from 'src/app/auth/auth.service';
 
 /**
  * this represents the container fot the teacher-assignements view component
@@ -33,7 +34,7 @@ export class TeacherAssignmentsContComponent implements OnInit {
   homeworksInfoStudents: HomeworkInfoStudent[];
 
 
-  constructor(private studentService: StudentService, public dialog: MatDialog, private router: Router, private route: ActivatedRoute, private courseService: CourseService, private assignmentService: AssignmentService) {
+  constructor(private authService: AuthService, private studentService: StudentService, public dialog: MatDialog, private router: Router, private route: ActivatedRoute, private courseService: CourseService, private assignmentService: AssignmentService) {
     /**
      * subscribe, in this way we can open a dialog using the "createAssignment" queryparam
      */
@@ -141,6 +142,7 @@ export class TeacherAssignmentsContComponent implements OnInit {
 
 
   viewContentHomeworkVersion(object: any) {
+    const assignment = this.assignments.find(a => a.id == object.assignmentId);
     this.assignmentService.getContentHomeworkVersion(object.assignmentId,object.studentId,object.versionId)
     .pipe(first()).subscribe(content => {
       if (!content) {
@@ -150,7 +152,10 @@ export class TeacherAssignmentsContComponent implements OnInit {
       const url = URL.createObjectURL(content);
       const dialogRef = this.dialog.open(ViewContentHomeworkVersionComponent, {
         data: {
-          version_id: object.versionId
+          content: content.text(),
+          type: content.type,
+          homeworkVersionUrl: url,
+          homeworkVersionName: this.authService.currentUserValue.username + "_Assignment_" + assignment.name + "_VersionId_" + object.versionId
         }
       });
       dialogRef.afterClosed().subscribe(() => {
