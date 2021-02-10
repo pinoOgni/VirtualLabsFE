@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {first} from 'rxjs/operators';
+import {first, flatMap, map, mergeMap, toArray} from 'rxjs/operators';
 import {CreateAssignmentComponent} from 'src/app/modals/create-assignment/create-assignment.component';
 import {ViewContentAssignmentComponent} from 'src/app/modals/view-content-assignment/view-content-assignment.component';
 import {Assignment} from 'src/app/models/assignment.model';
@@ -10,7 +10,7 @@ import {Homework} from 'src/app/models/homework.model';
 import {AssignmentService} from 'src/app/services/assignment.service';
 import {CourseService} from 'src/app/services/course.service';
 import {StudentService} from 'src/app/services/student.service';
-import {ViewContentHomeworkVersionComponent} from 'src/app/view-content-homework-version/view-content-homework-version.component';
+import {ViewContentHomeworkVersionComponent} from 'src/app/modals/view-content-homework-version/view-content-homework-version.component';
 
 /**
  * this represents the container fot the teacher-assignements view component
@@ -77,8 +77,8 @@ export class TeacherAssignmentsContComponent implements OnInit {
    * This method is used to display the content of an assignment
    * @param assignmentId
    */
-  openViewContentAssignmentDialog(assignmentId: string) {
-    const assignment = this.assignments.find(a => a.id.toString() === assignmentId);
+  openViewContentAssignmentDialog(assignmentId: number) {
+    const assignment = this.assignments.find(a => a.id == assignmentId);
     this.assignmentService.getContentAssignment(assignment.id).pipe(first()).subscribe(c => {
       if (!c) {
         this.router.navigate([this.router.url.split('?')[0]]);
@@ -109,36 +109,34 @@ export class TeacherAssignmentsContComponent implements OnInit {
    * then retrieve all info about a student fot that assignment
    * @param assignmentId
    */
-  /**
-   * List of all homeworks of this course
-   * with one get
-   */
-
-  // test
-  /**
-   let homeworks: Homework[] = [
-   {assignment_id: 1, student_id: "s111111", currentStatus: HomeworkStatus.READ, score:0}
-   ];
-   */
   getHomeworksInfoStudents(assignmentId: number) {
-    /*this.assignmentService.getHomeworksOfAssignment(assignmentId).pipe(
-        flatMap( x => x),
-        map( homework => {
-          let homeWorkInfoStudent: HomeworkInfoStudent = new HomeworkInfoStudent();
-          return this.studentService.getStudent(homework.student_id);
-        }),
-        flatMap( x => x ),
-        map( student =>{
-          homeWorkInfoStudent.studentFirstName(student.firstName);
-          homeWorkInfoStudent.studentLastName(student.lastName);
-          homeWorkInfoStudent.student_id(student.id);
-
-          return homeWorkInfoStudent;
-        }),
-        map( homeWorkInfoStudent => {
-
-        })
-    )*/
+    this.assignmentService.getHomeworksOfAssignment(assignmentId).pipe(
+      first(),   // take the first and only array from the service
+      flatMap(x => x),  // from stream of array of homework to stream of homework
+      mergeMap(solution => { //for every homework we start to build one HomeWorkInfoStudent
+        let homeworkInfoStudent = new HomeworkInfoStudent();
+        homeworkInfoStudent.student_id = solution.student_id;
+        homeworkInfoStudent.assignment_id = solution.assignment_id;
+        homeworkInfoStudent.currentStatus = solution.currentStatus;
+        // homeworkInfoStudent.currentStatusToString = solution.currentStatus.toString()
+        homeworkInfoStudent.score = solution.score;
+        return this.studentService.getStudent(solution.student_id).pipe(
+          map(student => ({ 
+            student,homeworkInfoStudent  
+          })), //from the student, return an object of (student,homeworkInfoStudent)
+          map(middleMerge => {
+            middleMerge.homeworkInfoStudent.studentFirstName = middleMerge.student.firstName;
+            middleMerge.homeworkInfoStudent.studentLastName = middleMerge.student.lastName;
+            return middleMerge.homeworkInfoStudent;
+          })
+        )
+      }),toArray()
+      ).subscribe(
+      (last) => {
+          this.homeworksInfoStudents = last;
+          console.log('ALE, ', this.homeworksInfoStudents)
+      }
+      )
   }
 
 

@@ -10,7 +10,7 @@ import { MatSort } from '@angular/material/sort';
 import { Homework, HomeworkStatus } from 'src/app/models/homework.model';
 import { ViewHomeworkVersionComponent } from 'src/app/modals/view-homework-version/view-homework-version.component';
 import { first } from 'rxjs/operators';
-import { ScoreDialogComponent } from 'src/app/score-dialog/score-dialog.component';
+import { ScoreDialogComponent } from 'src/app/modals/score-dialog/score-dialog.component';
 import { SpinnerService } from 'src/app/services/spinner.service';
 
 @Component({
@@ -30,9 +30,6 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
 
   showSpinner: boolean;
 
-
-  selectedAssignmentId: number;
-
   selectedStudentId: string;
 
   /** 
@@ -41,12 +38,10 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
   assignmentsDataSource = new MatTableDataSource<Assignment>();
 
   homeworksInfoStudentsDataSource = new MatTableDataSource<HomeworkInfoStudent>();
-  homeworksDataSource = new MatTableDataSource<Homework>();
 
   assignmentColumnsToDisplay = ['name', 'releaseDate', 'expiryDate', 'content', 'homeworks'];
-  homeworksColumnsToDisplay = ['student_id', 'currentStatus', 'currentStatusToString', 'score'];
-
-  homeworksInfoStudentsColumnsToDisplay = ['student_id', 'studentFirstName', 'studentLastName', 'currentStatus', 'currentStatusToString', 'score', 'versions']
+  
+  homeworksInfoStudentsColumnsToDisplay = ['student_id', 'studentFirstName', 'studentLastName', 'currentStatus', 'score', 'versions']
 
 
   filteredStatuses: string[] = [];
@@ -67,11 +62,6 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
   @Input() set setHomeworksInfoStudents(homeworksInfoStudents: HomeworkInfoStudent[]) {
     console.log('set homeworksInfoStudents ', homeworksInfoStudents)
     this.homeworksInfoStudentsDataSource.data = homeworksInfoStudents;
-  }
-
-  @Input() set setHomeworks(val: Homework[]) {
-    console.log('set homeworks ', val)
-    this.homeworksDataSource.data = val;
   }
 
   @Output() homeworksInfoStudentsEvent = new EventEmitter<number>();
@@ -112,9 +102,8 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
         }
       }
     );
-
     this.route.queryParams.subscribe((queryParam) =>
-      queryParam && queryParam.assignScoreToHomework ? this.assignScoreToHomework(this.selectedAssignmentId, queryParam.assignScoreToHomework) : null
+      queryParam && queryParam.assignScoreToHomework ? this.openScoreDialog(queryParam.assignScoreToHomework,queryParam.studentId) : null
     );
 
   }
@@ -130,7 +119,6 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
     if (this.expandedAssignment === null) {
       return;
     }
-    // this.selectedAssignmentId = selectedAssignment.id; //to ViewHomeworkVersionComponent
     this.homeworksInfoStudentsEvent.emit(selectedAssignment.id);
   }
 
@@ -147,7 +135,7 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
    * @param homeworkInfo 
    */
   scoreAssignableToHomework(homeworkInfo: HomeworkInfoStudent): boolean {
-    return !homeworkInfo.score && (homeworkInfo.currentStatus === HomeworkStatus.REVIEWED || homeworkInfo.currentStatus === HomeworkStatus.DEFINITELY_REVIEWED);
+    return !homeworkInfo.score && (homeworkInfo.currentStatus === HomeworkStatus.DEFINITELY_REVIEWED);
   }
 
 
@@ -167,7 +155,12 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
 
 
 
-
+  /**
+   * This method open the ViewHomeworkVersionComponent, in this way
+   * the teacher cann see all homework versions of a student
+   * @param assignmentId 
+   * @param studentId 
+   */
   showHomeworkVersionsDialog(assignmentId: number, studentId: string) {
     // control if there are other dialogs opened
     if (this.dialog.openDialogs.length > 0) {
@@ -200,21 +193,21 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
    * @param assignmentId 
    * @param studentId 
    */
-  assignScoreToHomework(assignmentId: number, studentId: string) {
+  openScoreDialog(assignmentId: number, studentId: string) {
     const dialogRef = this.dialog.open(ScoreDialogComponent, {
       data: {
         assignmentId: assignmentId,
         studentId: studentId 
       }
     });
-    dialogRef.afterClosed().pipe(first()).subscribe(res => {
-      if (res) {
+    dialogRef.afterClosed().pipe(first()).subscribe(homework => {
+      if (homework) {
         const element = this.homeworksInfoStudentsDataSource.data.find(e =>
           (e.assignment_id === assignmentId) && (e.student_id === studentId)
         );
-        element.currentStatus = res.currentStatus;
-        element.currentStatusToString = res.currentStatusToString;
-        element.score = res.score;
+        element.currentStatus = homework.currentStatus;
+       // element.currentStatusToString = res.currentStatusToString;
+        element.score = homework.score;
       }
       this.router.navigate([this.router.url.split('?')[0]]);
     });
