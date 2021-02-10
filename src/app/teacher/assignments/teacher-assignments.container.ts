@@ -140,7 +140,6 @@ export class TeacherAssignmentsContComponent implements OnInit {
       )
   }
 
-
   viewContentHomeworkVersion(object: any) {
     const assignment = this.assignments.find(a => a.id == object.assignmentId);
     this.assignmentService.getContentHomeworkVersion(object.assignmentId,object.studentId,object.versionId)
