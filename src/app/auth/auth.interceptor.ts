@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
-import { environment } from "../../environments/environment";
+import { environment } from '../../environments/environment';
 import { SpinnerService } from '../services/spinner.service';
 import { tap } from 'rxjs/operators';
 

@@ -7,7 +7,7 @@ import {
   Router,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from "./auth.service";
+import { AuthService } from './auth.service';
 import * as moment from 'moment';
 import { User } from '../models/user.model';
 
@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
   }
 
   checkLogin(state: RouterStateSnapshot, route: ActivatedRouteSnapshot): boolean {
-    console.log("checkLogin 1")
+    console.log('checkLogin 1')
     const currentUser = this.authService.currentUserValue;
     //control if the user is logged
     if (!currentUser) {
@@ -48,7 +48,7 @@ export class AuthGuard implements CanActivate {
       });
       return false;
     }
-    console.log("checkLogin 3")
+    console.log('checkLogin 3')
     // check if route is restricted by role
     if (
       route.data.roles &&

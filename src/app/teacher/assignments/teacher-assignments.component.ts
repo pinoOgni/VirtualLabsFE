@@ -12,7 +12,6 @@ import { ViewHomeworkVersionComponent } from 'src/app/modals/view-homework-versi
 import { first } from 'rxjs/operators';
 import { ScoreDialogComponent } from 'src/app/modals/score-dialog/score-dialog.component';
 import { SpinnerService } from 'src/app/services/spinner.service';
-import { NewReviewHomeworkDialogComponent } from 'src/app/modals/new-review-homework-dialog/new-review-homework-dialog.component';
 import { version } from 'moment';
 
 @Component({
@@ -87,14 +86,15 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
     this.route.queryParams.subscribe(
       (queryParams) => {
         if (queryParams) {
-          //il professore vuole caricare una review
-          // if (queryParams.teacherUploadReview) {
-          // this.openNewReviewHomeworkDialog(queryParams.teacherUploadReview, queryParams.homeworkStudent)
-          // }
-          //il professore vuole le versioni di uno studente
+          /**
+           * the teacher wants to see al versions of a student
+           */
           if (queryParams.teacherHomeworkVersions) {
             this.showHomeworkVersionsDialog(queryParams.homeworkAssignment, queryParams.homeworkStudent);
-          } //il professore vuole vedere il contenuto di una particolare versione
+          } 
+          /**
+           * the teacher wants to see the content of a particular version of a student
+           */
           else if (queryParams.teacherContentVersion) {
             const assignmentId: number = queryParams.homeworkAssignment;
             const studentId: string = queryParams.homeworkStudent;
@@ -111,33 +111,6 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
 
   }
 
-/*
-
-
-  openNewReviewHomeworkDialog(assignmentId: number, studentId: string) {
-    const dialogRef = this.dialog.open(NewReviewHomeworkDialogComponent, {
-      data: {
-        assignmetId: assignmentId,
-        studentId: studentId,
-      }
-    });
-    dialogRef.afterClosed().pipe(first()).subscribe((homework) => {
-        if (homework) {
-          const element = this.homeworksInfoStudentsDataSource.data.find(homeworkInfo => homeworkInfo.assignment_id == assignmentId);
-          if (element) {
-            element.currentStatus = homework.status;
-          }
-          this.dialog.closeAll();
-          this.router.navigate([this.router.url.split('?')[0]]);
-        } else {
-          this.router.navigate([this.router.url.split('?')[0]], { queryParams: { teacherUploadReview: assignmentId } });
-        }
-      });
-  }
-
-
-  */
-
   /**
    * This method is used when the teacher wants to see all homeworks of 
    * a particular assignment
@@ -152,7 +125,12 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
   }
 
 
-
+  /**
+   * This method is used to change the status of the versions
+   * The statuses that are in the array are displayed
+   * It is used a 'hidden' parameter to not display other versions
+   * @param status 
+   */
   changeFilterStatus(status: string) {
     this.filteredStatuses.includes(status) ?
       this.filteredStatuses = this.filteredStatuses.filter(s => s !== status) : this.filteredStatuses.push(status);
@@ -210,7 +188,6 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
     dialogRef.afterClosed().pipe(first())
       .subscribe((homeworkVersion) => {
         if(homeworkVersion) {
-            console.log('sucaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
             this.homeworksInfoStudentsEvent.emit(assignmentId)
         } else {
           this.router.navigate([this.router.url.split('?')[0]]);

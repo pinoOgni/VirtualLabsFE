@@ -36,13 +36,13 @@ export class TeacherAssignmentsContComponent implements OnInit {
 
   constructor(private authService: AuthService, private studentService: StudentService, public dialog: MatDialog, private router: Router, private route: ActivatedRoute, private courseService: CourseService, private assignmentService: AssignmentService) {
     /**
-     * subscribe, in this way we can open a dialog using the "createAssignment" queryparam
+     * subscribe, in this way we can open a dialog using the 'createAssignment' queryparam
      */
     this.route.queryParams.subscribe((queryParam) => queryParam && queryParam.createAssignment ? this.openCreateAssignmentDialog() : null);
 
     /**
      * get the list of assignments of this course
-     * then subscribe, in this way we can open a dialog using the "teacherContentAssignment" queryparam
+     * then subscribe, in this way we can open a dialog using the 'teacherContentAssignment' queryparam
      * used whe the teacher click an icon to see the content of an assignment
      */
     this.courseService.getAssignmentsOfCourse(this.courseService.currentCourseIdSubject.value)
@@ -135,7 +135,6 @@ export class TeacherAssignmentsContComponent implements OnInit {
       ).subscribe(
       (last) => {
           this.homeworksInfoStudents = last;
-          console.log('ALE, ', this.homeworksInfoStudents)
       }
       )
   }
@@ -154,7 +153,7 @@ export class TeacherAssignmentsContComponent implements OnInit {
           content: content.text(),
           type: content.type,
           homeworkVersionUrl: url,
-          homeworkVersionName: this.authService.currentUserValue.username + "_Assignment_" + assignment.name + "_VersionId_" + object.versionId
+          homeworkVersionName: this.authService.currentUserValue.username + '_Assignment_' + assignment.name + '_VersionId_' + object.versionId
         }
       });
       dialogRef.afterClosed().subscribe(() => {

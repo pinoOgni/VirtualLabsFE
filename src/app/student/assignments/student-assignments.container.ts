@@ -145,7 +145,7 @@ export class StudentAssignmentsContComponent {
           content: content.text(),
           type: content.type,
           homeworkVersionUrl: url,
-          homeworkVersionName: this.authService.currentUserValue.username + "_Assignment_" + assignment.name + "_VersionId_" + versionId
+          homeworkVersionName: this.authService.currentUserValue.username + '_Assignment_' + assignment.name + '_VersionId_' + versionId
         }
       });
       dialogRef.afterClosed().subscribe(() => {

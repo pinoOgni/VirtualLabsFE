@@ -77,7 +77,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
    * take the course from the container and set it
    */
   @Input() set setCurrentCourse(currentCourse: Course) {
-    console.log("ciao ", currentCourse.name);
+    console.log('ciao ', currentCourse.name);
     this.currentCourse = currentCourse;
   }
 
@@ -285,7 +285,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
 
 
   isAccepted(teamMembers: string[]): boolean {
-    console.log("CIAO ", this.currentStudent.firstName, " ", this.currentStudent.lastName)
+    console.log('CIAO ', this.currentStudent.firstName, ' ', this.currentStudent.lastName)
     if ( teamMembers.includes(
        `${this.currentStudent.firstName} 
        ${this.currentStudent.lastName} 

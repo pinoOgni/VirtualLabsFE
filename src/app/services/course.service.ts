@@ -23,9 +23,9 @@ export class CourseService {
 
 /**
    exampleAssignmentHomeworkStudent: AssignmentHomeworkStudent[] = [
-    {assignment_id: 13, name: "assignment 100", releaseDate: '1717171717', expiryDate: '1782372831',
+    {assignment_id: 13, name: 'assignment 100', releaseDate: '1717171717', expiryDate: '1782372831',
     currentStatus: HomeworkStatus.REVIEWED, score: 30 },
-    {assignment_id: 15, name: "assignment 111", releaseDate: '1313131313', expiryDate: '51515151515',
+    {assignment_id: 15, name: 'assignment 111', releaseDate: '1313131313', expiryDate: '51515151515',
     currentStatus: HomeworkStatus.SCORED, score: 28 }
   ]
  */
@@ -35,7 +35,7 @@ export class CourseService {
 
   constructor(private authService: AuthService, private httpClient: HttpClient) {
     this.course = new BehaviorSubject<Course>(null);
-    // this.course = new BehaviorSubject<Course>(new Course("APA","Algoritmi e Programmazione Avanzata",3,4,true));
+    // this.course = new BehaviorSubject<Course>(new Course('APA','Algoritmi e Programmazione Avanzata',3,4,true));
     this.currentCourseIdSubject = new BehaviorSubject<number>(null);
   }
 
@@ -278,7 +278,7 @@ export class CourseService {
     return this.httpClient.post<Course>(url,courseModel)
     .pipe(
       tap(() =>
-       console.log("createCourse success")
+       console.log('createCourse success')
       ),
       catchError(
         catchError(this.handleError<Course>('createCourse')

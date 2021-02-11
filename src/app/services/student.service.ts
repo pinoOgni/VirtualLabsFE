@@ -28,8 +28,8 @@ export class StudentService {
 
   //test 
   exampleProposals: Proposal[] = [
-    { teamName: "Vendetta", creator: "Pino", membersWithState: ["Leo Tolo 1", "Hamza Rh 4"], deadline: "14-12-2022", isValid: true, token: "bbbbbbb" },
-    { teamName: "Argonauti", creator: "ALALA", membersWithState: ["Ale Pag 1", "Jack Am 4"], deadline: "14-12-2021", isValid: true, token: "aaaaaa" }
+    { teamName: 'Vendetta', creator: 'Pino', membersWithState: ['Leo Tolo 1', 'Hamza Rh 4'], deadline: '14-12-2022', isValid: true, token: 'bbbbbbb' },
+    { teamName: 'Argonauti', creator: 'ALALA', membersWithState: ['Ale Pag 1', 'Jack Am 4'], deadline: '14-12-2021', isValid: true, token: 'aaaaaa' }
   ]
 
   private handleError<T>(operation = 'operation', result?: T) {

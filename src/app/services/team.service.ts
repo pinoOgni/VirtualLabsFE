@@ -21,8 +21,8 @@ export class TeamService {
 
   // test
   exampleMembers: Student[] = [
-    {id: "s123456", email: "string", firstName: "Giacomo", lastName: "Leopardi", avatar: "string"},
-    {id: "s987654", email: "string", firstName: "Alessandro", lastName: "Manzoni", avatar: "string"}
+    {id: 's123456', email: 'string', firstName: 'Giacomo', lastName: 'Leopardi', avatar: 'string'},
+    {id: 's987654', email: 'string', firstName: 'Alessandro', lastName: 'Manzoni', avatar: 'string'}
   ]
 
    /**

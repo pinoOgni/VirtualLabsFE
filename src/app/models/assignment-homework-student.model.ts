@@ -1,4 +1,4 @@
-import { HomeworkStatus } from "./homework.model";
+import { HomeworkStatus } from './homework.model';
 
 export class AssignmentHomeworkStudent {
 
@@ -7,7 +7,6 @@ export class AssignmentHomeworkStudent {
     releaseDate: string;
     expiryDate: string;
     currentStatus: HomeworkStatus;
-    // currentStatusTs: string;
     score: number;
 
  constructor() {

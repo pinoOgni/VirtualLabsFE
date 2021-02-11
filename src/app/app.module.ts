@@ -64,7 +64,6 @@ import {ViewContentHomeworkVersionComponent} from './modals/view-content-homewor
 import {EditVmResourceSettingsComponent} from './modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
 import {MatBadgeModule} from '@angular/material/badge';
 import { NewHomeworkVersionDialogComponent } from './modals/new-homework-version-dialog/new-homework-version-dialog.component';
-import { NewReviewHomeworkDialogComponent } from './modals/new-review-homework-dialog/new-review-homework-dialog.component';
 
 @NgModule({
     declarations: [
@@ -97,7 +96,6 @@ import { NewReviewHomeworkDialogComponent } from './modals/new-review-homework-d
         ViewContentHomeworkVersionComponent,
         EditVmResourceSettingsComponent,
         NewHomeworkVersionDialogComponent,
-        NewReviewHomeworkDialogComponent
     ],
     imports: [
         MatNativeDateModule,

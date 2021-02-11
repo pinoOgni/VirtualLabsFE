@@ -123,7 +123,6 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(course => {
         this.currentCourse = course;
-        // console.log("student-team-container ", this.currentCourse.name);
       }
       );
 
