@@ -8,7 +8,7 @@ export class Assignment {
     releaseDate: string;
     expiryDate: string;
     
-    constructor(id: number = 0,releaseDate: string, expiryDate: string, content: string = "YXNzaWdubWVudDE=") {
+    constructor(id: number = 0,releaseDate: string, expiryDate: string, content: string = 'YXNzaWdubWVudDE=') {
       this.id = id;
       this.releaseDate = '';
       this.content = content;

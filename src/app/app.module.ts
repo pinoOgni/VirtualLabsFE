@@ -59,10 +59,11 @@ import {TeacherAssignmentsComponent} from './teacher/assignments/teacher-assignm
 import {CreateAssignmentComponent} from './modals/create-assignment/create-assignment.component';
 import {ViewContentAssignmentComponent} from './modals/view-content-assignment/view-content-assignment.component';
 import {ViewHomeworkVersionComponent} from './modals/view-homework-version/view-homework-version.component';
-import {ScoreDialogComponent} from './score-dialog/score-dialog.component';
-import {ViewContentHomeworkVersionComponent} from './view-content-homework-version/view-content-homework-version.component';
+import {ScoreDialogComponent} from './modals/score-dialog/score-dialog.component';
+import {ViewContentHomeworkVersionComponent} from './modals/view-content-homework-version/view-content-homework-version.component';
 import {EditVmResourceSettingsComponent} from './modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
 import {MatBadgeModule} from '@angular/material/badge';
+import { NewHomeworkVersionDialogComponent } from './modals/new-homework-version-dialog/new-homework-version-dialog.component';
 
 @NgModule({
     declarations: [
@@ -93,7 +94,8 @@ import {MatBadgeModule} from '@angular/material/badge';
         ViewHomeworkVersionComponent,
         ScoreDialogComponent,
         ViewContentHomeworkVersionComponent,
-        EditVmResourceSettingsComponent
+        EditVmResourceSettingsComponent,
+        NewHomeworkVersionDialogComponent,
     ],
     imports: [
         MatNativeDateModule,

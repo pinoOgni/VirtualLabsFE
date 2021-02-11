@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {HomeComponent} from "./home/home.component";
-import {VmsContComponent} from "./teacher/vms/vms-cont.component";
-import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
-import {AuthGuard} from "./auth/auth.guard";
+import {HomeComponent} from './home/home.component';
+import {VmsContComponent} from './teacher/vms/vms-cont.component';
+import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+import {AuthGuard} from './auth/auth.guard';
 import { TeacherAssignmentsContComponent } from './teacher/assignments/teacher-assignments.container';
 import { TeacherComponent } from './teacher/teacher.component';
 import { StudentComponent } from './student/student.component';

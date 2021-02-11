@@ -89,32 +89,22 @@ export class AuthService{
    * The login() method sends the user credentials to the API via an 
    * HTTP POST request for authentication. 
    * If successful the user object including a JWT auth token are
-   *  stored in localStorage to keep the user logged in between page 
+   * stored in localStorage to keep the user logged in between page 
    * refreshes. The user object is then published to all subscribers 
    * with the call to this.currentUserSubject.next(user);.
    * @param model 
    */
   login(model: LoginModel) {
-    console.log("login before post")
+    console.log('login before post')
     return this.httpClient.post<User>(environment.login_url, model, environment.http_options)
         .pipe(
             map((authResult) => {
-              console.log('login in pipe ', authResult);
-              //jwt response, I'm logged
-              //jwt è un json con chiave "token" asfajscbiasoc.acnasicansocas.coacoasbnsoc
-              // "email": caicao
-              // "roles": 800A hamza
-              //
-              console.log('800A ', JSON.parse(atob(authResult.token.split('.')[1])).sub);
+              //jwt response, I'm logged; jwt is a json with a key 'token' asfajscbiasoc.acnasicansocas.coacoasbnsoc
               const user = new User(
           JSON.parse(atob(authResult.token.split('.')[1])).sub, //admin
           authResult.token, //token sano
           JSON.parse(atob(authResult.token.split('.')[1])).roles //ROLE_ADMIN
         );
-        console.log("800A ", authResult.token)
-        console.log("800A ", JSON.parse(atob(authResult.token.split('.')[1])).sub)
-        console.log("800A ", JSON.parse(atob(authResult.token.split('.')[1])).roles)
-        console.log("800A ", JSON.parse(atob(authResult.token.split('.')[1])).exp)
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
         return authResult;
@@ -134,7 +124,7 @@ export class AuthService{
   register(model: RegisterModel) {
     return this.httpClient.post(environment.register_url, model,environment.http_options).pipe(
       map((result) => {
-        console.log("result register ", result)
+        console.log('result register ', result)
         return result;
       })
     );
@@ -147,19 +137,6 @@ export class AuthService{
    */
   public getCurrentUserserObservable(): Observable<User> {
     return this.currentUserSubject.asObservable();
-  }
-
-
-  jwtParser(token: string) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map((char) => { return '%' + ('00' + char.charCodeAt(0).toString(16)).slice(-2); })
-        .join('')
-    );
-    return JSON.parse(jsonPayload);
   }
 
   public isUserLogged(): boolean {

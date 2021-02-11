@@ -1,0 +1,21 @@
+<div>
+    <h2 mat-dialog-title>Homework version</h2>
+<div mat-dialog-actions>
+    <button mat-button style="color: darkred;" (click)="dialogRef.close()">Close</button>
+    <button mat-button style="color: darkgreen;" (click)="downloadHomeworVersionFile()" title="The file is .{{fileType}}">Download file</button>
+</div>
+<br/>
+
+<div  class=".all-width" mat-dialog-content *ngIf="fileType === 'jpeg' || fileType === 'jpg' || fileType === 'png'" >
+    <img [src]="homeworkVersionUrl">
+</div>
+<div  class=".all-width" mat-dialog-content *ngIf="fileType === 'txt'" >
+    {{content}}
+</div>
+
+<div class=".all-width" *ngIf="fileType === 'pdf'">
+    <pdf-viewer [src]="homeworkVersionUrl" [original-size]="false" [autoresize]="true" ></pdf-viewer>
+</div>
+
+
+</div>

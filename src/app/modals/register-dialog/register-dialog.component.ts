@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { RegisterModel } from '../../models/form-models';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {MatDialogRef} from "@angular/material/dialog";
-import {AuthService} from "../../auth/auth.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialogRef} from '@angular/material/dialog';
+import {AuthService} from '../../auth/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
 import { first } from 'rxjs/operators';
 
 
@@ -38,7 +38,7 @@ export class RegisterDialogComponent implements OnInit {
   }
 
   submit() {
-    console.log("hello")
+    console.log('hello')
     if (this.registerForm.valid) {
       // const model = {email: this.loginForm.controls.email.value, password: this.loginForm.controls.password.value};
        this.model.email = this.registerForm.controls.email.value;
@@ -53,9 +53,9 @@ export class RegisterDialogComponent implements OnInit {
          }
        }, error => {
          if(error.status===400)
-           this.serverErrors = "Registration failed!";
+           this.serverErrors = 'Registration failed!';
          else
-           this.serverErrors = "Something went wrong!";
+           this.serverErrors = 'Something went wrong!';
        });
      }
    }

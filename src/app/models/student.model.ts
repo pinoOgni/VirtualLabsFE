@@ -5,8 +5,6 @@
  * @param lastName: this is the lastName of the student
  */
 
-import { ThrowStmt } from "@angular/compiler";
-
 export class Student {
     id: string;  // s200001
     email: string; // s200001@studenti.polito.it

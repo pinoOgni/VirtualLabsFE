@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {LoginModel} from "../../models/form-models";
-import {AuthService} from "../../auth/auth.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {MatDialogRef} from "@angular/material/dialog";
+import {LoginModel} from '../../models/form-models';
+import {AuthService} from '../../auth/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialogRef} from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -48,9 +48,9 @@ export class LoginDialogComponent implements OnInit {
       }, error => {
         //TODO migliorare nel progetto, spostare nell'error interceptor
         if(error.status===400)
-          this.serverErrors = "Authentication failed!";
+          this.serverErrors = 'Authentication failed!';
         else
-          this.serverErrors = "Something went wrong!";
+          this.serverErrors = 'Something went wrong!';
       });
     }
   }

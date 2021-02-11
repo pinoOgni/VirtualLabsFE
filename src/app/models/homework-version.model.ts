@@ -1,4 +1,4 @@
-import { HomeworkStatus } from "./homework.model";
+import { HomeworkStatus } from './homework.model';
 
 export class HomeworkVersion {
     id: number;
@@ -7,7 +7,7 @@ export class HomeworkVersion {
     versionStatus: HomeworkStatus;
     
 
-    constructor(id: number,  content: string = "aG9tZXdvcmsx=", timestamp: string, versionStatus: number = 0) {
+    constructor(id: number,  content: string = 'aG9tZXdvcmsx=', timestamp: string, versionStatus: number = 0) {
         this.id = id;
         this.content = content;
         this.timestamp = timestamp;

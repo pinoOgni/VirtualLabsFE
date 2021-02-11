@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Add a score for this homework for the student {{studentId}}</h1>
+
+<div mat-dialog-content>
+    <form [formGroup]="scoreForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="all-width">
+            <input matInput type="number" min="18" max="33" formControlName="score" placeholder="score" required/>
+            <mat-error>Add a score between 18 and 33</mat-error>
+        </mat-form-field>
+        <div mat-dialog-actions class="button-centered">
+            <button mat-button style="color: red;" mat-dialog-close>Close</button>
+            <button mat-button style="color: green;" [disabled]="scoreForm.invalid">Submit score</button>
+        </div>
+    </form>
+</div>

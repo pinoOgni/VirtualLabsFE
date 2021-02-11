@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Upload a new version for {{assignmentName}} </h1>
+<h2> You can upload various type of files like: jpeg, jpg, png, pdf and txt!</h2>
+<div mat-dialog-content>
+    <form [formGroup]="homeworkVersionForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="all-width">
+            <ngx-mat-file-input formControlName="content" placeholder="Homework version content"
+             accept=".jpeg, .jpg, .png, .pdf, .txt" required></ngx-mat-file-input>
+            <mat-icon matSuffix>folder</mat-icon>
+        </mat-form-field>
+        <div mat-dialog-actions class="button-centered">
+            <button mat-button style="color: red;" mat-dialog-close>Close</button>
+            <button mat-button style="color: green;" [disabled]="homeworkVersionForm.invalid">Create</button>
+        </div>
+    </form>
+</div>
+

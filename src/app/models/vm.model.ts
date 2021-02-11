@@ -12,7 +12,7 @@ export class Vm {
     spaceDisk: number;
     isActive: boolean;
 
-    constructor(name: string = " ", id: number = 0, vcpu: number = 1,
+    constructor(name: string = ' ', id: number = 0, vcpu: number = 1,
         ram: number = 1, spaceDisk: number = 1, isActive: boolean = false
     ) {
         this.name = name;

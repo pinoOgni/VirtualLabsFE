@@ -1,4 +1,4 @@
-import { InputFile } from "./input-file.model";
+import { InputFile } from './input-file.model';
 
 export interface LoginModel {
   username: string;

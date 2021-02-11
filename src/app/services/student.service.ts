@@ -28,8 +28,8 @@ export class StudentService {
 
   //test 
   exampleProposals: Proposal[] = [
-    { teamName: "Vendetta", creator: "Pino", membersWithState: ["Leo Tolo 1", "Hamza Rh 4"], deadline: "14-12-2022", isValid: true, token: "bbbbbbb" },
-    { teamName: "Argonauti", creator: "ALALA", membersWithState: ["Ale Pag 1", "Jack Am 4"], deadline: "14-12-2021", isValid: true, token: "aaaaaa" }
+    { teamName: 'Vendetta', creator: 'Pino', membersWithState: ['Leo Tolo 1', 'Hamza Rh 4'], deadline: '14-12-2022', isValid: true, token: 'bbbbbbb' },
+    { teamName: 'Argonauti', creator: 'ALALA', membersWithState: ['Ale Pag 1', 'Jack Am 4'], deadline: '14-12-2021', isValid: true, token: 'aaaaaa' }
   ]
 
   private handleError<T>(operation = 'operation', result?: T) {
@@ -58,11 +58,6 @@ export class StudentService {
     );
 
   }
-  /**
-   * TODO
-   * uploadStudentAssignment: metodo per caricare l'assignment di uno studente. Ritorna un Observable<UploadAssignment>
-   */
-
 
   /**
    * This method is used to make a request to the the server and retrieve all the available
@@ -130,7 +125,7 @@ export class StudentService {
    */
   getProposalsInCourse(courseId: number = this.courseService.currentCourseIdSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Proposal[]> {
     // return of<Proposal[]>(this.exampleProposals)
-    const url = `${environment.base_url_students}/${studentId}/proposalsOfCourse/${courseId}`
+    const url = `${environment.base_url_course}/${courseId}/proposalNotifications}`
     return this.httpClient.get<Proposal[]>(url, environment.http_options)
       .pipe(
         tap(() =>

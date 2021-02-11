@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, forkJoin, Observable, of} from 'rxjs';
 import {environment} from 'src/environments/environment';
 import {Course} from '../models/course.model';
-import {catchError, first, tap} from 'rxjs/operators';
+import {catchError, first, flatMap, map, mergeMap, tap, toArray} from 'rxjs/operators';
 import {Student} from '../models/student.model';
 import {CourseModel} from '../models/form-models';
 import {Teacher} from '../models/teacher.model';
@@ -11,18 +11,31 @@ import {Assignment} from '../models/assignment.model';
 import {Team} from '../models/team.model';
 import {VmInstanceModel} from '../models/vm-instance-model';
 import {TeamStatus} from '../models/team-status';
+import { AssignmentHomeworkStudent } from '../models/assignment-homework-student.model';
+import { Homework, HomeworkStatus } from '../models/homework.model';
+import { AssignmentService } from './assignment.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
 
+/**
+   exampleAssignmentHomeworkStudent: AssignmentHomeworkStudent[] = [
+    {assignment_id: 13, name: 'assignment 100', releaseDate: '1717171717', expiryDate: '1782372831',
+    currentStatus: HomeworkStatus.REVIEWED, score: 30 },
+    {assignment_id: 15, name: 'assignment 111', releaseDate: '1313131313', expiryDate: '51515151515',
+    currentStatus: HomeworkStatus.SCORED, score: 28 }
+  ]
+ */
+
   public course: BehaviorSubject<Course>;
   public currentCourseIdSubject: BehaviorSubject<number>;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private authService: AuthService, private httpClient: HttpClient) {
     this.course = new BehaviorSubject<Course>(null);
-    // this.course = new BehaviorSubject<Course>(new Course("APA","Algoritmi e Programmazione Avanzata",3,4,true));
+    // this.course = new BehaviorSubject<Course>(new Course('APA','Algoritmi e Programmazione Avanzata',3,4,true));
     this.currentCourseIdSubject = new BehaviorSubject<number>(null);
   }
 
@@ -31,6 +44,60 @@ export class CourseService {
    * metodo updateCourse per aggiornare un corso. Ritorna un Observable<Course>. FORM COURSE.
    * getVmsOfCourse per ottenere tutte le VM di questo corso. Prende un courseId. Ritorna un Observable<TeacherVmInfo>
    */
+
+
+  /**
+   * This method is used to retrieve all assignments and homeworks of an assignment
+   * of a student of the current course
+   * assignment and homework are merged in a assignmentHomeworkStudent that will be displayed 
+   * in the correct component
+   * Inspired by that bomber of Ale who wrote getHomeworksInfoStudents method
+   * @param courseId 
+   * @param studentId 
+   */
+  getAssignmentHomeworks(courseId: number = this.currentCourseIdSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<AssignmentHomeworkStudent[]> {
+
+    // return of(this.exampleAssignmentHomeworkStudent);
+    return this.getAssignmentsOfCourse(courseId).pipe(
+      first(),
+      flatMap(x => x),
+      mergeMap(assignment => {
+        let assignmentHomeworkStudent = new AssignmentHomeworkStudent()
+        assignmentHomeworkStudent.assignment_id = assignment.id;
+        assignmentHomeworkStudent.expiryDate = assignment.expiryDate;
+        assignmentHomeworkStudent.releaseDate = assignment.releaseDate;
+        assignmentHomeworkStudent.name = assignment.name;
+        return this.getHomeworkOfAssignmentOfStudent(assignment.id,studentId,courseId).pipe(
+          map(homework => ({
+            homework,assignmentHomeworkStudent
+          })),
+          map(middleMerge => {
+            middleMerge.assignmentHomeworkStudent.currentStatus = middleMerge.homework.currentStatus;
+           // middleMerge.assignmentHomeworkStudent.currentStatusTs = middleMerge.homework.currentStatus.toString();
+            middleMerge.assignmentHomeworkStudent.score = middleMerge.homework.score;
+            return middleMerge.assignmentHomeworkStudent;
+          })
+        )
+      }),toArray()
+    )
+  }
+
+
+  /**
+   * This method is used to retrieve a homework of a student for a 
+   * particular assignment of a course
+   * @param assignmentId 
+   * @param studentId 
+   * @param courseId 
+   */
+  getHomeworkOfAssignmentOfStudent(assignmentId: number, studentId: string, courseId: number = this.currentCourseIdSubject.value): Observable<Homework> {
+    const url = `${environment.base_url_course}/${courseId}/assignment/${assignmentId}/homework/${studentId}`
+    console.log(url)
+   return this.httpClient.get<Homework>(url)
+       .pipe(
+         tap((homeworks) => console.log(`getHomeworksOfAssignments ok ${assignmentId}`)),
+         catchError(this.handleError<Homework>(`getHomeworksOfAssignments error ${assignmentId}`)));
+ }
 
 
 
@@ -133,6 +200,7 @@ export class CourseService {
   setNextCourse(courseId: number) {
     this.currentCourseIdSubject.next(courseId);
     if (!courseId) {
+      console.log('setNextcourse !courseId')
       this.course.next(null);
       return;
     }
@@ -210,7 +278,7 @@ export class CourseService {
     return this.httpClient.post<Course>(url,courseModel)
     .pipe(
       tap(() =>
-       console.log("createCourse success")
+       console.log('createCourse success')
       ),
       catchError(
         catchError(this.handleError<Course>('createCourse')
