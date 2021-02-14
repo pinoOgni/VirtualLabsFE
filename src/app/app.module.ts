@@ -63,7 +63,8 @@ import {ScoreDialogComponent} from './modals/score-dialog/score-dialog.component
 import {ViewContentHomeworkVersionComponent} from './modals/view-content-homework-version/view-content-homework-version.component';
 import {EditVmResourceSettingsComponent} from './modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
 import {MatBadgeModule} from '@angular/material/badge';
-import { NewHomeworkVersionDialogComponent } from './modals/new-homework-version-dialog/new-homework-version-dialog.component';
+import {NewHomeworkVersionDialogComponent} from './modals/new-homework-version-dialog/new-homework-version-dialog.component';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 @NgModule({
     declarations: [
@@ -128,11 +129,12 @@ import { NewHomeworkVersionDialogComponent } from './modals/new-homework-version
         MatDatepickerModule,
         PdfViewerModule,
         ToastrModule.forRoot({
-          preventDuplicates: true,
-          timeOut: 3000,
-          progressBar: true,
+            preventDuplicates: true,
+            timeOut: 3000,
+            progressBar: true,
 
         }),
+        MatGridListModule,
     ],
     exports:[
         MatDatepickerModule,
