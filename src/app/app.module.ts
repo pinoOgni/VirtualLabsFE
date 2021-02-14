@@ -65,6 +65,8 @@ import {EditVmResourceSettingsComponent} from './modals/edit-vm-resource-setting
 import {MatBadgeModule} from '@angular/material/badge';
 import {NewHomeworkVersionDialogComponent} from './modals/new-homework-version-dialog/new-homework-version-dialog.component';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {StudentNoTeamVmsComponent} from './student/vms/student-no-team-vms/student-no-team-vms.component';
+import {EditStudentVmInstanceDialogComponent} from './modals/edit-student-vm-instance-dialog/edit-student-vm-instance-dialog.component';
 
 @NgModule({
     declarations: [
@@ -97,6 +99,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
         ViewContentHomeworkVersionComponent,
         EditVmResourceSettingsComponent,
         NewHomeworkVersionDialogComponent,
+        StudentNoTeamVmsComponent,
+        EditStudentVmInstanceDialogComponent,
     ],
     imports: [
         MatNativeDateModule,

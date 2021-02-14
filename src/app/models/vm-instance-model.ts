@@ -1,3 +1,9 @@
+export enum VmInstanceStatus {
+    SUSPENDED = 'SUSPENDED',
+    RUNNING = 'RUNNING',
+    ERROR = 'ERROR'
+}
+
 export class VmInstanceModel {
     id: number;
 
@@ -10,9 +16,9 @@ export class VmInstanceModel {
 
     memory: number;
 
-    status: string;
+    status: VmInstanceStatus;
 
-    constructor(id: number, name: string, vcpu: number, disk: number, memory: number, status: string) {
+    constructor(id: number, name: string, vcpu: number, disk: number, memory: number, status: VmInstanceStatus) {
         this.id = id;
         this.name = name;
         this.vcpu = vcpu;

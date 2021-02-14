@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Team} from '../../models/team.model';
 import {CourseService} from '../../services/course.service';
-import {VmInstanceModel} from '../../models/vm-instance-model';
+import {VmInstanceModel, VmInstanceStatus} from '../../models/vm-instance-model';
 import {MatDialog} from '@angular/material/dialog';
 import {EditVmResourceSettingsComponent} from '../../modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
 import {Student} from '../../models/student.model';
@@ -63,7 +63,7 @@ export class VmsComponent implements OnInit {
     this.runningInstances = 0;
     this.vmsInstances.forEach(
         y => {
-          if (y.status === 'RUNNING') {
+          if (y.status === VmInstanceStatus.RUNNING) {
             this.usedVcpu += y.vcpu;
             this.usedDisk += y.disk;
             this.usedMemory += y.memory;

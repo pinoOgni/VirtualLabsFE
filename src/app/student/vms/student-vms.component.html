@@ -1,1 +1,58 @@
-<p>student-vms works!</p>
+<div><b>
+    <p>Team's name: {{team.name}}</p> <br>
+    <p>Team's ID: {{team.id}}</p>
+    <div>
+        <p>Team's maximum resources:</p><br>
+        <p>Maximum Instances allowed: {{team.runningVmInstance}} Instances</p>
+        <p>Maximum vCPUs allowed: {{team.vcpuMAX}}</p>
+        <p>Maximum Memory allowed: {{team.memoryMAX}} MB</p>
+        <p>Maximum Disk Space allowes: {{team.diskMAX}} MB</p>
+    </div>
+    <div>
+        <p>Team's VM Instances:</p>
+        <mat-grid-list class="border" cols="2" rowHeight="2:1">
+            <mat-grid-tile *ngFor="let vm of vmInstances">
+
+                <div><b><p *ngIf="isVmRunning(vm); else elseblock" matBadge="‎" matBadgeColor="primary"><br></p>
+                    <ng-template #elseblock><p matBadge="‎" matBadgeColor="warn"></p><br></ng-template>
+
+
+                    Virtual Machine name: {{vm.name}} <br>
+                    Virtual Machine ID: {{vm.id}} <br>
+                    Status: {{vm.status}}<br>
+                    vCPUs: {{vm.vcpu}}<br>
+                    Disk Size: {{vm.memory}} MB<br>
+                    Memory Size: {{vm.disk}} MB<br>
+                    <div *ngIf="(getVmCreator(this.team.id, vm.id) | async) as student">
+                        Created by: {{student.firstName}} {{student.lastName}}  {{student.id}}
+                        <div *ngIf="isOwner(team.id,vm.id)">
+                            <button (click)="openModifyVmResourcesDialog(vm)" mat-raised-button> Modify Resources
+                            </button>
+                            <button (click)="turnOffVM(vm)" *ngIf="!isVmRunning(vm); else elseblock1" mat-raised-button>
+                                Turn Off VM
+                            </button>
+                            <ng-template #elseblock1>
+                                <button (click)="turnOnVM(vm)" *ngIf="isVmRunning(vm)" mat-raised-button> Turn On VM
+                                </button>
+
+                            </ng-template>
+                            <button (click)="deleteVM(vm)" *ngIf="!isVmRunning(vm)" mat-raised-button> Delete VM
+                            </button>
+                            <button (click)="openAddOwnersDialog(vm, this.team)" mat-raised-button> Add Owners</button>
+                        </div>
+
+                    </div>
+                    <p *ngIf="isVmRunning(vm)">
+                        <!-- todo che devo fare? --->
+                        <button color="primary" mat-raised-button> Open VM Instance</button>
+                        <br>
+                    </p>
+                </b>
+                </div>
+
+
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+</b>
+</div>
