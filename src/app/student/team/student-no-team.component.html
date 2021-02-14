@@ -8,7 +8,7 @@
     <div class="create-team-1">
         <h3>Choose a name for your team</h3>
         <mat-form-field class="form-team-name">
-            <input matInput type="text" placeholder="Argonauti" [formControl]="teamNameControl" required />
+            <input matInput type="text" placeholder="Argonauti" [formControl]="teamNameControl" />
             <mat-error>Your name is not valid, try again</mat-error>
         </mat-form-field>
         <br />
@@ -76,10 +76,14 @@
                     <td mat-cell *matCellDef="let element"> {{ element.creator }} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="membersWithState">
-                    <th mat-header-cell *matHeaderCellDef>Selected students</th>
+                <ng-container matColumnDef="members">
+                    <th mat-header-cell *matHeaderCellDef>Members</th>
                     <td mat-cell *matCellDef="let element">
-                        {{ displayFnDelectedStudents(element.membersWithState) }}
+                        <mat-spinner [diameter]="500" *ngIf="spinnerService.visibility | async"></mat-spinner>
+                        <button mat-raised-button color="primary" [routerLink]=""
+                            [queryParams]="{ membersAndState: element.id, teamName: element.teamName }">
+                            View members and state
+                        </button>
                     </td>
                 </ng-container>
 
@@ -93,26 +97,14 @@
                 <ng-container matColumnDef="accept">
                     <th mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let row">
-                        <button *ngIf="!isAccepted(row.membersWithState) && row.valid"
+                        <button *ngIf="!isAccepted(row)"
              mat-button style="color: green;" (click)="acceptTeamProposal(row.token)"> Accept it </button>
-                        <button *ngIf="isAccepted(row.membersWithState)" mat-button style="color: yellowgreen;"
+                        <button *ngIf="isAccepted(row)" mat-button style="color: yellowgreen;"
                             disabled> Accepted </button>
-                        <button *ngIf="!isAccepted(row.membersWithState) && row.valid" mat-button
+                        <button *ngIf="!isAccepted(row)" mat-button
                             style="color: red;" (click)="rejectTeamProposal(row.token)"> Reject it </button>
-                        <button *ngIf="!row.valid" mat-button style="color:darkcyan;" disabled> Disabled </button>
                     </td>
                 </ng-container>
-
-                <ng-container matColumnDef="delete">
-                    <th mat-header-cell *matHeaderCellDef></th>
-                    <td mat-cell *matCellDef="let row">
-                        <button mat-icon-button (click)="deleteTeamProposal(row.token)" style="color: red;"
-                            [disabled]="row.valid">
-                            <mat-icon>Delete it</mat-icon>
-                        </button>
-                    </td>
-                </ng-container>
-
                 <tr mat-header-row *matHeaderRowDef="columnsToDisplayProposals"></tr>
                 <tr mat-row *matRowDef="let row; columns: columnsToDisplayProposals"></tr>
             </table>
@@ -144,7 +136,7 @@
     </mat-list>
 
     <button mat-flat-button style="color: darkgreen;"
-        [disabled]="!teamNameControl.valid || selectedStudents.length + 1 < currentCourse.min || (!this.selectedDate && selectedStudents.length > 0)"
+        [disabled]="!teamNameControl.valid"
         (click)="createTeam()">
         Create team
     </button>

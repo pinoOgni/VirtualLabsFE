@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
     private authService: AuthService
   ) { }
 
-  canActivate(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+  canActivate(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
     //if the user is not logged, the login form is opened,
     //if the user is logged the url is available
@@ -39,7 +39,6 @@ export class AuthGuard implements CanActivate {
       });
       return false;
     }
-    //now we need to control the time of the token
     if (moment().isBefore(User.getAccessTokenExpireTime(currentUser.token))) {
       console.log('Token is expired!');
       this.authService.logout();
@@ -49,7 +48,6 @@ export class AuthGuard implements CanActivate {
       return false;
     }
     console.log('checkLogin 3')
-    // check if route is restricted by role
     if (
       route.data.roles &&
       !currentUser.roles.some((r) => route.data.roles.includes(r))) {

@@ -7,11 +7,11 @@
 export class ProposalOfTeam {
     teamName: string;
     deadline: string;
-    selectedStudentIds: string[];
+    selectedStudentsId: string[]; //english from our best colleague Hamza
 
-    constructor(teamName: string='',deadline: string , selectedStudentIds: string[] = [] ) {
+    constructor(teamName: string='',deadline: string , selectedStudentsId: string[] = []) {
         this.teamName = teamName;
-        this.selectedStudentIds = selectedStudentIds;
+        this.selectedStudentsId = selectedStudentsId;
         this.deadline = deadline;
     }
 }

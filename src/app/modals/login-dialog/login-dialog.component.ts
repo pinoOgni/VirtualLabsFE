@@ -20,10 +20,10 @@ export class LoginDialogComponent implements OnInit {
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router, private dialogRef: MatDialogRef<LoginDialogComponent>) {
     this.model = {username: '', password: ''};
     this.loginForm = this.formBuilder.group ({
-      username: ['', Validators.required],
+      // username: ['', Validators.required],
       password: ['', Validators.required],
     
-     // username: ['', Validators.pattern(/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(polito|studenti.polito)\.it$/)],
+     email: ['', Validators.pattern(/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(polito|studenti.polito)\.it$/)],
      // password: ['', Validators.pattern(/^((?=.*[0-9])|(?=.*[@#$%^&+!=]))((?=.*[a-z])|(?=.*[A-Z]))(?=\S+$).{8,}$/)],
     });
   }
@@ -39,14 +39,16 @@ export class LoginDialogComponent implements OnInit {
     if (this.loginForm.valid) {
      // const model = {username: this.loginForm.controls.username.value, password: this.loginForm.controls.password.value};
      //splitto la mail e mando solo lo username
-      this.model.username = this.loginForm.controls.username.value;
+      this.model.username = this.loginForm.controls.email.value.split('@')[0];
       this.model.password = this.loginForm.controls.password.value;
+      console.log('submit login this.model.username ', this.model.username)
+      console.log('submit login this.loginForm.controls.username ', this.loginForm.controls.email.value)
       this.authService.login(this.model).pipe(first()).subscribe(response => {
         if (response){
-        this.close(true);
+            this.close(true);
         }
       }, error => {
-        //TODO migliorare nel progetto, spostare nell'error interceptor
+        //TODO 
         if(error.status===400)
           this.serverErrors = 'Authentication failed!';
         else

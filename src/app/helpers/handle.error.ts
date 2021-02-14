@@ -8,7 +8,10 @@ import { Observable, of } from 'rxjs';
  * @param show 
  * @param message 
  */
-export function handleError<T>(result?: T, service: ToastrService = this.toastrService, show: boolean = true, message: string = 'There is an error') {
+export function handleError<T>(service: ToastrService = this.toastrService,
+  operation = 'operation',
+  result?: T,
+  show: boolean = true, message: string = 'There is an error') {
   return (error: any): Observable<T> => {
     if (show) {
       if (error.error instanceof Blob && error.status < 500) {

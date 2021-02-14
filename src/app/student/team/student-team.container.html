@@ -1,17 +1,15 @@
-<!-- cose da passare ad app-student-team solo il team -->
 <app-student-team *ngIf="team; else noTeam" [team]="team" [members]="membersOfTeam"></app-student-team>
 <ng-template #noTeam>
-    <!-- cose da passare ad app-student-no-team  proposte, studenti del corso che sono liberi, course, richieste accettate, richieste cancellate
-    richieste rifiutate, studenti filtrati per la ricerca -->
   <app-student-no-team
+    [setCurrentCourse]="currentCourse"
     (rejectedTeamProposalEvent)="rejectedTeamProposal($event)"
     (acceptedTeamProposalEvent)="acceptedTeamProposal($event)"
     (deletedTeamProposalEvent)="deletedTeamProposal($event)"
     [searchedStudents]="searchedStudents"
-    [setProposals]="proposals"
+    [setProposals]="proposalsInfo"
     (searchingStudentsByNameEvent)="searchingStudentsByName($event)"
     [setEnrolledAvailableStudents]="enrolledAvailableStudents"
-    [setCurrentCourse]="currentCourse"
+    
     (createTeamEvent)="createTeam($event)"
   >
   </app-student-no-team>

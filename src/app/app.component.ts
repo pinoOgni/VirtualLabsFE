@@ -3,7 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from './modals/login-dialog/login-dialog.component';
 import {AuthService} from './auth/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, Subscription} from 'rxjs';
+import {Observable, of, Subscription} from 'rxjs';
 import {RegisterDialogComponent} from './modals/register-dialog/register-dialog.component';
 import {User} from './models/user.model';
 import {Course} from './models/course.model';
@@ -204,21 +204,23 @@ export class AppComponent implements OnDestroy {
         if (this.currentUser) {
             if (this.currentUser.roles.includes('ROLE_STUDENT')) {
                 console.log('refill courses role student');
-                this.courses = this.studentsService.getCoursesOfStudentById()
-                    .pipe(
+                this.courses = this.studentsService.getCoursesOfStudentById(this.currentUser.username)
+                    .pipe(first(),
                         tap(() =>
                             console.log(`refill courses  getCoursesOfStudentById `)
                         ),
                     );
             } else if (this.currentUser.roles.includes('ROLE_TEACHER')) {
                 console.log('refill courses role teacher');
-                this.courses = this.teacherService.getCoursesOfTeacherById()
-                    .pipe(
+                this.courses = this.teacherService.getCoursesOfTeacherById(this.currentUser.username)
+                    .pipe(first(),
                         tap(() =>
                             console.log(`refill courses  getCoursesOfTeacherById `)
                         ),
                     );
             }
+        } else {
+            this.courses = of([])
         }
     }
 

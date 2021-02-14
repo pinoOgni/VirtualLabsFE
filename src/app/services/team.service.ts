@@ -76,14 +76,35 @@ getMembersOfTeam(teamId: number, courseId: number = this.courseService.currentCo
   return this.httpClient
   .get<Student[]>(url).pipe(
       tap(() =>
-          console.log(`getMembersOfTeam ok studentId ${teamId} course ${courseId}`
+          console.log(`getMembersOfTeam ok teamId ${teamId} course ${courseId}`
           )
       ),
       catchError(
-          this.handleError<Student[]>(`getMembersOfTeam error studentId ${teamId} course ${courseId}`,[])
+          this.handleError<Student[]>(`getMembersOfTeam error teamId ${teamId} course ${courseId}`,[])
       )
   );
 }
+
+/**
+ * This method is used to retrieve all members of a proposal of a team
+ * @param proposalId 
+ * @param courseId 
+ */
+getMembersOfProposalNotification(proposalId: number, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Student[]> {
+  const url = `${environment.base_url_course}/${courseId}/proposalNotifications/${proposalId}/members`
+  return this.httpClient
+  .get<Student[]>(url).pipe(
+      tap(() =>
+          console.log(`getMembersOfProposalNotification ok studentId ${proposalId} course ${courseId}`
+          )
+      ),
+      catchError(
+          this.handleError<Student[]>(`getMembersOfProposalNotification error studentId ${proposalId} course ${courseId}`,[])
+      )
+  );
+}
+
+
 
   
 
@@ -93,7 +114,6 @@ getMembersOfTeam(teamId: number, courseId: number = this.courseService.currentCo
    * @param proposalOfTeam proposal of a team
    */
   createTeam(courseId: number, proposalOfTeam: ProposalOfTeam): Observable<Proposal> {
-    proposalOfTeam.deadline = '86400000';
     console.log('create team ', proposalOfTeam)
     const url = `${environment.base_url_course}/${courseId}/teams`
     return this.httpClient.post<Proposal>(url,proposalOfTeam)
@@ -104,17 +124,28 @@ getMembersOfTeam(teamId: number, courseId: number = this.courseService.currentCo
         );
   }
 
+
+getCreatorOfTeam(proposalId: number, studentId: string = this.authService.currentUserValue.username, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Student> {
+  const url = `${environment.base_url_course}/${courseId}/proposalNotifications/${proposalId}/creator`
+  console.log(url)
+ return this.httpClient.get<Student>(url)
+     .pipe(
+       tap((homeworks) => console.log(`getCreatorOfTeam ok ${proposalId}`)),
+       catchError(this.handleError<Student>(`getCreatorOfTeam error ${proposalId}`)));
+}
+
+
   /**
    * This will accept the proposal of a team
    * @param tokenTeam the token associated to the team proposal
    */
-  acceptTeamProposal(tokenTeam: string):  Observable<boolean> {
-    const url = `${environment.base_url_teams}/acceptTeamInvitation/${tokenTeam}`
-    return this.httpClient.get<boolean>(url,environment.http_options)
+  acceptTeamProposal(tokenTeam: string):  Observable<string> {
+    const url = `${environment.base_url_notifications}/confirm/${tokenTeam}`
+    return this.httpClient.get<string>(url)
     .pipe(tap(() =>
     console.log(`acceptTeamProposal() ok ${tokenTeam}`)
     ),
-    catchError(this.handleError<boolean>(`acceptTeamProposal error ${tokenTeam}`))
+    catchError(this.handleError<string>(`acceptTeamProposal error ${tokenTeam}`))
     );
   } 
 
@@ -122,13 +153,13 @@ getMembersOfTeam(teamId: number, courseId: number = this.courseService.currentCo
    * This will reject the proposal of a team
    * @param tokenTeam the token associated to the team proposal
    */
-  rejectTeamProposal(tokenTeam: string):  Observable<boolean> {
-    const url = `${environment.base_url_teams}/rejectTeamInvitation/${tokenTeam}`
-    return this.httpClient.get<boolean>(url,environment.http_options)
+  rejectTeamProposal(tokenTeam: string):  Observable<string> {
+    const url = `${environment.base_url_notifications}/reject/${tokenTeam}`
+    return this.httpClient.get<string>(url)
     .pipe(tap(() =>
     console.log(`rejectTeamProposal() ok ${tokenTeam}`)
     ),
-    catchError(this.handleError<boolean>(`rejectTeamProposal error ${tokenTeam}`))
+    catchError(this.handleError<string>(`rejectTeamProposal error ${tokenTeam}`))
     );
   } 
   /**

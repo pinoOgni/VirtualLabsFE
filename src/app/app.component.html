@@ -21,7 +21,7 @@
 </mat-toolbar>
 <mat-toolbar *ngIf="currentUser">
   <mat-toolbar-row>
-    <h3>Applicazioni Internet</h3>
+    <h3>{{course != null ? course.name : ''}} </h3>
   </mat-toolbar-row>
   <mat-toolbar-row>
     <button (click)="openDialogAddCourse()" *ngIf="currentUser.roles[0] === 'ROLE_TEACHER'" mat-raised-button>
@@ -29,7 +29,6 @@
       <mat-icon>add</mat-icon>
     </button>
   </mat-toolbar-row>
-
 
 </mat-toolbar>
 <mat-sidenav-container>

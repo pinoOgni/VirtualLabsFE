@@ -7,9 +7,11 @@ import * as moment from 'moment';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Course } from 'src/app/models/course.model';
+import { ProposalInfo } from 'src/app/models/proposal-info.model';
 import { ProposalOfTeam } from 'src/app/models/proposal-of-team.model';
-import { Proposal } from 'src/app/models/proposal.model';
+import { Proposal, ResponseTypeInvitation } from 'src/app/models/proposal.model';
 import { Student } from 'src/app/models/student.model';
+import { SpinnerService } from 'src/app/services/spinner.service';
 
 @Component({
   selector: 'app-student-no-team',
@@ -47,6 +49,8 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   selectedDate: string = null;
 
+  proposalInfos: ProposalInfo[];
+
   /**
    * Columns used in the table of students
    */
@@ -77,7 +81,6 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
    * take the course from the container and set it
    */
   @Input() set setCurrentCourse(currentCourse: Course) {
-    console.log('ciao ', currentCourse.name);
     this.currentCourse = currentCourse;
   }
 
@@ -99,7 +102,10 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
     const studentInfo = JSON.parse(localStorage.getItem('currentUser'));
     console.log('setEnrolledAvailableStudents, ', JSON.parse(localStorage.getItem('currentUser')))
     this.currentStudent = students.find((student) => student.id === studentInfo.username);
-    this.dataSourceStudents.data = students.filter((student) => student.id !== studentInfo.id);
+    /**
+     * Put in the data source fot the students, all students but not the logged student
+     */
+    this.dataSourceStudents.data = students.filter((student) => student.id !== this.currentStudent.id);
   }
 
   /**
@@ -111,18 +117,19 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
   /**
    * Table datasource for proposals. It is dynamic
    */
-  dataSourceProposals = new MatTableDataSource<Proposal>();
+  dataSourceProposals = new MatTableDataSource<ProposalInfo>();
 
   /**
    * Columns used in the proposals table
    */
 
-  columnsToDisplayProposals = ['teamName', 'creator','membersWithState', 'deadline', 'accept', 'delete' ];
+  columnsToDisplayProposals = ['teamName', 'creator','members', 'deadline', 'accept'];
 
   /**
    * Take the list of proposals
    */
-  @Input() set setProposals(proposals: Proposal[]) {
+  @Input() set setProposals(proposals: ProposalInfo[]) {
+    this.proposalInfos = proposals;
     this.dataSourceProposals.data = proposals;
   }
 
@@ -141,7 +148,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
 
 
 
-  constructor() { }
+  constructor(public spinnerService: SpinnerService) { }
 
   ngOnInit(): void {
      // ALE
@@ -283,22 +290,33 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
     this.deletedTeamProposalEvent.emit(teamToken);
   }
 
-
-  isAccepted(teamMembers: string[]): boolean {
-    console.log('CIAO ', this.currentStudent.firstName, ' ', this.currentStudent.lastName)
-    if ( teamMembers.includes(
-       `${this.currentStudent.firstName} 
-       ${this.currentStudent.lastName} 
-       (${this.currentStudent.id}) : ACCEPTED`)
-    ) {
-      return true;
+ isAccepted(proposalInfo: ProposalInfo): boolean {
+   let res: boolean = true;
+  proposalInfo.membersWithStatus.forEach(
+    p => {
+      if(p.accepted != ResponseTypeInvitation.ACCEPTED) {
+        res = false;
+      }
     }
-  }
+  )
+  return res;
+}
+
+
+
 
   displayFnDelectedStudents(selectedStudents: string[]): string {
     let temp = '';
     selectedStudents.forEach((student) => (temp += ' ' + student + '\n'));
     return temp;
+  }
+ 
+
+  isDisable(): boolean {
+    if(this.selectedStudents.length + 1 < this.currentCourse.min || (!this.selectedDate && this.selectedStudents.length > 0)) {
+      return false;
+    }
+    return true;
   }
 
 }
