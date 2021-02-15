@@ -12,6 +12,7 @@ import { StudentVmsContComponent } from './student/vms/student-vms.container';
 import { StudentTeamContComponent } from './student/team/student-team.container';
 import {Role} from './models/role.model';
 import { TeacherStudentsContComponent } from './teacher/students/teacher-students.container';
+import { UserComponent } from './user/user.component';
 const routes  = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent},
@@ -37,7 +38,11 @@ const routes  = [
       { path: 'assignments', component: StudentAssignmentsContComponent}
       ]
     },
-  { path: '**', component: PageNotFoundComponent},
+  {
+    path: 'user/:userId',
+    component: UserComponent,
+  },
+  { path: '**', component: PageNotFoundComponent}
 ];
 
 @NgModule({

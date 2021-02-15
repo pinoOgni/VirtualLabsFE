@@ -36,7 +36,6 @@ export class TeamService {
   
 
   constructor(private httpClient: HttpClient, private authService: AuthService, private courseService: CourseService) { 
-    //test
     this.currentTeamSubject = new BehaviorSubject<Team>(null);
   }
 
@@ -67,10 +66,14 @@ export class TeamService {
     );
 }
 
-
+/**
+ * This method is used to get the members of a team
+ * @param teamId 
+ * @param courseId 
+ */
 getMembersOfTeam(teamId: number, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Student[]> {
-  //this method will done a get
-  //test
+  // this method will done a get
+  // test
   // return of(this.exampleMembers);
      const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/students`
   return this.httpClient
@@ -104,10 +107,6 @@ getMembersOfProposalNotification(proposalId: number, courseId: number = this.cou
   );
 }
 
-
-
-  
-
   /**
    * This method create a team given a course and a proposal of team
    * @param courseId the acronym of a course
@@ -124,7 +123,12 @@ getMembersOfProposalNotification(proposalId: number, courseId: number = this.cou
         );
   }
 
-
+/**
+ * This method is used to get the creator of a team
+ * @param proposalId 
+ * @param studentId 
+ * @param courseId 
+ */
 getCreatorOfTeam(proposalId: number, studentId: string = this.authService.currentUserValue.username, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Student> {
   const url = `${environment.base_url_course}/${courseId}/proposalNotifications/${proposalId}/creator`
   console.log(url)
@@ -139,13 +143,13 @@ getCreatorOfTeam(proposalId: number, studentId: string = this.authService.curren
    * This will accept the proposal of a team
    * @param tokenTeam the token associated to the team proposal
    */
-  acceptTeamProposal(tokenTeam: string):  Observable<string> {
+  acceptTeamProposal(tokenTeam: string):  Observable<boolean> {
     const url = `${environment.base_url_notifications}/confirm/${tokenTeam}`
-    return this.httpClient.get<string>(url)
+    return this.httpClient.get<boolean>(url)
     .pipe(tap(() =>
     console.log(`acceptTeamProposal() ok ${tokenTeam}`)
     ),
-    catchError(this.handleError<string>(`acceptTeamProposal error ${tokenTeam}`))
+    catchError(this.handleError<boolean>(`acceptTeamProposal error ${tokenTeam}`))
     );
   } 
 
@@ -153,13 +157,13 @@ getCreatorOfTeam(proposalId: number, studentId: string = this.authService.curren
    * This will reject the proposal of a team
    * @param tokenTeam the token associated to the team proposal
    */
-  rejectTeamProposal(tokenTeam: string):  Observable<string> {
+  rejectTeamProposal(tokenTeam: string):  Observable<boolean> {
     const url = `${environment.base_url_notifications}/reject/${tokenTeam}`
-    return this.httpClient.get<string>(url)
+    return this.httpClient.get<boolean>(url)
     .pipe(tap(() =>
     console.log(`rejectTeamProposal() ok ${tokenTeam}`)
     ),
-    catchError(this.handleError<string>(`rejectTeamProposal error ${tokenTeam}`))
+    catchError(this.handleError<boolean>(`rejectTeamProposal error ${tokenTeam}`))
     );
   } 
   /**

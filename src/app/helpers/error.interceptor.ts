@@ -18,7 +18,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   constructor(private authService: AuthService, private toastrService: ToastrService, private router: Router) {}
 /*
-//TODO miglioare nel progetto
+
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError(err => {
       if (err.status === 401) {
@@ -31,9 +31,9 @@ export class ErrorInterceptor implements HttpInterceptor {
   */
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('interceptor error')
+    console.log('interceptor error');
     return next.handle(request).pipe(catchError(err => {
-      console.log('error status', err.status)
+      console.log('error status', err.status);
       const currentUser = this.authService.currentUserValue;
       if (currentUser && err.status === 401) {
         if (moment().isBefore(User.getAccessTokenExpireTime(currentUser.token))) {
@@ -42,10 +42,10 @@ export class ErrorInterceptor implements HttpInterceptor {
           this.toastrService.info(`Permission denied`);
         }
         this.authService.logout();
-        this.router.navigate(['/'], {queryParams: {returnUrl: location.pathname, doLogin: true}});
+        this.router.navigate(['/'], {queryParams: {returnedUrl: location.pathname, doLogin: true}});
       } else if(err.status === 403) {
         this.toastrService.info(`Error login`);
-        this.router.navigate(['/'], {queryParams: {returnUrl: location.pathname, doLogin: true}});
+        this.router.navigate(['/'], {queryParams: {returnedUrl: location.pathname, doLogin: true}});
       }
       return throwError(err);
     }));

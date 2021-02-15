@@ -84,7 +84,7 @@ export class AppComponent implements OnDestroy {
         // First will deliver an EmptyError to the Observer's error callback if the Observable completes before any next notification was sent
         dialogRef.afterClosed().pipe(first()).subscribe(res => {
             if (res) {
-                this.router.navigate([this.route.snapshot.queryParams.returnUrl || '/home',]);
+                this.router.navigate([this.route.snapshot.queryParams.returnedUrl || '/home',]);
                 this.navBarOpened = true;
 
             } else if (latestUrl === this.router.url) {
@@ -99,7 +99,7 @@ export class AppComponent implements OnDestroy {
         const latestUrl = this.router.url;
         dialogRef.afterClosed().pipe(first()).subscribe(res => {
             if (res) {
-                this.router.navigate([this.route.snapshot.queryParams.returnUrl || '/home',]);
+                this.router.navigate([this.route.snapshot.queryParams.returnedUrl || '/home',]);
                 this.navBarOpened = true;
             } else if (latestUrl === this.router.url) {
                 this.router.navigate(['/home']);
@@ -114,6 +114,12 @@ export class AppComponent implements OnDestroy {
         this.authService.logout();
         this.router.navigate(['/home']);
     }
+
+    account() {
+        this.router.navigate([`/user/${this.currentUser.username}`])
+    }
+
+
 
     public openDialogEditCourse(course: Course): void {
         const dialogRef = this.dialog.open(EditCourseDialogComponent, {

@@ -8,6 +8,7 @@
 
   <!-- This fills the remaining space of the current row -->
   <span class="example-fill-remaining-space"></span>
+  <button *ngIf="currentUser;" mat-button (click)="account()">Account</button>
   <span *ngIf="currentUser"> Hello {{ currentUser.username }} </span>
   <button *ngIf="currentUser; else notLogged" mat-button (click)="logout()">Logout</button>
   <ng-template #notLogged>

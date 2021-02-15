@@ -121,8 +121,8 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  register(model: RegisterModel) {
-    return this.httpClient.post(environment.register_url, model, environment.http_options).pipe(
+  register(registerForm: FormData) {
+    return this.httpClient.post(environment.register_url, registerForm).pipe(
       map((result) => {
         console.log('result register ', result)
         return result;

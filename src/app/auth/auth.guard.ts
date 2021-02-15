@@ -35,7 +35,7 @@ export class AuthGuard implements CanActivate {
       //in this case the user is not logged, so we need to redirect
       //it will open a login-dialog
       this.router.navigate(['/home'], {
-        queryParams: { returnUrl: state.url, doLogin: true },
+        queryParams: { returnedUrl: state.url, doLogin: true },
       });
       return false;
     }
@@ -43,7 +43,7 @@ export class AuthGuard implements CanActivate {
       console.log('Token is expired!');
       this.authService.logout();
       this.router.navigate(['/home'], {
-        queryParams: { returnUrl: state.url, doLogin: true },
+        queryParams: { returnedUrl: state.url, doLogin: true },
       });
       return false;
     }

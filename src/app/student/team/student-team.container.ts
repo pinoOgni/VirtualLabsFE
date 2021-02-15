@@ -41,10 +41,16 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
   membersOfTeam: Student[] = [];
 
   /**
-   * List of proposals for the currentUser
+   * List of proposals received for the currentUser
    * This list is used in student-no-team-component
    */
-  proposalsInfo: ProposalInfo[] = [];
+  proposalsInfoReceived: ProposalInfo[] = [];
+
+  /**
+   * List of proposals sent by the currentUser
+   * This list is used in student-no-team-component
+   */
+  proposalsInfoSent: ProposalInfo[] = [];
 
   /**
    * List of enrolled students in a course that are available (not in a team)
@@ -83,7 +89,7 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
   constructor(public dialog: MatDialog, private route: ActivatedRoute, private router: Router, private teamService: TeamService, private studentService: StudentService, private courseService: CourseService) {
 
       this.route.queryParams.subscribe((queryParam) => 
-      queryParam && queryParam.membersAndState ? this.openViewMembersTeamDialog(queryParam.membersAndState, queryParam.teamName) : null );
+      queryParam && queryParam.membersAndState ? this.openViewMembersTeamDialog(queryParam.membersAndState, queryParam.teamName, queryParam.typeProposal) : null );
     
    }
 
@@ -150,7 +156,8 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
     /**
      * Take all the proposals of this course for the the student
      */
-    this.getProposals();
+    this.getProposalsReceived();
+    this.getProposalsSent();
 
   }
 
@@ -163,8 +170,16 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
   }
 
 
-  openViewMembersTeamDialog(proposalInfoId: number, teamName: string) {
-    const proposalInfo = this.proposalsInfo.find(p => p.id == proposalInfoId);
+  openViewMembersTeamDialog(proposalInfoId: number, teamName: string, typeProposal: string) {
+    let proposalInfo
+    console.log('openViewMembersTeamDialog ', typeProposal)
+    if(typeProposal === 'received') {
+      console.log('received')
+      proposalInfo = this.proposalsInfoReceived.find(p => p.id == proposalInfoId);
+    } else if(typeProposal === 'sent') {
+      console.log('sent')
+      proposalInfo = this.proposalsInfoSent.find(p => p.id == proposalInfoId);
+    }
         if (this.dialog.openDialogs.length > 0) {
           return;
         }
@@ -201,9 +216,39 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
   }
   */
 
- getProposals() {
-  console.log('getProposals student-team-container')
-  this.studentService.getProposalsInCourse().pipe(
+ getProposalsReceived() {
+  console.log('getProposals received student-team-container')
+  this.studentService.getProposalsReceivedInCourse().pipe(
+    first(),
+    flatMap(x => x),
+    mergeMap(proposalNotification => {
+      let proposalInfo = new ProposalInfo();
+      proposalInfo.membersWithStatus = proposalNotification.studentsInvitedWithStatus;
+      proposalInfo.teamName = proposalNotification.teamName;
+      proposalInfo.token = proposalNotification.token;
+      proposalInfo.deadline = proposalNotification.deadline;
+      proposalInfo.id = proposalNotification.id;
+      return this.teamService.getCreatorOfTeam(proposalNotification.id).pipe(
+        map(creator => ({
+          creator, proposalInfo
+        })),
+        map(middleMerge => {
+          middleMerge.proposalInfo.creator = middleMerge.creator.firstName + " " + middleMerge.creator.lastName + " " + middleMerge.creator.id
+          return middleMerge.proposalInfo;
+        })
+      ) 
+    }),toArray()
+    ).subscribe(
+      (last) => {
+          this.proposalsInfoReceived = last;
+      }
+    )
+}
+
+
+getProposalsSent() {
+  console.log('getProposals sent student-team-container')
+  this.studentService.getProposalsSentInCourse().pipe(
     first(),
     flatMap(x => x),
     mergeMap(proposalNotification => {
@@ -225,10 +270,15 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
     }),toArray()
     ).subscribe(
       (last) => {
-          this.proposalsInfo = last;
+          this.proposalsInfoSent = last;
       }
     )
 }
+
+
+
+
+
 
   createTeam(proposalOfTeam: ProposalOfTeam): void {
     this.teamService
@@ -242,7 +292,8 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
           // NO ho una proposalNotification
           // this.teamService.currentTeamSubject.next(team);
         }
-        this.getProposals();
+        this.getProposalsSent();
+        this.router.navigate([this.router.url.split('?')[0]]);  
       });
   }
 
@@ -267,20 +318,20 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
             .subscribe((team) => this.teamService.currentTeamSubject.next(team));
           this.router.navigate([this.router.url]);
         }
-        this.getProposals();
+        this.getProposalsReceived();
       });
   }
 
   rejectedTeamProposal(tokenTeam: string) {
     this.teamService
       .rejectTeamProposal(tokenTeam).pipe(first())
-      .subscribe(() => this.getProposals());
+      .subscribe(() => this.getProposalsReceived());
   }
 
   deletedTeamProposal(tokenTeam: string) {
     this.teamService
       .deleteProposal(tokenTeam).pipe(first())
-      .subscribe(() => this.getProposals());
+      .subscribe(() => this.getProposalsReceived());
   }
 
 
