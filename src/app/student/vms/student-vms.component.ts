@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {VmInstanceModel, VmInstanceStatus} from '../../models/vm-instance-model';
 import {Team} from '../../models/team.model';
 import {Observable} from 'rxjs';
@@ -17,7 +17,9 @@ import {EditVmResourceSettingsComponent} from '../../modals/edit-vm-resource-set
 })
 export class StudentVmsComponent implements OnInit {
   studentUsername: string;
+  @Input()
   team: Team;
+  @Input()
   vmInstances: VmInstanceModel[];
   currentUsedVcpus: number;
   currentUsedDiskSpace: number;
@@ -34,16 +36,19 @@ export class StudentVmsComponent implements OnInit {
     this.currentUsedVcpus = 0;
     this.currentUsedRam = 0;
     this.currentRunningInstance = 0;
-    this.vmInstances.forEach(
-        vm => {
-          if (vm.status === 'RUNNING') {
-            this.currentRunningInstance++;
+    if (this.vmInstances !== null && this.vmInstances !== undefined) {
+      this.vmInstances.forEach(
+          vm => {
+            if (vm.status === 'RUNNING') {
+              this.currentRunningInstance++;
+            }
+            this.currentUsedDiskSpace += vm.disk;
+            this.currentUsedRam += vm.memory;
+            this.currentUsedVcpus += vm.vcpu;
           }
-          this.currentUsedDiskSpace += vm.disk;
-          this.currentUsedRam += vm.memory;
-          this.currentUsedVcpus += vm.vcpu;
-        }
-    );
+      );
+    }
+
     this.authService.getCurrentUserserObservable().subscribe(
         u => this.studentUsername = u.username
     );
@@ -93,5 +98,9 @@ export class StudentVmsComponent implements OnInit {
 
   isVmRunning(vm: VmInstanceModel): boolean {
     return vm.status === VmInstanceStatus.RUNNING;
+  }
+
+  openVmInstance(vm: VmInstanceModel) {
+    //TODO pino anche i dialog con i query param da bomberz
   }
 }

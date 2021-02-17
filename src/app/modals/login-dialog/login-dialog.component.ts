@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { LoginModel } from '../../models/form-models';
-import { AuthService } from '../../auth/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { first } from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
+import {LoginModel} from '../../models/form-models';
+import {AuthService} from '../../auth/auth.service';
+import {Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MatDialogRef} from '@angular/material/dialog';
+import {first} from 'rxjs/operators';
 
 @Component({
   selector: 'app-login-dialog',
@@ -20,10 +20,10 @@ export class LoginDialogComponent implements OnInit {
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router, private dialogRef: MatDialogRef<LoginDialogComponent>) {
     this.model = { username: '', password: '' };
     this.loginForm = this.formBuilder.group({
-      // username: ['', Validators.required],
+      email: ['', Validators.required], // todo
       password: ['', Validators.required],
 
-      email: ['', Validators.pattern(/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(polito|studenti.polito)\.it$/)],
+      //  email: ['', Validators.pattern(/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(polito|studenti.polito)\.it$/)],
       // password: ['', Validators.pattern(/^((?=.*[0-9])|(?=.*[@#$%^&+!=]))((?=.*[a-z])|(?=.*[A-Z]))(?=\S+$).{8,}$/)],
     });
   }
