@@ -1,22 +1,8 @@
-<div *ngIf="teacher;" class="container">
-    <div class="row">
-      <div class="col">
-        <img src="data:image/png;base64,{{teacher.avatar}}" style="width: 200px;" class="img-fluid rounded-circle" alt="profile pic">
-        <h2 class="display-5 text-capitalize">{{ teacher.firstName }} {{teacher.lastName}}</h2>
-        <p class="lead">{{ teacher.email }}</p>
-      </div>
-    </div>
-  </div>
-  <div *ngIf="student;" class="container">
-    <div class="row">
-      <div class="col">
-        <img src="data:image/png;base64,{{student.avatar}}" style="width: 200px;" class="img-fluid rounded-circle" alt="profile pic">
-        <h2 class="display-5 text-capitalize">{{ student.firstName }} {{student.lastName}}</h2>
-        <p class="lead">{{ student.email }}</p>
-      </div>
-    </div>
-  </div>
-
+<div *ngIf="student;" class="center">
+      <img src="data:image/png;base64,{{student.avatar}}" alt="Avatar" class="avatar">
+      <h1 class="display-5 text-capitalize">{{ student.firstName }} {{ student.lastName }}</h1>
+      <h1 class="display-5 text-capitalize">{{ student.email}}</h1>
+</div>
 
 
 
