@@ -1,0 +1,19 @@
+
+/* Avatar image */
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+/* Add padding to containers */
+.container {
+  padding: 16px;
+}
+
+.center {
+  margin: auto;
+  text-align: center;
+  width: 60%;
+  border: 3px solid green;
+  padding: 5px;
+}

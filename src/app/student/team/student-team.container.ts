@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { first, switchMap, takeUntil } from 'rxjs/operators';
+import { first, flatMap, map, mergeMap, switchMap, takeUntil, toArray } from 'rxjs/operators';
+import { TeamMembersDialogComponent } from 'src/app/modals/team-members-dialog/team-members-dialog.component';
 import { Course } from 'src/app/models/course.model';
+import { ProposalInfo } from 'src/app/models/proposal-info.model';
 import { ProposalOfTeam } from 'src/app/models/proposal-of-team.model';
 import { Proposal } from 'src/app/models/proposal.model';
 import { Student } from 'src/app/models/student.model';
@@ -25,18 +28,29 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
  */
 
   /**
-   * This this the team of the currentUser/currentStudent
+   * This is the team of the currentUser/currentStudent
    * It is used in student-team-component
    */
   team: Team;
 
+  /**
+   * List of the students of a team
+   * In the team that we retrieve from there is only
+   * the list of the student Ids not the entire students
+   */
   membersOfTeam: Student[] = [];
 
   /**
-   * List of proposals for the currentUser
+   * List of proposals received for the currentUser
    * This list is used in student-no-team-component
    */
-  proposals: Proposal[] = [];
+  proposalsInfoReceived: ProposalInfo[] = [];
+
+  /**
+   * List of proposals sent by the currentUser
+   * This list is used in student-no-team-component
+   */
+  proposalsInfoSent: ProposalInfo[] = [];
 
   /**
    * List of enrolled students in a course that are available (not in a team)
@@ -72,14 +86,31 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(private router: Router, private teamService: TeamService, private studentService: StudentService, private courseService: CourseService) { }
+  constructor(public dialog: MatDialog, private route: ActivatedRoute, private router: Router, private teamService: TeamService, private studentService: StudentService, private courseService: CourseService) {
+
+      this.route.queryParams.subscribe((queryParam) => 
+      queryParam && queryParam.membersAndState ? this.openViewMembersTeamDialog(queryParam.membersAndState, queryParam.teamName, queryParam.typeProposal) : null );
+    
+   }
 
   ngOnInit(): void {
     /**
-     * 1. chiamata a teamService per prendere currentTeamSubject (BehaviorSubject)
-     * 2. chiamata a courseService.getEnrolledAvailableStudentss
-     * 3. chiamata a courseService.course (BehaviorSubject)
+     * The asObservable method: Creates a new Observable with this Subject as the source. 
+     * You can do this to create customize Observer-side logic of the Subject and conceal 
+     * it from code that uses the Observable.
+     * 
+     * In this way the currentCourse is setted
+     * Then currentCourse is passed to student-no-team-component
      */
+    this.courseService.course
+      .asObservable()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(course => {
+        console.log('Setting the course')
+        this.currentCourse = course;
+      }
+      );
+
 
     /**
      * The team variable of this component is taken from the currentTeamSubject
@@ -94,10 +125,12 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
       .asObservable()
       .pipe(takeUntil(this.destroy$))
       .subscribe((team) => {
-
         this.team = team;
-        this.teamService.getMembersOfTeam(team.id).pipe(first())
+        if(team != null) {
+          console.log('student-team-contatiner currentTeamSubject ', team.name)
+          this.teamService.getMembersOfTeam(team.id).pipe(first())
           .subscribe((members) => (this.membersOfTeam = members));
+        }
       }
       );
 
@@ -111,23 +144,6 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
       .subscribe((students) => (this.enrolledAvailableStudents = students));
 
     /**
-     * The asObservable method: Creates a new Observable with this Subject as the source. 
-     * You can do this to create customize Observer-side logic of the Subject and conceal 
-     * it from code that uses the Observable.
-     * 
-     * In this way the currentCourse is setted
-     * Then currentCourse is passed to student-no-team-component
-     */
-    this.courseService.course
-      .asObservable()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(course => {
-        this.currentCourse = course;
-      }
-      );
-
-
-    /**
      *  the searchedStudents is subscribed to the searchOptions 
      */
     this.searchedStudents = this.searchOptions.pipe(
@@ -137,8 +153,11 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
         this.studentService.searchingAvailableStudentsInCourseByName(name)
       )
     );
-
-    this.getProposals();
+    /**
+     * Take all the proposals of this course for the the student
+     */
+    this.getProposalsReceived();
+    this.getProposalsSent();
 
   }
 
@@ -149,6 +168,33 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
   }
+
+
+  openViewMembersTeamDialog(proposalInfoId: number, teamName: string, typeProposal: string) {
+    let proposalInfo
+    console.log('openViewMembersTeamDialog ', typeProposal)
+    if(typeProposal === 'received') {
+      console.log('received')
+      proposalInfo = this.proposalsInfoReceived.find(p => p.id == proposalInfoId);
+    } else if(typeProposal === 'sent') {
+      console.log('sent')
+      proposalInfo = this.proposalsInfoSent.find(p => p.id == proposalInfoId);
+    }
+        if (this.dialog.openDialogs.length > 0) {
+          return;
+        }
+        const dialogRef = this.dialog.open(TeamMembersDialogComponent, {
+          width: '60%',
+          data: {
+            proposalInfo: proposalInfo,
+            teamName: teamName,
+          }
+        });
+        dialogRef.afterClosed().pipe(first())
+        .subscribe( () => {
+            this.router.navigate([this.router.url.split('?')[0]]);
+        })
+        }
 
 
   /**
@@ -162,18 +208,83 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
    * retrieve proposals fot his course (courseAcronym)
    * and for this student (using the authentication service )
    */
+/*
   getProposals() {
     console.log('getProposals student-team-container')
     this.studentService.getProposalsInCourse()
       .pipe(first()).subscribe((proposals) => (this.proposals = proposals));
   }
+  */
+
+ getProposalsReceived() {
+  console.log('getProposals received student-team-container')
+  this.studentService.getProposalsReceivedInCourse().pipe(
+    first(),
+    flatMap(x => x),
+    mergeMap(proposalNotification => {
+      let proposalInfo = new ProposalInfo();
+      proposalInfo.membersWithStatus = proposalNotification.studentsInvitedWithStatus;
+      proposalInfo.teamName = proposalNotification.teamName;
+      proposalInfo.token = proposalNotification.token;
+      proposalInfo.deadline = proposalNotification.deadline;
+      proposalInfo.id = proposalNotification.id;
+      return this.teamService.getCreatorOfTeam(proposalNotification.id).pipe(
+        map(creator => ({
+          creator, proposalInfo
+        })),
+        map(middleMerge => {
+          middleMerge.proposalInfo.creator = middleMerge.creator.firstName + " " + middleMerge.creator.lastName + " " + middleMerge.creator.id
+          return middleMerge.proposalInfo;
+        })
+      ) 
+    }),toArray()
+    ).subscribe(
+      (last) => {
+          this.proposalsInfoReceived = last;
+      }
+    )
+}
+
+
+getProposalsSent() {
+  console.log('getProposals sent student-team-container')
+  this.studentService.getProposalsSentInCourse().pipe(
+    first(),
+    flatMap(x => x),
+    mergeMap(proposalNotification => {
+      let proposalInfo = new ProposalInfo();
+      proposalInfo.membersWithStatus = proposalNotification.studentsInvitedWithStatus;
+      proposalInfo.teamName = proposalNotification.teamName;
+      proposalInfo.token = proposalNotification.token;
+      proposalInfo.deadline = proposalNotification.deadline;
+      proposalInfo.id = proposalNotification.id;
+      return this.teamService.getCreatorOfTeam(proposalNotification.id).pipe(
+        map(creator => ({
+          creator, proposalInfo
+        })),
+        map(middleMerge => {
+          middleMerge.proposalInfo.creator = middleMerge.creator.firstName + " " + middleMerge.creator.lastName + " " + middleMerge.creator.id
+          return middleMerge.proposalInfo;
+        })
+      )
+    }),toArray()
+    ).subscribe(
+      (last) => {
+          this.proposalsInfoSent = last;
+      }
+    )
+}
+
+
+
+
 
 
   createTeam(proposalOfTeam: ProposalOfTeam): void {
     this.teamService
       .createTeam(this.courseService.currentCourseIdSubject.value, proposalOfTeam)
       .pipe(first()).subscribe(proposal => {
-        if (proposal && proposalOfTeam.selectedStudentIds.length === 1) {
+        if (proposal && proposalOfTeam.selectedStudentsId.length === 1) {
           //TODO 
           //team.members = [];
           //team.members.push(this.enrolledAvailableStudents.find(s => s.id === JSON.parse(localStorage.getItem('currentUser')).id));
@@ -181,7 +292,8 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
           // NO ho una proposalNotification
           // this.teamService.currentTeamSubject.next(team);
         }
-        this.getProposals();
+        this.getProposalsSent();
+        this.router.navigate([this.router.url.split('?')[0]]);  
       });
   }
 
@@ -206,20 +318,20 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
             .subscribe((team) => this.teamService.currentTeamSubject.next(team));
           this.router.navigate([this.router.url]);
         }
-        this.getProposals();
+        this.getProposalsReceived();
       });
   }
 
   rejectedTeamProposal(tokenTeam: string) {
     this.teamService
       .rejectTeamProposal(tokenTeam).pipe(first())
-      .subscribe(() => this.getProposals());
+      .subscribe(() => this.getProposalsReceived());
   }
 
   deletedTeamProposal(tokenTeam: string) {
     this.teamService
       .deleteProposal(tokenTeam).pipe(first())
-      .subscribe(() => this.getProposals());
+      .subscribe(() => this.getProposalsReceived());
   }
 
 

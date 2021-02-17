@@ -10,10 +10,10 @@ export class Student {
     email: string; // s200001@studenti.polito.it
     firstName: string; //Giacomo
     lastName: string; //Leopardi
-    avatar: string;
+    avatar: string | ArrayBuffer;
     
 
-    constructor(id: string, email: string, firstName: string, lastName: string, avatar: string) {
+    constructor(id: string, email: string, firstName: string, lastName: string, avatar: string | ArrayBuffer) {
         this.avatar = avatar;
         this.id = id;
         this.email = email;

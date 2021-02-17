@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "~9.1.9",
     "@angular/router": "~9.1.9",
     "moment": "^2.29.1",
+    "ng-circle-progress": "^1.6.0",
     "ng2-pdf-viewer": "^6.3.2",
     "ngx-material-file-input": "^2.1.1",
     "ngx-toastr": "^13.2.0",

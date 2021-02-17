@@ -34,7 +34,6 @@ export class CourseService {
 
   constructor(private authService: AuthService, private httpClient: HttpClient) {
     this.course = new BehaviorSubject<Course>(null);
-    // this.course = new BehaviorSubject<Course>(new Course('APA','Algoritmi e Programmazione Avanzata',3,4,true));
     this.currentCourseIdSubject = new BehaviorSubject<number>(null);
   }
 
@@ -165,7 +164,7 @@ export class CourseService {
       .get<Course>(url).pipe( tap(() =>
           console.log(`getThisCourse ok ${courseId}`)
         ),
-        catchError(this.handleError<any>(`getThisCourse error ${courseId} `,[]))
+        catchError(this.handleError<Course>(`getThisCourse error ${courseId} `))
       );
   }
 
@@ -198,7 +197,7 @@ export class CourseService {
 
   setNextCourse(courseId: number) {
     this.currentCourseIdSubject.next(courseId);
-    if (!courseId) {
+    if (courseId == null) {
       console.log('setNextcourse !courseId')
       this.course.next(null);
       return;

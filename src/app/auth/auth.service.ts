@@ -8,17 +8,17 @@
  *
  */
 
-import {Injectable} from '@angular/core';
-import {environment} from '../../environments/environment';
-import {HttpClient} from '@angular/common/http';
-import {LoginModel, RegisterModel} from '../models/form-models';
-import {map} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { LoginModel, RegisterModel } from '../models/form-models';
+import { map } from 'rxjs/operators';
 // @ts-ignore
 import * as moment from 'moment';
 // @ts-ignore
 import * as jwt_decode from 'jwt-decode';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {User} from '../models/user.model';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +29,7 @@ import {User} from '../models/user.model';
  * user object and notify other components when the user logs in
  * and out of the app
  */
-export class AuthService{
+export class AuthService {
 
   base_URL = environment.base_URL;
 
@@ -50,7 +50,7 @@ export class AuthService{
    * values that are published after a subscription is created
    */
   private currentUserSubject: BehaviorSubject<User>;
-  
+
 
   /**
    * The constructor() of the service initialises the 
@@ -97,20 +97,20 @@ export class AuthService{
   login(model: LoginModel) {
     console.log('login before post')
     return this.httpClient.post<User>(environment.login_url, model, environment.http_options)
-        .pipe(
-            map((authResult) => {
-              //jwt response, I'm logged; jwt is a json with a key 'token' asfajscbiasoc.acnasicansocas.coacoasbnsoc
-              const user = new User(
-          JSON.parse(atob(authResult.token.split('.')[1])).sub, //admin
-          authResult.token, //token sano
-          JSON.parse(atob(authResult.token.split('.')[1])).roles //ROLE_ADMIN
-        );
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-        return authResult;
-      })
-    );
-}
+      .pipe(
+        map((authResult) => {
+          //jwt response, I'm logged; jwt is a json with a key 'token' asfajscbiasoc.acnasicansocas.coacoasbnsoc
+          const user = new User(
+            JSON.parse(atob(authResult.token.split('.')[1])).sub, //user
+            authResult.token, //token sano
+            JSON.parse(atob(authResult.token.split('.')[1])).roles //ROLE_ADMIN
+          );
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          this.currentUserSubject.next(user);
+          return authResult;
+        })
+      );
+  }
   /**
    * The currentUserValue getter allows other components 
    * an easy way to get the value of the currently logged 
@@ -121,8 +121,8 @@ export class AuthService{
     return this.currentUserSubject.value;
   }
 
-  register(model: RegisterModel) {
-    return this.httpClient.post(environment.register_url, model,environment.http_options).pipe(
+  register(registerForm: FormData) {
+    return this.httpClient.post(environment.register_url, registerForm).pipe(
       map((result) => {
         console.log('result register ', result)
         return result;
@@ -146,7 +146,7 @@ export class AuthService{
   getExpirationToken() {
     const expiration = JSON.parse(localStorage.getItem('currentUser')).accessToken;
     const expiresAt = JSON.parse(expiration);
-    console.log('getExpirationToken ',expiration )
+    console.log('getExpirationToken ', expiration)
     return moment(expiresAt);
   }
 }

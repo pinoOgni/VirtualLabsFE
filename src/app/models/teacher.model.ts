@@ -5,13 +5,16 @@
  * @param lastName: this is the lastName of the teacher
  */
 
+
 export class Teacher {
     id: number;  //d200001
     email: string; //d200001@polito.it
     firstName: string; //Primo
     lastName: string; //Levi
+    avatar: string | ArrayBuffer;
 
-    constructor(id: number, email: string, firstName: string, lastName: string) {
+    constructor(id: number, email: string, firstName: string, lastName: string, avatar: string | ArrayBuffer) {
+        this.avatar = avatar;
         this.id = id;
         this.email = email;
         this.firstName = firstName;
