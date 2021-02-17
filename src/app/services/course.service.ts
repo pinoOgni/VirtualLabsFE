@@ -9,7 +9,7 @@ import {CourseModel} from '../models/form-models';
 import {Teacher} from '../models/teacher.model';
 import {Assignment} from '../models/assignment.model';
 import {Team} from '../models/team.model';
-import {VmInstanceModel, VmInstanceStatus} from '../models/vm-instance-model';
+import {VmInstanceModel} from '../models/vm-instance-model';
 import {TeamStatus} from '../models/team-status';
 import {AssignmentHomeworkStudent} from '../models/assignment-homework-student.model';
 import {Homework} from '../models/homework.model';
@@ -472,32 +472,13 @@ export class CourseService {
 
 
   getVmInstancesOfTeam(teamId: number): Observable<VmInstanceModel[]> {
-    return of([
-      new VmInstanceModel(
-          1,
-          'lab1',
-          3,
-          500,
-          500,
-          VmInstanceStatus.RUNNING
-      ),
-      new VmInstanceModel(
-          2,
-          'lab2',
-          3,
-          500,
-          500,
-          VmInstanceStatus.RUNNING
-      ),
-      new VmInstanceModel(
-          3,
-          'lab3',
-          3,
-          500,
-          500,
-          VmInstanceStatus.SUSPENDED
-      ),
-    ]);
+      const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${teamId}/vmInstances`;
+      return this.httpClient.get<VmInstanceModel[]>(url)
+          .pipe(tap(() =>
+                  console.log(`getVmInstancesOfTeam`)
+              ),
+              catchError(this.handleError<VmInstanceModel[]>(`getVmInstancesOfTeam`))
+          );
   }
 
     updateTeamVmResources(id: number, editedTeam: Team): Observable<Team> {
