@@ -1,2 +1,5 @@
-<app-student-vms></app-student-vms>
+<app-student-vms *ngIf="isStudentJoinedToTeam(); else elseblock"></app-student-vms>
+<ng-template #elseblock>
+    <app-student-no-team-vms></app-student-no-team-vms>
+</ng-template>
 

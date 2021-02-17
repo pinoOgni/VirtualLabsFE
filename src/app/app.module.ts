@@ -63,7 +63,10 @@ import {ScoreDialogComponent} from './modals/score-dialog/score-dialog.component
 import {ViewContentHomeworkVersionComponent} from './modals/view-content-homework-version/view-content-homework-version.component';
 import {EditVmResourceSettingsComponent} from './modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
 import {MatBadgeModule} from '@angular/material/badge';
-import { NewHomeworkVersionDialogComponent } from './modals/new-homework-version-dialog/new-homework-version-dialog.component';
+import {NewHomeworkVersionDialogComponent} from './modals/new-homework-version-dialog/new-homework-version-dialog.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {StudentNoTeamVmsComponent} from './student/vms/student-no-team-vms/student-no-team-vms.component';
+import {EditStudentVmInstanceDialogComponent} from './modals/edit-student-vm-instance-dialog/edit-student-vm-instance-dialog.component';
 import { TeamMembersDialogComponent } from './modals/team-members-dialog/team-members-dialog.component';
 import { UserComponent } from './user/user.component';
 
@@ -98,6 +101,8 @@ import { UserComponent } from './user/user.component';
         ViewContentHomeworkVersionComponent,
         EditVmResourceSettingsComponent,
         NewHomeworkVersionDialogComponent,
+        StudentNoTeamVmsComponent,
+        EditStudentVmInstanceDialogComponent,
         TeamMembersDialogComponent,
         UserComponent,
     ],
@@ -132,11 +137,12 @@ import { UserComponent } from './user/user.component';
         MatDatepickerModule,
         PdfViewerModule,
         ToastrModule.forRoot({
-          preventDuplicates: true,
-          timeOut: 3000,
-          progressBar: true,
+            preventDuplicates: true,
+            timeOut: 3000,
+            progressBar: true,
 
         }),
+        MatGridListModule,
     ],
     exports:[
         MatDatepickerModule,

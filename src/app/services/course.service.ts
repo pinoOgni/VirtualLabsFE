@@ -9,21 +9,20 @@ import {CourseModel} from '../models/form-models';
 import {Teacher} from '../models/teacher.model';
 import {Assignment} from '../models/assignment.model';
 import {Team} from '../models/team.model';
-import {VmInstanceModel} from '../models/vm-instance-model';
+import {VmInstanceModel, VmInstanceStatus} from '../models/vm-instance-model';
 import {TeamStatus} from '../models/team-status';
-import { AssignmentHomeworkStudent } from '../models/assignment-homework-student.model';
-import { Homework, HomeworkStatus } from '../models/homework.model';
-import { AssignmentService } from './assignment.service';
-import { AuthService } from '../auth/auth.service';
+import {AssignmentHomeworkStudent} from '../models/assignment-homework-student.model';
+import {Homework} from '../models/homework.model';
+import {AuthService} from '../auth/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class CourseService {
 
-/**
-   exampleAssignmentHomeworkStudent: AssignmentHomeworkStudent[] = [
-    {assignment_id: 13, name: 'assignment 100', releaseDate: '1717171717', expiryDate: '1782372831',
+    /**
+     exampleAssignmentHomeworkStudent: AssignmentHomeworkStudent[] = [
+     {assignment_id: 13, name: 'assignment 100', releaseDate: '1717171717', expiryDate: '1782372831',
     currentStatus: HomeworkStatus.REVIEWED, score: 30 },
     {assignment_id: 15, name: 'assignment 111', releaseDate: '1313131313', expiryDate: '51515151515',
     currentStatus: HomeworkStatus.SCORED, score: 28 }
@@ -480,7 +479,7 @@ export class CourseService {
           3,
           500,
           500,
-          'RUNNING'
+          VmInstanceStatus.RUNNING
       ),
       new VmInstanceModel(
           2,
@@ -488,7 +487,7 @@ export class CourseService {
           3,
           500,
           500,
-          'RUNNING'
+          VmInstanceStatus.RUNNING
       ),
       new VmInstanceModel(
           3,
@@ -496,19 +495,53 @@ export class CourseService {
           3,
           500,
           500,
-          'SUSPENDED'
+          VmInstanceStatus.SUSPENDED
       ),
     ]);
   }
 
-  updateTeamVmResources(id: number, editedTeam: Team): Observable<Team> {
-    // aspettare ad hamza che faccia l'endpoint POST
-    return of(editedTeam);
-  }
+    updateTeamVmResources(id: number, editedTeam: Team): Observable<Team> {
+        // aspettare ad hamza che faccia l'endpoint POST
+        return of(editedTeam);
+    }
 
-  getVmInstanceCreator(teamId: number, vmInstanceId: number): Observable<Student> {
-    // /{courseId}/teams/{tid}/vmInstances/{vmid}/getCreator  ----> FARE LA GET
-    const prova = new Student('260005', 'alex.pagano@studenti.polito.it', 'Alessandro', 'Pagano', 'A');
-    return of(prova);
-  }
+    getVmInstanceCreator(teamId: number, vmInstanceId: number): Observable<Student> {
+        // /{courseId}/teams/{tid}/vmInstances/{vmid}/getCreator  ----> FARE LA GET
+        const prova = new Student('260005', 'alex.pagano@studenti.polito.it', 'Alessandro', 'Pagano', 'A');
+        return of(prova);
+    }
+
+
+    getVmInstanceOwners(tId: number, vmId: number): Observable<Student[]> {
+        // "/{courseId}/teams/{tid}/vmInstances/{vmid}/getOwners"
+        const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${tId}/vmInstances/${vmId}/getOwners`;
+
+        return this.httpClient.get<Student[]>(url)
+            .pipe(tap(() =>
+                    console.log(`getVmInstanceOwners`)
+                ),
+                catchError(this.handleError<Student[]>(`getVmInstanceOwners`, []))
+            );
+
+    }
+
+    changeVmInstanceStatus(tId: number, vm: VmInstanceModel) {
+        const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${tId}/vmInstances/${vm.id}/command`;
+        return this.httpClient.put<VmInstanceModel>(url, vm)
+            .pipe(tap(() =>
+                    console.log(`changeVmInstanceStatus`)
+                ),
+                catchError(this.handleError<VmInstanceModel>(`changeVmInstanceStatus`))
+            );
+    }
+
+    deleteVmInstance(tId: number, vm: VmInstanceModel): Observable<boolean> {
+        const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${tId}/vmInstances/${vm.id}`;
+        return this.httpClient.delete<boolean>(url)
+            .pipe(tap(() =>
+                    console.log(`changeVmInstanceStatus`)
+                ),
+                catchError(this.handleError<boolean>(`changeVmInstanceStatus`))
+            );
+    }
 }
