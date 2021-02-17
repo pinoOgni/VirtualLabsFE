@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { CourseService } from '../services/course.service';
 /**
  * This component is responsible for the teacher view. It comprends 3 tabs (students, vms and assignments)
  */
-export class TeacherComponent implements OnInit {
+export class TeacherComponent implements OnInit, OnDestroy {
 
   /**
   * A Subject is like an Observable, but can multicast to many Observers. 

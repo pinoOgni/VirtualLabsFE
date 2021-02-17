@@ -26,11 +26,13 @@ export class StudentService {
   isValid: boolean;
   token: string;
 
+/*
   //test 
   exampleProposals: Proposal[] = [
     { teamName: 'Vendetta', creator: 'Pino', membersWithState: ['Leo Tolo 1', 'Hamza Rh 4'], deadline: '14-12-2022', isValid: true, token: 'bbbbbbb' },
     { teamName: 'Argonauti', creator: 'ALALA', membersWithState: ['Ale Pag 1', 'Jack Am 4'], deadline: '14-12-2021', isValid: true, token: 'aaaaaa' }
   ]
+   */
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
@@ -120,21 +122,51 @@ export class StudentService {
   /**
    * The parametrers are taken by the courseService and authService, exploiting the injection and the 
    * power of BehaviorSubject
+   * This method is used to retrieve all proposal notifications for this course and for the logged student
    * @param courseId the acronym of the course
    * @param studentId the id of the student
    */
-  getProposalsInCourse(courseId: number = this.courseService.currentCourseIdSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Proposal[]> {
+  getProposalsReceivedInCourse(courseId: number = this.courseService.currentCourseIdSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Proposal[]> {
     // return of<Proposal[]>(this.exampleProposals)
-    const url = `${environment.base_url_course}/${courseId}/proposalNotifications}`
+    const url = `${environment.base_url_students}/${studentId}/courses/${courseId}/notifications/invited`
     return this.httpClient.get<Proposal[]>(url, environment.http_options)
       .pipe(
         tap(() =>
-          console.log(`getProposalsInCourse ok studentId ${studentId}, course ${courseId}`)
+          console.log(`getProposalsReceivedInCourse ok studentId ${studentId}, course ${courseId}`)
         ),
         catchError(
-          this.handleError<Proposal[]>(`getTeamProposalsForCourse error studentId ${studentId}, course ${courseId})`, []))
+          this.handleError<Proposal[]>(`getProposalsReceivedInCourse error studentId ${studentId}, course ${courseId})`, []))
       );
   }
+
+
+  /**
+   * The parametrers are taken by the courseService and authService, exploiting the injection and the 
+   * power of BehaviorSubject
+   * This method is used to retrieve all proposal notifications for this course and for the logged student
+   * @param courseId the acronym of the course
+   * @param studentId the id of the student
+   */
+  getProposalsSentInCourse(courseId: number = this.courseService.currentCourseIdSubject.value, studentId: string = this.authService.currentUserValue.username): Observable<Proposal[]> {
+    // return of<Proposal[]>(this.exampleProposals)
+    const url = `${environment.base_url_students}/${studentId}/courses/${courseId}/notifications/created`
+    return this.httpClient.get<Proposal[]>(url, environment.http_options)
+      .pipe(
+        tap(() =>
+          console.log(`getProposalsSentInCourse ok studentId ${studentId}, course ${courseId}`)
+        ),
+        catchError(
+          this.handleError<Proposal[]>(`getProposalsSentInCourse error studentId ${studentId}, course ${courseId})`, []))
+      );
+  }
+
+
+
+
+
+
+
+
 
   /**
    * Retrieve all the courses taken by the student

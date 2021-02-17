@@ -7,21 +7,30 @@
  * and nobody can accept it anymore
  */
 
+export enum ResponseTypeInvitation {
+    NOT_REPLY = 'NOT_REPLY',
+    DECLINED = 'DECLINED',
+    ACCEPTED = 'ACCEPTED' ,
+}
+
+export interface StudentStatusInvitation {
+    studentId: string;
+    accepted: ResponseTypeInvitation;
+}
+
 export class Proposal {
+    id: number;
     teamName: string;
-    creator: string;
     deadline: string;
-    isValid: boolean;
     token: string;
-    membersWithState: string[];
+    studentsInvitedWithStatus: StudentStatusInvitation[];
 
 
-    constructor(teamName: string = '', creator: string = '', membersWithState: string[], deadline: string, isValid: boolean,  token: string='') {
+    constructor(id: number = -1, teamName: string = '', studentsInvitedWithStatus: StudentStatusInvitation[], deadline: string, token: string='') {
+        this.id = id;
         this.teamName = teamName;
-        this.creator = creator;
-        this.membersWithState = membersWithState;
+        this.studentsInvitedWithStatus = studentsInvitedWithStatus;
         this.deadline = deadline;
-        this.isValid = isValid;
         this.token = token;
 
     }

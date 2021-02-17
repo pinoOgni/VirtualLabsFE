@@ -5,6 +5,7 @@ import {Observable, of} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {Course} from '../models/course.model';
 import {AuthService} from '../auth/auth.service';
+import { Teacher } from '../models/teacher.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,22 @@ export class TeacherService {
    * searchingTeachersByName: metodo per cercare gli teacher. Ritorna un Observable<Teacher[]>
    * uploadTeacherAssignment: metodo per caricare l'assignment di uno teacher. Ritorna un Observable<Upload>
    */
+
+
+  /**
+   * This method return a teacher given a teacherId
+   * @param studentId 
+   */
+  getTeacher(teacherId: string): Observable<Teacher> {
+    const url = `${environment.base_url_teachers}/${teacherId}`
+    return this.httpClient.get<Teacher>(url).pipe(tap(() =>
+      console.log(`getTeacher ${teacherId}`)
+    ),
+      catchError(this.handleError<any>(`getTeacher error ${teacherId}`))
+    );
+
+  }
+
 
 
   /**

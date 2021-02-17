@@ -6,10 +6,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { AuthService } from 'src/app/auth/auth.service';
 import { Course } from 'src/app/models/course.model';
+import { ProposalInfo } from 'src/app/models/proposal-info.model';
 import { ProposalOfTeam } from 'src/app/models/proposal-of-team.model';
-import { Proposal } from 'src/app/models/proposal.model';
+import { Proposal, ResponseTypeInvitation } from 'src/app/models/proposal.model';
 import { Student } from 'src/app/models/student.model';
+import { SpinnerService } from 'src/app/services/spinner.service';
+
 
 @Component({
   selector: 'app-student-no-team',
@@ -48,6 +52,21 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
   selectedDate: string = null;
 
   /**
+   * List of proposal info received
+   */
+  proposalInfosReceived: ProposalInfo[];
+
+  received: string = 'received';
+
+  sent: string = 'sent';
+
+
+  /**
+   * List of proposal info sent
+   */
+  proposalInfosSent: ProposalInfo[];
+
+  /**
    * Columns used in the table of students
    */
   columnsToDisplayStudents = ['select', 'id', 'firstName', 'lastName'];
@@ -77,7 +96,6 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
    * take the course from the container and set it
    */
   @Input() set setCurrentCourse(currentCourse: Course) {
-    console.log('ciao ', currentCourse.name);
     this.currentCourse = currentCourse;
   }
 
@@ -99,7 +117,14 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
     const studentInfo = JSON.parse(localStorage.getItem('currentUser'));
     console.log('setEnrolledAvailableStudents, ', JSON.parse(localStorage.getItem('currentUser')))
     this.currentStudent = students.find((student) => student.id === studentInfo.username);
-    this.dataSourceStudents.data = students.filter((student) => student.id !== studentInfo.id);
+    /**
+     * Put in the data source fot the students, all students but not the logged student
+     */
+    console.log('800A ', students);
+    console.log('800A ', this.currentStudent);
+    this.dataSourceStudents.data = students.filter((student) => student.id !== this.currentStudent.id);
+
+    //this.dataSourceStudents.data = students.filter((student) => student.id !== this.currentStudent.id);
   }
 
   /**
@@ -111,20 +136,42 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
   /**
    * Table datasource for proposals. It is dynamic
    */
-  dataSourceProposals = new MatTableDataSource<Proposal>();
+  dataSourceProposalsReceived = new MatTableDataSource<ProposalInfo>();
+
+  /**
+   * Table datasource for proposals. It is dynamic
+   */
+  dataSourceProposalsSent = new MatTableDataSource<ProposalInfo>();
 
   /**
    * Columns used in the proposals table
    */
 
-  columnsToDisplayProposals = ['teamName', 'creator','membersWithState', 'deadline', 'accept', 'delete' ];
+  columnsToDisplayProposalsReceived = ['teamName', 'creator','members', 'deadline', 'accept'];
+
+  /**
+   * Columns used in the proposals table
+   */
+
+  columnsToDisplayProposalsSent = ['teamName','members', 'deadline'];
+
+  /**
+   * Take the list of proposals received
+   */
+  @Input() set setProposalsReceived(proposals: ProposalInfo[]) {
+    this.proposalInfosReceived = proposals;
+    this.dataSourceProposalsReceived.data = proposals;
+  }
+
 
   /**
    * Take the list of proposals
    */
-  @Input() set setProposals(proposals: Proposal[]) {
-    this.dataSourceProposals.data = proposals;
+  @Input() set setProposalsSent(proposals: ProposalInfo[]) {
+    this.proposalInfosSent = proposals;
+    this.dataSourceProposalsSent.data = proposals;
   }
+
 
   /**
    * Event emitter for the proposal of a team after the createTeam is clicked
@@ -141,7 +188,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
 
 
 
-  constructor() { }
+  constructor(private authService: AuthService, public spinnerService: SpinnerService) { }
 
   ngOnInit(): void {
      // ALE
@@ -194,7 +241,6 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   /**
-   * 
    * @param selectedStudent the student is added to the proposal of the team
    * before it is added there is a control on the studentId and also on the size of the current 
    * proposal team (selectedStudents.length)
@@ -208,8 +254,9 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
       this.studentControl.setValue('');
     }
   }
+
+
   /**
-   * 
    * @param selectedStudent this student is removed from the proposal of a team
    * so it is again available in the table of students
    */
@@ -218,7 +265,8 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   /**
-   * 
+   * This method is used to create a team, in reality
+   * is used to create a proposal of team
    */
   createTeam() {
     console.log('createTeam')
@@ -283,22 +331,46 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
     this.deletedTeamProposalEvent.emit(teamToken);
   }
 
-
-  isAccepted(teamMembers: string[]): boolean {
-    console.log('CIAO ', this.currentStudent.firstName, ' ', this.currentStudent.lastName)
-    if ( teamMembers.includes(
-       `${this.currentStudent.firstName} 
-       ${this.currentStudent.lastName} 
-       (${this.currentStudent.id}) : ACCEPTED`)
-    ) {
-      return true;
+/**
+ * 
+ * @param proposalInfo 
+ */
+ isAccepted(proposalInfo: ProposalInfo): boolean {
+   let res: boolean = true;
+  proposalInfo.membersWithStatus.forEach(
+    p => {
+      if(p.accepted != ResponseTypeInvitation.ACCEPTED) {
+        res = false;
+      }
     }
-  }
+  )
+  return res;
+}
+
+/**
+ * This method is used to see if the student logged can accept
+ * or reject a proposal
+ * @param proposalInfo 
+ */
+canAcceptOrReject(proposalInfo: ProposalInfo): boolean {
+  return (proposalInfo.membersWithStatus.
+          find(p => p.studentId == this.authService.currentUserValue.username).accepted == ResponseTypeInvitation.NOT_REPLY);
+}
+
+
 
   displayFnDelectedStudents(selectedStudents: string[]): string {
     let temp = '';
     selectedStudents.forEach((student) => (temp += ' ' + student + '\n'));
     return temp;
+  }
+ 
+
+  isDisable(): boolean {
+    if(this.selectedStudents.length + 1 < this.currentCourse.min || (!this.selectedDate && this.selectedStudents.length > 0)) {
+      return false;
+    }
+    return true;
   }
 
 }
