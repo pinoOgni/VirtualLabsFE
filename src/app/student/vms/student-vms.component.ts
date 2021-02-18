@@ -7,15 +7,15 @@ import {AuthService} from '../../auth/auth.service';
 import {first, flatMap, map, toArray} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {EditVmResourceSettingsComponent} from '../../modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ViewVmInstanceComponent } from 'src/app/modals/view-vm-instance/view-vm-instance.component';
-import { AddOwnersVmInstanceComponent } from 'src/app/modals/add-owners-vm-instance/add-owners-vm-instance.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ViewVmInstanceComponent} from 'src/app/modals/view-vm-instance/view-vm-instance.component';
+import {AddOwnersVmInstanceComponent} from 'src/app/modals/add-owners-vm-instance/add-owners-vm-instance.component';
 
 
 @Component({
-  selector: 'app-student-vms',
-  templateUrl: './student-vms.component.html',
-  styleUrls: ['./student-vms.component.css']
+    selector: 'app-student-vms',
+    templateUrl: './student-vms.component.html',
+    styleUrls: ['./student-vms.component.css']
 })
 export class StudentVmsComponent implements OnInit {
     studentUsername: string;
@@ -73,7 +73,10 @@ export class StudentVmsComponent implements OnInit {
                             map(student => student.id),
                             toArray()
                         ).subscribe(
-                            result => this.ownerIds.set(vm.id, result)
+                            result => {
+                                this.ownerIds.set(vm.id, result);
+
+                            }
                         );
                         this.courseService.getVmInstanceCreator(this.team.id, vm.id).subscribe(
                             creator => {
@@ -87,6 +90,12 @@ export class StudentVmsComponent implements OnInit {
         );
 
 
+    }
+
+    getVmInstances(): void {
+        this.courseService.getVmInstancesOfTeam(this.team.id).subscribe(
+            result => this.vmInstances = result
+        );
     }
 
     getVmCreator(teamId: number, vmInstanceId: number): Student {
@@ -116,13 +125,20 @@ export class StudentVmsComponent implements OnInit {
     }
 
     turnOffVM(vm: VmInstanceModel) {
-        vm.status = VmInstanceStatus.SUSPENDED;
-        this.courseService.changeVmInstanceStatus(this.team.id, vm);
-  }
+        //   vm.status = VmInstanceStatus.SUSPENDED;
+        this.courseService.changeVmInstanceStatus(this.team.id, vm, 0).subscribe(
+            r => {
+                console.log('mi è arrivato' + r.status);
+                this.getVmInstances();
+            }
+        );
+    }
 
   turnOnVM(vm: VmInstanceModel) {
-    vm.status = VmInstanceStatus.RUNNING;
-    this.courseService.changeVmInstanceStatus(this.team.id, vm);
+      //  vm.status = VmInstanceStatus.RUNNING;
+      this.courseService.changeVmInstanceStatus(this.team.id, vm, 1).subscribe(
+          r => this.getVmInstances()
+      );
   }
 
   deleteVM(vm: VmInstanceModel) {
