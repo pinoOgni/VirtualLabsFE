@@ -525,4 +525,24 @@ export class CourseService {
                 catchError(this.handleError<boolean>(`changeVmInstanceStatus`))
             );
     }
-}
+
+
+    /**
+     * This method is used to display the content of a vm instance
+     * It can be running or stopped (2 different images)
+     * @param teamId 
+     * @param vmId 
+     * @param courseId 
+     */
+  getContentVmInstance(teamId: number, vmId: number, courseId: number = this.currentCourseIdSubject.value): Observable<Blob> {
+    const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances/${vmId}/show`
+    return this.httpClient.get(url, {
+      responseType: 'blob', //Blob object containing the binary data. document:
+    }).pipe(
+      tap(() => console.log(`getContentVmInstance ok ${vmId}`)),
+      catchError(this.handleError<any>(`getContentVmInstance error ${vmId}`))
+    );
+  }
+}   
+
+

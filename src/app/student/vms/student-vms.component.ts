@@ -8,6 +8,9 @@ import {AuthService} from '../../auth/auth.service';
 import {filter, first, flatMap, map, toArray} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {EditVmResourceSettingsComponent} from '../../modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ViewVmInstanceComponent } from 'src/app/modals/view-vm-instance/view-vm-instance.component';
+import { AddOwnersVmInstanceComponent } from 'src/app/modals/add-owners-vm-instance/add-owners-vm-instance.component';
 
 
 @Component({
@@ -27,7 +30,19 @@ export class StudentVmsComponent implements OnInit {
   currentRunningInstance: number;
 
 
-  constructor(private dialog: MatDialog, private authService: AuthService, private courseService: CourseService) {
+  constructor(private route: ActivatedRoute, private router: Router, private dialog: MatDialog, private authService: AuthService, private courseService: CourseService) {
+    
+    /**
+     * Subscribe to all query params for the dialogs
+     */
+    this.route.queryParams.subscribe((queryParam) => 
+    queryParam && queryParam.openVmInstance ? this.openVmInstanceContentDialog(queryParam.openVmInstance, queryParam.teamId) : null );
+
+    this.route.queryParams.subscribe((queryParam) => 
+    queryParam && queryParam.modifyVmResources ? this.openEditVmResourcesDialog(queryParam.modifyVmResources, queryParam.teamId) : null );
+
+    this.route.queryParams.subscribe((queryParam) => 
+    queryParam && queryParam.addOwners ? this.openAddOwnersDialog(queryParam.addOwners, queryParam.teamId) : null );
   }
 
   ngOnInit(): void {
@@ -73,10 +88,6 @@ export class StudentVmsComponent implements OnInit {
     return output > 0;
   }
 
-  openModifyVmResourcesDialog(vm: VmInstanceModel) {
-    const dialogRef = this.dialog.open(EditVmResourceSettingsComponent);
-
-  }
 
   turnOffVM(vm: VmInstanceModel) {
     vm.status = VmInstanceStatus.SUSPENDED;
@@ -92,15 +103,72 @@ export class StudentVmsComponent implements OnInit {
     this.courseService.deleteVmInstance(this.team.id, vm);
   }
 
-  openAddOwnersDialog(vm: VmInstanceModel, team: Team) {
-
-  }
-
   isVmRunning(vm: VmInstanceModel): boolean {
     return vm.status === VmInstanceStatus.RUNNING;
   }
 
-  openVmInstance(vm: VmInstanceModel) {
-    //TODO pino anche i dialog con i query param da bomberz
+  /**
+   * This method is used to create dialog to see the VM instance
+   * @param vmId 
+   * @param teamId 
+   */
+  openVmInstanceContentDialog(vmId: number, teamId: number) {
+    this.courseService.getContentVmInstance(teamId,vmId).pipe(first()).subscribe(c => {
+      if (!c) {
+        this.router.navigate([this.router.url.split('?')[0]]);
+        return;
+      }
+      console.log('blob text', c.text())
+      const url = URL.createObjectURL(c);
+      const dialogRef = this.dialog.open(ViewVmInstanceComponent, {
+        data: {
+          type: c.type,
+          vmInstanceUrl: url,
+        }
+      });
+      dialogRef.afterClosed().subscribe(() => {
+        URL.revokeObjectURL(url);
+        this.router.navigate([this.router.url.split('?')[0]]);
+      });
+    });
   }
+
+  /**
+   * This method is used to open the dialog to edit vm resources
+   * @param vmId 
+   * @param teamId 
+   */
+  openEditVmResourcesDialog(vmId: number, teamId: number) {
+    const dialogRef = this.dialog.open(EditVmResourceSettingsComponent, {
+      width: '60%',
+    });
+    dialogRef.afterClosed().pipe(first()).subscribe(
+      (result) => {
+        if (result) {
+            console.log('result.ok, ', result.ok);
+            console.log('result.newTeam, ', result.newTeam);
+        }
+        this.router.navigate([this.router.url.split('?')[0]]);
+      }
+    )
+  }
+
+  /**
+   * This method is used to open a dialog to add owners to a vm instance
+   * @param vmId 
+   * @param teamId 
+   */
+  openAddOwnersDialog(vmId: number, teamId: number) {
+    const dialogRef = this.dialog.open(AddOwnersVmInstanceComponent, {
+      width: '60%',
+    });
+    dialogRef.afterClosed().pipe(first()).subscribe(
+      (result) => {
+        // ALE Non so cosa vuoi farti ritornare
+        this.router.navigate([this.router.url.split('?')[0]]);
+      }
+    )
+  }
+
+
 }
