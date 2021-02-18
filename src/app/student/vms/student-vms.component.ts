@@ -102,7 +102,7 @@ export class StudentVmsComponent implements OnInit {
 
     turnOffVM(vm: VmInstanceModel) {
         vm.status = VmInstanceStatus.SUSPENDED;
-    this.courseService.changeVmInstanceStatus(this.team.id, vm);
+        this.courseService.changeVmInstanceStatus(this.team.id, vm);
   }
 
   turnOnVM(vm: VmInstanceModel) {
