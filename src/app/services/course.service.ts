@@ -1,4 +1,4 @@
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, forkJoin, Observable, of} from 'rxjs';
 import {environment} from 'src/environments/environment';
@@ -487,16 +487,23 @@ export class CourseService {
     }
 
     getVmInstanceCreator(teamId: number, vmInstanceId: number): Observable<Student> {
-        // /{courseId}/teams/{tid}/vmInstances/{vmid}/getCreator  ----> FARE LA GET
-        const prova = new Student('260005', 'alex.pagano@studenti.polito.it', 'Alessandro', 'Pagano', 'A');
-        return of(prova);
+        // {courseId}/teams/{tid}/vmInstances/{vmid}/getCreator  ----> FARE LA GET
+        // const prova = new Student('260005', 'alex.pagano@studenti.polito.it', 'Alessandro', 'Pagano', 'A');
+        // return of(prova);
+        const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${teamId}/vmInstances/${vmInstanceId}/creator`;
+        return this.httpClient.get<Student>(url)
+            .pipe(tap(() =>
+                    console.log(`getVmInstanceOwners`)
+                ),
+                catchError(this.handleError<Student>(`getVmInstanceOwners`))
+            );
     }
 
 
     getVmInstanceOwners(tId: number, vmId: number): Observable<Student[]> {
         // "/{courseId}/teams/{tid}/vmInstances/{vmid}/getOwners"
-        const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${tId}/vmInstances/${vmId}/getOwners`;
-
+        const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${tId}/vmInstances/${vmId}/owners`;
+        console.log(' vmInstanceOwners: ' + url);
         return this.httpClient.get<Student[]>(url)
             .pipe(tap(() =>
                     console.log(`getVmInstanceOwners`)
@@ -506,9 +513,13 @@ export class CourseService {
 
     }
 
-    changeVmInstanceStatus(tId: number, vm: VmInstanceModel) {
+    changeVmInstanceStatus(tId: number, vm: VmInstanceModel, newStatus: number) {
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
         const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${tId}/vmInstances/${vm.id}/command`;
-        return this.httpClient.put<VmInstanceModel>(url, vm)
+
+        return this.httpClient.post<VmInstanceModel>(url, newStatus, httpOptions)
             .pipe(tap(() =>
                     console.log(`changeVmInstanceStatus`)
                 ),
