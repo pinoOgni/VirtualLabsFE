@@ -1,0 +1,11 @@
+<div>
+<div mat-dialog-actions>
+    <button mat-button style="color: darkred;" (click)="dialogRef.close()">Close</button>
+</div>
+<br/>
+
+<div  class=".all-width" mat-dialog-content *ngIf="fileType === 'jpeg' || fileType === 'jpg' || fileType === 'png'" >
+    <img [src]="vmInstanceUrl">
+</div>
+
+</div>
