@@ -487,9 +487,17 @@ export class CourseService {
     }
 
     getVmInstanceCreator(teamId: number, vmInstanceId: number): Observable<Student> {
-        // /{courseId}/teams/{tid}/vmInstances/{vmid}/getCreator  ----> FARE LA GET
-        const prova = new Student('260005', 'alex.pagano@studenti.polito.it', 'Alessandro', 'Pagano', 'A');
-        return of(prova);
+        // {courseId}/teams/{tid}/vmInstances/{vmid}/getCreator  ----> FARE LA GET
+        // const prova = new Student('260005', 'alex.pagano@studenti.polito.it', 'Alessandro', 'Pagano', 'A');
+        // return of(prova);
+        const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${teamId}/vmInstances/${vmInstanceId}/getCreator`;
+        console.log('ASDOASOAIFSUO' + url);
+        return this.httpClient.get<Student>(url)
+            .pipe(tap(() =>
+                    console.log(`getVmInstanceOwners`)
+                ),
+                catchError(this.handleError<Student>(`getVmInstanceOwners`))
+            );
     }
 
 
