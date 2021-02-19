@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { version } from 'moment';
@@ -35,18 +35,18 @@ export class StudentAssignmentsContComponent {
 
 
   constructor(private authService: AuthService, private courseService: CourseService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog,
-    private assignmentService: AssignmentService){
+    private assignmentService: AssignmentService) {
 
+    this.route.queryParams.subscribe((queryParam) =>
+      queryParam && queryParam.studentContentVersion ? this.openViewContentHomeworkVersionDialog(queryParam.studentContentVersion, queryParam.homeworkAssignment) : null
+    );
+
+
+    this.courseService.getAssignmentHomeworks().pipe(first()).subscribe(assignmentHomeworks => {
+      this.assignmentHomeworks = assignmentHomeworks;
       this.route.queryParams.subscribe((queryParam) =>
-          queryParam && queryParam.studentContentVersion ? this.openViewContentHomeworkVersionDialog(queryParam.studentContentVersion, queryParam.homeworkAssignment) : null
-  );
-
-
-     this.courseService.getAssignmentHomeworks().pipe(first()).subscribe(assignmentHomeworks => {
-       this.assignmentHomeworks = assignmentHomeworks;
-       this.route.queryParams.subscribe((queryParam) => 
-       queryParam && queryParam.studentContentAssignment ? this.openViewContentAssignmentDialog(queryParam.studentContentAssignment) : null );
-     })
+        queryParam && queryParam.studentContentAssignment ? this.openViewContentAssignmentDialog(queryParam.studentContentAssignment) : null);
+    })
 
   }
 
@@ -55,45 +55,27 @@ export class StudentAssignmentsContComponent {
    * @param assignmentId 
    */
   refillHomeworkVersions(assignmentId: number) {
-    this.assignmentService.getHomeworkVersionsOfStudent(assignmentId,this.authService.currentUserValue.username)
-        .pipe(first()).subscribe((versions) => {
-          this.homeworkVersions = versions;
-        });
+    this.assignmentService.getHomeworkVersionsOfStudent(assignmentId, this.authService.currentUserValue.username)
+      .pipe(first()).subscribe((versions) => {
+        this.homeworkVersions = versions;
+      });
   }
 
-  getHomeworkVersions(assignmentId: number) {
-    this.assignmentService.getHomeworkVersionsOfStudent(assignmentId,this.authService.currentUserValue.username)
-        .pipe(first()).subscribe((versions) => {
-          this.homeworkVersions = versions;
-        });
-  }
-
-
-
+  /**
+   * This method is used to get the assignment template plus the homework template 
+   */
   private refillAssignmentHomeworks() {
     this.courseService.getAssignmentHomeworks().pipe(first()).subscribe(assignmentHomework => {
-      
+
       this.assignmentHomeworks = assignmentHomework;
     }
     );
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-   * This method is used to display the content of an assignment
-   * @param assignmentId
-   */
+  /**
+ * This method is used to display the content of an assignment
+ * @param assignmentId
+ */
   openViewContentAssignmentDialog(assignmentId: number) {
     const assignment = this.assignmentHomeworks.find(a => a.assignment_id == assignmentId);
     this.assignmentService.getContentAssignment(assignment.assignment_id).pipe(first()).subscribe(c => {
@@ -104,8 +86,6 @@ export class StudentAssignmentsContComponent {
       console.log('blob text', c.text())
       const url = URL.createObjectURL(c);
       const dialogRef = this.dialog.open(ViewContentAssignmentComponent, {
-        // height: '60%',
-        // width: '60%',
         data: {
           content: c.text(),
           type: c.type,
@@ -133,28 +113,42 @@ export class StudentAssignmentsContComponent {
   openViewContentHomeworkVersionDialog(versionId: number, assignmentId: number) {
     const assignment = this.assignmentHomeworks.find(a => a.assignment_id == assignmentId);
     console.log('viewContentHomeworkVersion ', assignment)
-    this.assignmentService.getContentHomeworkVersion(assignmentId,this.authService.currentUserValue.username, versionId)
-    .pipe(first()).subscribe(content => {
-      if (!content) {
-        this.router.navigate([this.router.url.split('?')[0]]);
-        return;
-      }
-      const url = URL.createObjectURL(content);
-      const dialogRef = this.dialog.open(ViewContentHomeworkVersionComponent, {
-        data: {
-          content: content.text(),
-          type: content.type,
-          homeworkVersionUrl: url,
-          homeworkVersionName: this.authService.currentUserValue.username + '_Assignment_' + assignment.name + '_VersionId_' + versionId
+    this.assignmentService.getContentHomeworkVersion(assignmentId, this.authService.currentUserValue.username, versionId)
+      .pipe(first()).subscribe(content => {
+        if (!content) {
+          this.router.navigate([this.router.url.split('?')[0]]);
+          return;
         }
+        const url = URL.createObjectURL(content);
+        const dialogRef = this.dialog.open(ViewContentHomeworkVersionComponent, {
+          data: {
+            content: content.text(),
+            type: content.type,
+            homeworkVersionUrl: url,
+            homeworkVersionName: this.authService.currentUserValue.username + '_Assignment_' + assignment.name + '_VersionId_' + versionId
+          }
+        });
+        dialogRef.afterClosed().subscribe(() => {
+          URL.revokeObjectURL(url);
+          this.router.navigate([this.router.url.split('?')[0]]);
+        });
       });
-      dialogRef.afterClosed().subscribe(() => {
-        URL.revokeObjectURL(url);
-        this.router.navigate([this.router.url.split('?')[0]]);
-      });
-    });
   }
 
-  
+
+  /**
+   * This method is used to set the homework version list
+   * @param assignmentId 
+   */
+  getHomeworkVersions(assignmentId: number) {
+    this.assignmentService.getHomeworkVersionsOfStudent(assignmentId, this.authService.currentUserValue.username)
+      .pipe(first()).subscribe((versions) => {
+        this.homeworkVersions = versions;
+      });
+  }
+
+
+
+
 }
 

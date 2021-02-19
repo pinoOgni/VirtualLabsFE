@@ -31,7 +31,7 @@ export class TeacherComponent implements OnInit, OnDestroy {
     { label: 'Assignments', path: 'assignments' },
   ];
 
-  constructor(private route: ActivatedRoute, private courseService: CourseService) { 
+  constructor(private route: ActivatedRoute, private courseService: CourseService) {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       console.log('constructor teacher component courseId ', params.courseId)
       this.courseService.setNextCourse(params.courseId);

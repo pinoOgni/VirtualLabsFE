@@ -1,11 +1,13 @@
 <div>
 <div mat-dialog-actions>
     <button mat-button style="color: darkred;" (click)="dialogRef.close()">Close</button>
+    <button mat-button style="color: darkgreen;" (click)="downloadAssignmentFile()">Download file</button>
+
 </div>
 <br/>
 
-<div  class=".all-width" mat-dialog-content *ngIf="fileType === 'jpeg' || fileType === 'jpg' || fileType === 'png'" >
-    <img [src]="vmInstanceUrl">
+<div  class=".all-width" mat-dialog-content>
+    <img src="data:image/png;base64,{{image}}">
 </div>
 
 </div>

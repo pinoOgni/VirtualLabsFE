@@ -101,7 +101,7 @@ export class TeacherStudentsContComponent implements OnDestroy, OnInit {
 
 
     /**
-     * 
+     * This method is used to register N students from a CSV
      * @param formData 
      */
     enrollStudentsToCourseWithCsv(csvFormData: FormData) { 
@@ -110,21 +110,17 @@ export class TeacherStudentsContComponent implements OnDestroy, OnInit {
     }
 
     /**
-     * 
+     * It is used to update students
     */
     private refillEnrolledStudents() {
         // control if the current course is not undefined
         if (!this.courseService.currentCourseIdSubject.value) {
-            console.log('rerefillEnrolledStudents if')
             this.enrolledStudents = [];
             return;
         }
-        console.log('rerefillEnrolledStudents no if')
         this.courseService.getEnrolledStudents(this.courseService.currentCourseIdSubject.value)
             .pipe(first()).subscribe((results) => {
-                console.log(results);
                 this.enrolledStudents = results;
-                console.log('this.enrolledStudents ', this.enrolledStudents)
             }
                 );
     }
@@ -141,19 +137,16 @@ export class TeacherStudentsContComponent implements OnDestroy, OnInit {
           }
     }
 
+    /**
+     * In the init phase of the component we need to subscribe to the searchOptions emitter, 
+     * then in this way a teacher can search students
+     */
     ngOnInit() {
-        //in the init phase of the component we need to subscribe to the searchOptions emitter,
-        //then in this way a teacher can search students
         this.searchedStudents = this.searchOptions.pipe(
             takeUntil(this.destroy$),
             switchMap((name: string) => this.studentService.searchingStudentsByName(name)),
             map(students => students.filter(s => !this.enrolledStudents.map(e => e.id).includes(s.id)))
         );
     }
-
-
-
-
-
 
 }

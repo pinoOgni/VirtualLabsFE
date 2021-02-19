@@ -135,7 +135,7 @@ export class CourseService {
 
 
   /**
-   * This method is used to retrieve all teachers of a given course
+   * This method is used to get all the teasers for a given course
    * @param course 
    */
   getTeachersOfCourse(course: Course): Observable<Teacher[]> {
@@ -155,8 +155,8 @@ export class CourseService {
 
 
   /**
-   * 
-   * @param courseId is the id of the course (APA)
+   * This method is used to get a given course using the id
+   * @param courseId
    */
   getThisCourse(courseId: number): Observable<Course> {
     const url = `${environment.base_url_course}/${courseId}`;
@@ -225,7 +225,7 @@ export class CourseService {
   }
 
   /**
-   * This method return all courses
+   * This method returns all courses
    */
   getAllCourses(): Observable<Course[]> {
     const url = `${environment.base_url_course}`;
@@ -239,7 +239,7 @@ export class CourseService {
 
 
   /**
-   * Tis method returns all students of a courseh
+   * This method returns all students of a course
    * @param courseId 
    */
   getEnrolledStudents(courseId: number = this.currentCourseIdSubject.value): Observable<Student[]> {
@@ -292,7 +292,6 @@ export class CourseService {
    */
   enrollStudentToCourse(student: Student,courseId: number): Observable<Student> {
     const url =  `${environment.base_url_course}/${courseId}/enrollOne`
-    console.log('800A enrollStudentToCourse ', student.id)
     const studentFormData = new FormData();
     studentFormData.append('studentId',student.id)
     return this.httpClient.post<Student>(url, studentFormData)
@@ -393,7 +392,7 @@ export class CourseService {
   }
 
   /**
-   * This method is used to retrieve all assignments of a course
+   * This method is used to get all the assignments of a course
    * @param courseId 
    */
   getAssignmentsOfCourse(courseId: number): Observable<Assignment[]> {
@@ -408,6 +407,11 @@ export class CourseService {
       );
   }
     
+  /**
+   * This method is used to register N students using a CSV
+   * @param csvFormData 
+   * @param courseId 
+   */
   enrollStudentsToCourseWithCSV(csvFormData: FormData, courseId: number = this.currentCourseIdSubject.value) {
     const url = `${environment.base_url_course}/${courseId}/enrollMany`
     return this.httpClient.post<boolean[]>(url,csvFormData).pipe(
@@ -545,10 +549,10 @@ export class CourseService {
      * @param vmId 
      * @param courseId 
      */
-  getContentVmInstance(teamId: number, vmId: number, courseId: number = this.currentCourseIdSubject.value): Observable<Blob> {
+  getContentVmInstance(teamId: number, vmId: number, courseId: number = this.currentCourseIdSubject.value): Observable<string | ArrayBuffer> {
     const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances/${vmId}/show`
     return this.httpClient.get(url, {
-      responseType: 'blob', //Blob object containing the binary data. document:
+      responseType: 'arraybuffer', //Blob object containing the binary data. document:
     }).pipe(
       tap(() => console.log(`getContentVmInstance ok ${vmId}`)),
       catchError(this.handleError<any>(`getContentVmInstance error ${vmId}`))

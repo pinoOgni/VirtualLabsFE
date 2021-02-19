@@ -30,6 +30,11 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
   */
 
+  /**
+   * This method (as the name implies) is placed between the client and the server, intercepting requests.
+   * @param request 
+   * @param next 
+   */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     console.log('interceptor error');
     return next.handle(request).pipe(catchError(err => {

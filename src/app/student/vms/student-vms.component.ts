@@ -160,16 +160,13 @@ export class StudentVmsComponent implements OnInit {
         this.router.navigate([this.router.url.split('?')[0]]);
         return;
       }
-      console.log('blob text', c.text())
-      const url = URL.createObjectURL(c);
+      // console.log('blob size ', c.size)
       const dialogRef = this.dialog.open(ViewVmInstanceComponent, {
         data: {
-          type: c.type,
-          vmInstanceUrl: url,
+          contentArrayBuffer: c,
         }
       });
       dialogRef.afterClosed().subscribe(() => {
-        URL.revokeObjectURL(url);
         this.router.navigate([this.router.url.split('?')[0]]);
       });
     });
