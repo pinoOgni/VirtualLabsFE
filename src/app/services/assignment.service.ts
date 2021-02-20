@@ -91,8 +91,8 @@ export class AssignmentService {
 
 
   /**
-   * This method is used to get the content of a particular version 
-   * of a homework of an assignment of a course of a student (it's a tongue twister?)
+   * This method is used to fetch the content of a particular homerowk version 
+   * of a given course assignment for the logged in student (it's a tongue twister?)
    * @param assignmetId 
    * @param studentId 
    * @param versionId 
@@ -111,7 +111,7 @@ export class AssignmentService {
 
 
 /**
- * This method is used to upload a new version for a given of assignment
+ * This method is used to upload a new version for a given assignment
  * @param homeworkVersion 
  * @param assignmentId 
  * @param studentId 

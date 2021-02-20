@@ -6,6 +6,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {EditVmResourceSettingsComponent} from '../../modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
 import {Student} from '../../models/student.model';
 import {Observable} from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -22,21 +23,26 @@ export class VmsComponent implements OnInit {
   runningInstances: number;
 
 
-  constructor(public dialog: MatDialog, private courseService: CourseService) {
+  constructor(private route: ActivatedRoute, private router: Router, public dialog: MatDialog, private courseService: CourseService) {
     this.usedVcpu = 0;
     this.usedDisk = 0;
     this.usedMemory = 0;
     this.runningInstances = 0;
+
+
+    this.route.queryParams.subscribe((queryParam) =>
+    queryParam && queryParam.modifyVmResourcesTeacher ? this.openEditVmResourcesDialog() : null );
+
   }
 
   ngOnInit(): void {
     this.calculateUsedResources();
   }
 
-  openEditResourcesDialog(team: Team): void {
+  openEditVmResourcesDialog(): void {
     const dialogRef = this.dialog.open(EditVmResourceSettingsComponent, {
       data: {
-        t: team
+        t: this.team
       }
     });
     dialogRef.afterClosed().subscribe(

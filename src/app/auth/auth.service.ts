@@ -76,11 +76,10 @@ export class AuthService {
 
   /**
    * The logout() method removes the current user object 
-   * from local storage and publishes null to the currentUserSubject 
+   * from local storage and put null to the currentUserSubject 
    * to notify all subscribers that the user has logged out.
    */
   logout() {
-    // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }
@@ -99,7 +98,7 @@ export class AuthService {
     return this.httpClient.post<User>(environment.login_url, model, environment.http_options)
       .pipe(
         map((authResult) => {
-          //jwt response, I'm logged; jwt is a json with a key 'token' asfajscbiasoc.acnasicansocas.coacoasbnsoc
+          // jwt response, I'm logged; jwt is a json with a key 'token' asfajscbiasoc.acnasicansocas.coacoasbnsoc
           const user = new User(
             JSON.parse(atob(authResult.token.split('.')[1])).sub, //user
             authResult.token, //token sano
@@ -121,6 +120,10 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
+  /**
+   * This method is used to register a user, post to the server and send a FormData
+   * @param registerForm 
+   */
   register(registerForm: FormData) {
     return this.httpClient.post(environment.register_url, registerForm).pipe(
       map((result) => {
@@ -129,6 +132,7 @@ export class AuthService {
       })
     );
   }
+
   /**
    * This function is used to return the currentUser ad an observable
    * using the currentUserSubject which is a BehaviorSubject 
@@ -139,10 +143,16 @@ export class AuthService {
     return this.currentUserSubject.asObservable();
   }
 
+  /**
+   * This method is used to check if a user is logged in
+   */
   public isUserLogged(): boolean {
     return moment().isBefore(this.getExpirationToken());
   }
 
+  /**
+   * This method is used to check if the user's token is still valid
+   */
   getExpirationToken() {
     const expiration = JSON.parse(localStorage.getItem('currentUser')).accessToken;
     const expiresAt = JSON.parse(expiration);

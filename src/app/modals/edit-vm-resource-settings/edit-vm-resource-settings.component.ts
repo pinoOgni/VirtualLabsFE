@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Team} from '../../models/team.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { VmInstanceModel } from 'src/app/models/vm-instance-model';
 
 @Component({
   selector: 'app-edit-vm-resource-settings',
@@ -11,11 +12,12 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 export class EditVmResourceSettingsComponent implements OnInit {
   editResourcesForm: FormGroup;
   team: Team;
+  vmInstance: VmInstanceModel;
 
   constructor(
       @Inject(MAT_DIALOG_DATA)
       public data: {
-        t: Team
+        vmInstance: VmInstanceModel
       },
       private dialogRef: MatDialogRef<EditVmResourceSettingsComponent>,
       private formBuilder: FormBuilder
@@ -26,7 +28,7 @@ export class EditVmResourceSettingsComponent implements OnInit {
       maxRam: ['', Validators.required],
       maxTotalInstances: ['', Validators.required]
     });
-    this.team = data.t;
+    this.vmInstance = data.vmInstance;
 
     this.editResourcesForm.controls.maxVCpu.setValue(this.team.vcpuMAX);
     this.editResourcesForm.controls.maxDiskSpace.setValue(this.team.diskMAX);
