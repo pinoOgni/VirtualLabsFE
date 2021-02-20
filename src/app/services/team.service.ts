@@ -131,7 +131,6 @@ getMembersOfProposalNotification(proposalId: number, courseId: number = this.cou
  */
 getCreatorOfTeam(proposalId: number, studentId: string = this.authService.currentUserValue.username, courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Student> {
   const url = `${environment.base_url_course}/${courseId}/proposalNotifications/${proposalId}/creator`
-  console.log(url)
  return this.httpClient.get<Student>(url)
      .pipe(
        tap((homeworks) => console.log(`getCreatorOfTeam ok ${proposalId}`)),

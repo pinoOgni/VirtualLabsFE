@@ -6,7 +6,7 @@
         </mat-card-title>
 
         <mat-card-subtitle>
-            <div><b>ID:</b>  {{team.id}}</div>
+            <div><b>ID:</b> {{team.id}}</div>
             <div><b>Maximum number of CPUs:</b> {{team.vcpuMAX}} </div>
             <div><b>Maximum disk space: </b>{{team.diskMAX}} </div>
             <div><b>Maximum memory:</b> {{team.memoryMAX}} </div>
@@ -16,8 +16,9 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-actions>
-        <button (click)="openEditResourcesDialog(team)" color="primary" mat-raised-button>Edit Team Maximum Resources
-            Settings
+        <button [queryParams]="{ modifyVmResourcesTeacher: team.id }" [routerLink]="" color="primary"
+            mat-raised-button>
+            Edit Team Maximum Resources Settings
         </button>
 
     </mat-card-actions>
@@ -51,26 +52,29 @@
         <mat-grid-list class="border" cols="2" rowHeight="2:1">
             <mat-grid-tile *ngFor="let vm of vmsInstances">
 
-                <div><b><p *ngIf="vm.status === 'RUNNING'; else elseblock" matBadge="‎" matBadgeColor="primary"><br></p>
-                    <ng-template #elseblock><p matBadge="‎" matBadgeColor="warn"></p><br></ng-template>
+                <div><b>
+                        <p *ngIf="vm.status === 'RUNNING'; else elseblock" matBadge="‎" matBadgeColor="primary"><br></p>
+                        <ng-template #elseblock>
+                            <p matBadge="‎" matBadgeColor="warn"></p><br>
+                        </ng-template>
 
 
-                    Virtual Machine name: {{vm.name}} <br>
-                    Virtual Machine ID: {{vm.id}} <br>
-                    Status: {{vm.status}}<br>
-                    vCPUs: {{vm.vcpu}}<br>
-                    Disk Size: {{vm.memory}} MB<br>
-                    Memory Size: {{vm.disk}} MB<br>
-                    <div *ngIf="(getVmCreator(this.team.id, vm.id) | async) as student">
-                        Created by: {{student.firstName}} {{student.lastName}}  {{student.id}}
+                        Virtual Machine name: {{vm.name}} <br>
+                        Virtual Machine ID: {{vm.id}} <br>
+                        Status: {{vm.status}}<br>
+                        vCPUs: {{vm.vcpu}}<br>
+                        Disk Size: {{vm.memory}} MB<br>
+                        Memory Size: {{vm.disk}} MB<br>
+                        <div *ngIf="(getVmCreator(this.team.id, vm.id) | async) as student">
+                            Created by: {{student.firstName}} {{student.lastName}} {{student.id}}
 
-                    </div>
-                    <p *ngIf="vm.status === 'RUNNING'">
-                        <!-- todo che devo fare? --->
-                        <button color="primary" mat-raised-button> Open VM Instance</button>
-                        <br>
-                    </p>
-                </b>
+                        </div>
+                        <p *ngIf="vm.status === 'RUNNING'">
+                            <!-- todo che devo fare? --->
+                            <button color="primary" mat-raised-button> Open VM Instance</button>
+                            <br>
+                        </p>
+                    </b>
                 </div>
 
 

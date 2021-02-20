@@ -17,11 +17,8 @@ export class ViewContentHomeworkVersionComponent {
 
   constructor(public dialogRef: MatDialogRef<ViewContentHomeworkVersionComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private sanitizer: DomSanitizer) {
     this.fileType = data.type.split('/')[1]
-    console.log(' c.type ', data.type)
-    console.log(' fileType ', this.fileType)
     if (this.fileType === 'txt') {
       data.content.then(text => {
-        console.log(text);
         this.content = text
       })
     } else if (this.fileType === 'pdf') {

@@ -61,7 +61,6 @@ export class CreateAssignmentComponent {
     const expiryDate = new Date(this.selectedDate);
     expiryDate.setDate(expiryDate.getDate() + 1);
     assignmentFormData.append('expiryDate',expiryDate.getTime().toString(10));
-    console.log('create assignment, ', expiryDate.getTime().toString(10))
     const fileInput: InputFile = this.assignmentForm.get('content').value;
     assignmentFormData.append('content',fileInput.files[0]);
 

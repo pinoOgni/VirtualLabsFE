@@ -90,7 +90,6 @@ export class CourseService {
    */
   getHomeworkOfAssignmentOfStudent(assignmentId: number, studentId: string, courseId: number = this.currentCourseIdSubject.value): Observable<Homework> {
     const url = `${environment.base_url_course}/${courseId}/assignment/${assignmentId}/homework/${studentId}`
-    console.log(url)
    return this.httpClient.get<Homework>(url)
        .pipe(
          tap((homeworks) => console.log(`getHomeworksOfAssignments ok ${assignmentId}`)),
@@ -398,7 +397,6 @@ export class CourseService {
   getAssignmentsOfCourse(courseId: number): Observable<Assignment[]> {
     //    return of(this.exampleAssignments);
     const url = `${environment.base_url_course}/${courseId}/assignments`
-    console.log(url)
     return this.httpClient.get<Assignment[]>(url)
       .pipe( tap(() =>
           console.log(`getAssignmentsOfCourse ok ${courseId}`)
@@ -549,15 +547,15 @@ export class CourseService {
      * @param vmId 
      * @param courseId 
      */
-  getContentVmInstance(teamId: number, vmId: number, courseId: number = this.currentCourseIdSubject.value): Observable<string | ArrayBuffer> {
+  getContentVmInstance(teamId: number, vmId: number, courseId: number = this.currentCourseIdSubject.value): Observable<Blob> {
     const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances/${vmId}/show`
     return this.httpClient.get(url, {
-      responseType: 'arraybuffer', //Blob object containing the binary data. document:
+      responseType: 'blob', //Blob object containing the binary data. document:
     }).pipe(
       tap(() => console.log(`getContentVmInstance ok ${vmId}`)),
       catchError(this.handleError<any>(`getContentVmInstance error ${vmId}`))
     );
-  }
+  } 
 }   
 
 

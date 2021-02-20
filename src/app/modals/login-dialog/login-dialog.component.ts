@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-dialog',
@@ -41,14 +42,12 @@ export class LoginDialogComponent implements OnInit {
       //splitto la mail e mando solo lo username
       this.model.username = this.loginForm.controls.email.value.split('@')[0];
       this.model.password = this.loginForm.controls.password.value;
-      console.log('submit login this.model.username ', this.model.username)
-      console.log('submit login this.loginForm.controls.username ', this.loginForm.controls.email.value)
       this.authService.login(this.model).pipe(first()).subscribe(response => {
         if (response) {
           this.close(true);
         }
       }, error => {
-        this.serverErrors = error.message;
+        this.serverErrors = (error as HttpErrorResponse).error.message;
       });
     }
   }

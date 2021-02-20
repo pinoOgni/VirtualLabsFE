@@ -180,6 +180,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
 
 
 
+  errors: string;
 
   constructor(private authService: AuthService, public spinnerService: SpinnerService) { }
 
@@ -263,7 +264,8 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
   createTeam() {
     console.log('createTeam')
     if (this.selectedStudents.length + 1 < this.currentCourse.min) {
-      console.log('error number of student for the team is low')
+      console.log('error number of student for the team is low');
+      this.errors = 'The number of students must respect the minimum and maximum of this course';
       return;
     }
     this.selectedStudents.push(this.currentStudent);

@@ -38,7 +38,7 @@ export class StudentVmsComponent implements OnInit {
     queryParam && queryParam.openVmInstance ? this.openVmInstanceContentDialog(queryParam.openVmInstance, queryParam.teamId) : null );
 
     this.route.queryParams.subscribe((queryParam) =>
-    queryParam && queryParam.modifyVmResources ? this.openEditVmResourcesDialog(queryParam.modifyVmResources, queryParam.teamId) : null );
+    queryParam && queryParam.modifyVmResourcesStudent ? this.openEditVmResourcesDialog(queryParam.modifyVmResourcesStudent) : null );
 
     this.route.queryParams.subscribe((queryParam) =>
     queryParam && queryParam.addOwners ? this.openAddOwnersDialog(queryParam.addOwners, queryParam.teamId) : null );
@@ -119,6 +119,7 @@ export class StudentVmsComponent implements OnInit {
 
     }
 
+    // delete? ALE
     openModifyVmResourcesDialog(vm: VmInstanceModel) {
         const dialogRef = this.dialog.open(EditVmResourceSettingsComponent);
 
@@ -161,9 +162,10 @@ export class StudentVmsComponent implements OnInit {
         return;
       }
       // console.log('blob size ', c.size)
+      const url = URL.createObjectURL(c);
       const dialogRef = this.dialog.open(ViewVmInstanceComponent, {
         data: {
-          contentArrayBuffer: c,
+          imageUrl: url,
         }
       });
       dialogRef.afterClosed().subscribe(() => {
@@ -177,9 +179,12 @@ export class StudentVmsComponent implements OnInit {
    * @param vmId
    * @param teamId
    */
-  openEditVmResourcesDialog(vmId: number, teamId: number) {
+  openEditVmResourcesDialog(vmId: number) {
+    const vmInstance = this.vmInstances.find(vm =>  vm.id == vmId);
     const dialogRef = this.dialog.open(EditVmResourceSettingsComponent, {
-      width: '60%',
+      data: {
+        vmInstance: vmInstance,
+      }
     });
     dialogRef.afterClosed().pipe(first()).subscribe(
       (result) => {

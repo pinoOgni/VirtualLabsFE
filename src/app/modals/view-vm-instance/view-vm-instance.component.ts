@@ -10,10 +10,13 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 export class ViewVmInstanceComponent  {
 
   image: string | ArrayBuffer;
-  imageUrl: string = "/API/courses/11/teams/34/vmInstances/37/show"
+  imageUrl: SafeUrl;
+
+
   constructor(public dialogRef: MatDialogRef<ViewVmInstanceComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private sanitizer: DomSanitizer) { 
-  
-    this.image = data.contentArrayBuffer;
+    
+    this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(data.imageUrl);
+    
 }
 
 

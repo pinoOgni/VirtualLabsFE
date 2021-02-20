@@ -61,7 +61,6 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
   }
 
   @Input() set setHomeworksInfoStudents(homeworksInfoStudents: HomeworkInfoStudent[]) {
-    console.log('set homeworksInfoStudents ', homeworksInfoStudents)
     this.homeworksInfoStudentsDataSource.data = homeworksInfoStudents;
   }
 
@@ -99,7 +98,6 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
             const assignmentId: number = queryParams.homeworkAssignment;
             const studentId: string = queryParams.homeworkStudent;
             const versionId: number = queryParams.teacherContentVersion;
-            console.log('teacher-assignment.components ', assignmentId, ', ', studentId, ', ', versionId)
             this.viewContentHomeworkVersionEvent.emit({ assignmentId, studentId, versionId });
           }
         }
@@ -205,7 +203,6 @@ export class TeacherAssignmentsComponent implements AfterViewInit {
    * @param studentId 
    */
   openScoreDialog(assignmentId: number, studentId: string) {
-    console.log('open score dialog assignment id ', assignmentId)
     const dialogRef = this.dialog.open(ScoreDialogComponent, {
       data: {
         assignmentId: assignmentId,

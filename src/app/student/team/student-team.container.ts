@@ -168,10 +168,8 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
     let proposalInfo
     console.log('openViewMembersTeamDialog ', typeProposal)
     if (typeProposal === 'received') {
-      console.log('received')
       proposalInfo = this.proposalsInfoReceived.find(p => p.id == proposalInfoId);
     } else if (typeProposal === 'sent') {
-      console.log('sent')
       proposalInfo = this.proposalsInfoSent.find(p => p.id == proposalInfoId);
     }
     if (this.dialog.openDialogs.length > 0) {
@@ -190,28 +188,12 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
       })
   }
 
-
-  /**
-   * metodo acceptedTeamProposal che chiama teamService.acceptTeamProposal
-   * metodo rejectedTeamProposal che chiama teamService.rejectTeamProposal
-   * metodo deletedTeamProposal che chiama teamService.deleteTeamProposal
-   * createTeam che chiama teamService.createTeam
-   */
-
   /**
    * retrieve proposals fot his course (courseAcronym)
    * and for this student (using the authentication service )
    */
-  /*
-    getProposals() {
-      console.log('getProposals student-team-container')
-      this.studentService.getProposalsInCourse()
-        .pipe(first()).subscribe((proposals) => (this.proposals = proposals));
-    }
-    */
 
   getProposalsReceived() {
-    console.log('getProposals received student-team-container')
     this.studentService.getProposalsReceivedInCourse().pipe(
       first(),
       flatMap(x => x),
@@ -241,7 +223,6 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
 
 
   getProposalsSent() {
-    console.log('getProposals sent student-team-container')
     this.studentService.getProposalsSentInCourse().pipe(
       first(),
       flatMap(x => x),
@@ -270,21 +251,16 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
   }
 
 
-
-
-
-
+  /**
+   * This method is used to create a proposal of team
+   * @param proposalOfTeam 
+   */
   createTeam(proposalOfTeam: ProposalOfTeam): void {
     this.teamService
       .createTeam(this.courseService.currentCourseIdSubject.value, proposalOfTeam)
       .pipe(first()).subscribe(proposal => {
         if (proposal && proposalOfTeam.selectedStudentsId.length === 1) {
-          //TODO 
-          //team.members = [];
-          //team.members.push(this.enrolledAvailableStudents.find(s => s.id === JSON.parse(localStorage.getItem('currentUser')).id));
-
-          // NO ho una proposalNotification
-          // this.teamService.currentTeamSubject.next(team);
+            // TODO?
         }
         this.getProposalsSent();
         this.router.navigate([this.router.url.split('?')[0]]);
