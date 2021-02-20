@@ -14,6 +14,7 @@ import {TeamStatus} from '../models/team-status';
 import {AssignmentHomeworkStudent} from '../models/assignment-homework-student.model';
 import {Homework} from '../models/homework.model';
 import {AuthService} from '../auth/auth.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
     providedIn: 'root'
@@ -32,10 +33,10 @@ export class CourseService {
   public course: BehaviorSubject<Course>;
   public currentCourseIdSubject: BehaviorSubject<number>;
 
-  constructor(private authService: AuthService, private httpClient: HttpClient) {
-    this.course = new BehaviorSubject<Course>(null);
-    this.currentCourseIdSubject = new BehaviorSubject<number>(null);
-  }
+    constructor(private authService: AuthService, private httpClient: HttpClient, private snackBar: MatSnackBar) {
+        this.course = new BehaviorSubject<Course>(null);
+        this.currentCourseIdSubject = new BehaviorSubject<number>(null);
+    }
 
   /**
    * metodo enrollStudentsToCourseWithCSV per aggiungere degli studenti al corso dato un ID con csv. Prende un FORM e un courseId.
@@ -544,18 +545,63 @@ export class CourseService {
      * This method is used to display the content of a vm instance
      * It can be running or stopped (2 different images)
      * @param teamId 
-     * @param vmId 
-     * @param courseId 
+     * @param vmId
+     * @param courseId
      */
-  getContentVmInstance(teamId: number, vmId: number, courseId: number = this.currentCourseIdSubject.value): Observable<Blob> {
-    const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances/${vmId}/show`
-    return this.httpClient.get(url, {
-      responseType: 'blob', //Blob object containing the binary data. document:
-    }).pipe(
-      tap(() => console.log(`getContentVmInstance ok ${vmId}`)),
-      catchError(this.handleError<any>(`getContentVmInstance error ${vmId}`))
-    );
-  } 
-}   
+    getContentVmInstance(teamId: number, vmId: number, courseId: number = this.currentCourseIdSubject.value): Observable<Blob> {
+        const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances/${vmId}/show`;
+        return this.httpClient.get(url, {
+            responseType: 'blob', //Blob object containing the binary data. document:
+        }).pipe(
+            tap(() => console.log(`getContentVmInstance ok ${vmId}`)),
+            catchError(this.handleError<any>(`getContentVmInstance error ${vmId}`))
+        );
+    }
+
+    changeVmInstanceResources(teamId: number, newVmInstance: VmInstanceModel, courseId: number = this.currentCourseIdSubject.value) {
+        const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances/${newVmInstance.id}/`;
+        return this.httpClient.put(url, newVmInstance).pipe(
+            tap(() => console.log(`changeVMInstanceResources `)),
+            catchError((operation = 'operation') => {
+                this.snackBar.open('Not Enough Resources', '', {
+                    duration: 2000,
+                });
+                // alert();
+                return of([]);
+            })
+        );
+    }
+
+    getStudentsOfTeam(teamId: number, courseId: number = this.currentCourseIdSubject.value): Observable<Student[]> {
+        const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/students`;
+        return this.httpClient.get(url).pipe(
+            tap(() => console.log(`getStudentsOfTeam`)),
+            catchError(this.handleError<any>(`getStudentsOfTeam`))
+        );
+    }
+
+    addOwnersToVmInstance(teamId: number, vmId: number, output: string[], courseId: number = this.currentCourseIdSubject.value) {
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
+
+        let url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances/${vmId}/owners?studentIds=`;
+        output.forEach(
+            o => {
+                url = `${url}${o},`;
+                console.log(' sono o ' + o);
+            }
+        );
+        console.log('sono url' + url);
+
+        return this.httpClient.post<boolean>(url, httpOptions)
+            .pipe(
+                tap(() => console.log('createAssignment ok')),
+                catchError(this.handleError<Assignment>(`createAssignment error`)
+                )
+            );
+
+    }
+}
 
 

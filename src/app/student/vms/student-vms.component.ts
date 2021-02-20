@@ -4,12 +4,13 @@ import {Team} from '../../models/team.model';
 import {Student} from '../../models/student.model';
 import {CourseService} from '../../services/course.service';
 import {AuthService} from '../../auth/auth.service';
-import {first, flatMap, map, toArray} from 'rxjs/operators';
+import {filter, first, flatMap, map, toArray} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {EditVmResourceSettingsComponent} from '../../modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ViewVmInstanceComponent} from 'src/app/modals/view-vm-instance/view-vm-instance.component';
 import {AddOwnersVmInstanceComponent} from 'src/app/modals/add-owners-vm-instance/add-owners-vm-instance.component';
+import {EditStudentVmInstanceDialogComponent} from '../../modals/edit-student-vm-instance-dialog/edit-student-vm-instance-dialog.component';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class StudentVmsComponent implements OnInit {
     studentUsername: string;
     @Input()
     team: Team;
+
     vmInstances: VmInstanceModel[];
     currentUsedVcpus: number;
     currentUsedDiskSpace: number;
@@ -56,9 +58,8 @@ export class StudentVmsComponent implements OnInit {
         this.currentUsedRam = 0;
         this.currentRunningInstance = 0;
         this.courseService.getVmInstancesOfTeam(this.team.id).subscribe(
-            instances => {
-
-                this.vmInstances = instances;
+            vms => {
+                this.vmInstances = vms;
                 this.vmInstances.forEach(
                     vm => {
                         if (vm.status === VmInstanceStatus.RUNNING) {
@@ -75,26 +76,51 @@ export class StudentVmsComponent implements OnInit {
                         ).subscribe(
                             result => {
                                 this.ownerIds.set(vm.id, result);
-
                             }
                         );
                         this.courseService.getVmInstanceCreator(this.team.id, vm.id).subscribe(
                             creator => {
-                                console.log(' arombolo sono creator: ' + creator);
                                 this.vmInstancesCreators.set(vm.id, creator);
                             });
                         //    this.vmInstancesCreators.set(vm.id, this.courseService.getVmInstanceCreator(this.team.id, vm.id) );
                     }
                 );
             }
-        );
+        )
 
 
     }
 
     getVmInstances(): void {
         this.courseService.getVmInstancesOfTeam(this.team.id).subscribe(
-            result => this.vmInstances = result
+            result => {
+                this.vmInstances = result;
+                this.vmInstances.forEach(
+                    vm => {
+                        if (vm.status === VmInstanceStatus.RUNNING) {
+                            this.currentRunningInstance++;
+                        }
+                        this.currentUsedDiskSpace += vm.disk;
+                        this.currentUsedRam += vm.memory;
+                        this.currentUsedVcpus += vm.vcpu;
+                        this.courseService.getVmInstanceOwners(this.team.id, vm.id).pipe(
+                            first(),
+                            flatMap(x => x),
+                            map(student => student.id),
+                            toArray()
+                        ).subscribe(
+                            result1 => {
+                                this.ownerIds.set(vm.id, result1);
+                            }
+                        );
+                        this.courseService.getVmInstanceCreator(this.team.id, vm.id).subscribe(
+                            creator => {
+                                this.vmInstancesCreators.set(vm.id, creator);
+                            });
+                        //    this.vmInstancesCreators.set(vm.id, this.courseService.getVmInstanceCreator(this.team.id, vm.id) );
+                    }
+                );
+            }
         );
     }
 
@@ -107,13 +133,17 @@ export class StudentVmsComponent implements OnInit {
     isOwner(tId: number, vmId: number): boolean {
         let out = false;
 
+
         if (this.ownerIds !== undefined && this.ownerIds !== null) {
-            this.ownerIds.get(vmId).forEach(
-                id => {
-                    if (this.studentUsername === id) {
-                        out = true;
-                    }
-                });
+            const ids = this.ownerIds.get(Number(vmId));
+            if (ids !== undefined) {
+                ids.forEach(
+                    id => {
+                        if (this.studentUsername === id) {
+                            out = true;
+                        }
+                    });
+            }
         }
 
         return out;
@@ -182,18 +212,23 @@ export class StudentVmsComponent implements OnInit {
    * @param teamId
    */
   openEditVmResourcesDialog(vmId: number) {
-    const vmInstance = this.vmInstances.find(vm =>  vm.id == vmId);
-    const dialogRef = this.dialog.open(EditVmResourceSettingsComponent, {
-      data: {
-        vmInstance: vmInstance,
-      }
-    });
-    dialogRef.afterClosed().pipe(first()).subscribe(
-      (result) => {
-        if (result) {
-            console.log('result.ok, ', result.ok);
-            console.log('result.newTeam, ', result.newTeam);
-        }
+      const vmInstance = this.vmInstances.find(vm => vm.id == vmId);
+      console.log('openEditVmResourcesDialog: ' + vmInstance.name);
+      const dialogRef = this.dialog.open(EditStudentVmInstanceDialogComponent, {
+          data: {
+              vmInstanceP: vmInstance,
+          }
+      });
+      dialogRef.afterClosed().pipe(first()).subscribe(
+          (result) => {
+              if (result) {
+                  console.log('result.ok, ', result.ok);
+                  console.log('result.newTeam, ', result.newVmInstance);
+                  const newInstance = result.newVmInstance;
+                  this.courseService.changeVmInstanceResources(this.team.id, result.newVmInstance).subscribe(
+                      vm => this.getVmInstances()
+                  );
+              }
         this.router.navigate([this.router.url.split('?')[0]]);
       }
     )
@@ -205,15 +240,46 @@ export class StudentVmsComponent implements OnInit {
    * @param teamId
    */
   openAddOwnersDialog(vmId: number, teamId: number) {
-    const dialogRef = this.dialog.open(AddOwnersVmInstanceComponent, {
-      width: '60%',
-    });
-    dialogRef.afterClosed().pipe(first()).subscribe(
-      (result) => {
-        // ALE Non so cosa vuoi farti ritornare
-        this.router.navigate([this.router.url.split('?')[0]]);
-      }
-    )
+      let toBeShowed: Student[];
+      this.courseService.getStudentsOfTeam(this.team.id).pipe(
+          flatMap(x => x),
+          //  map( student => student.id),
+          filter(student => this.ownerIds.get(Number(vmId)).indexOf(student.id) < 0),
+          toArray())
+          .subscribe(
+              x => {
+                  toBeShowed = x;
+                  const dialogRef = this.dialog.open(AddOwnersVmInstanceComponent, {
+                      data: {
+                          students: toBeShowed
+                      }
+                  });
+                  dialogRef.afterClosed().subscribe(
+                      result => {
+                          // ALE Non so cosa vuoi farti ritornare
+                          if (result === undefined) {
+                              return;
+                          }
+                          if (result.ok) {
+                              const output = result.students;
+                              this.courseService.addOwnersToVmInstance(teamId, vmId, output).subscribe(
+                                  y => {
+                                      this.getVmInstances();
+
+
+                                  }
+                              );
+                          }
+                          console.log('cirirombolo');
+                          toBeShowed = [];
+                          this.router.navigate([this.router.url.split('?')[0]]);
+                      }
+                  );
+
+              }
+          );
+
+
   }
 
 

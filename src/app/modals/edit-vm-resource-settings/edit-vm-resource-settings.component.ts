@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Team} from '../../models/team.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { VmInstanceModel } from 'src/app/models/vm-instance-model';
+import {VmInstanceModel} from 'src/app/models/vm-instance-model';
 
 @Component({
   selector: 'app-edit-vm-resource-settings',
@@ -17,7 +17,7 @@ export class EditVmResourceSettingsComponent implements OnInit {
   constructor(
       @Inject(MAT_DIALOG_DATA)
       public data: {
-        vmInstance: VmInstanceModel
+        vmInstanceP: VmInstanceModel
       },
       private dialogRef: MatDialogRef<EditVmResourceSettingsComponent>,
       private formBuilder: FormBuilder
@@ -26,14 +26,12 @@ export class EditVmResourceSettingsComponent implements OnInit {
       maxVCpu: ['', Validators.required],
       maxDiskSpace: ['', Validators.required],
       maxRam: ['', Validators.required],
-      maxTotalInstances: ['', Validators.required]
     });
-    this.vmInstance = data.vmInstance;
+    this.vmInstance = data.vmInstanceP;
 
-    this.editResourcesForm.controls.maxVCpu.setValue(this.team.vcpuMAX);
-    this.editResourcesForm.controls.maxDiskSpace.setValue(this.team.diskMAX);
-    this.editResourcesForm.controls.maxRam.setValue(this.team.memoryMAX);
-    this.editResourcesForm.controls.maxTotalInstances.setValue(this.team.maxVmInstance);
+    this.editResourcesForm.controls.maxVCpu.setValue(this.vmInstance.vcpu);
+    this.editResourcesForm.controls.maxDiskSpace.setValue(this.vmInstance.disk);
+    this.editResourcesForm.controls.maxRam.setValue(this.vmInstance.memory);
   }
 
   ngOnInit(): void {
@@ -41,14 +39,14 @@ export class EditVmResourceSettingsComponent implements OnInit {
 
   submit() {
     if (this.editResourcesForm.valid) {
-      this.team.vcpu = this.editResourcesForm.controls.maxVCpu.value;
-      this.team.disk = this.editResourcesForm.controls.maxDiskSpace.value;
-      this.team.memory = this.editResourcesForm.controls.maxRam.value;
+      this.vmInstance.vcpu = this.editResourcesForm.controls.maxVCpu.value;
+      this.vmInstance.disk = this.editResourcesForm.controls.maxDiskSpace.value;
+      this.vmInstance.memory = this.editResourcesForm.controls.maxRam.value;
       // this.team.maxVmInstance = this.editResourcesForm.controls.maxTotalInstances.value;
       this.dialogRef.close(
           {
             ok: true,
-            newTeam: this.team,
+            newVmInstance: this.vmInstance,
           }
       );
     }

@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Edit VM Resources:</h2>
 <mat-dialog-content class="md-dialog-container">
-    <div>Team Name: {{team.name}}</div>
+    <div>VM Instance Name: {{vmInstance.name}}</div>
     <form (ngSubmit)="submit()" [formGroup]="editResourcesForm">
         <h3 mat-dialog-title>Current VM Resources:</h3>
         <mat-label for="maxVCpu">Maximum vCPUs:</mat-label>
