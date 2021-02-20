@@ -38,7 +38,7 @@ export class StudentVmsComponent implements OnInit {
     queryParam && queryParam.openVmInstance ? this.openVmInstanceContentDialog(queryParam.openVmInstance, queryParam.teamId) : null );
 
     this.route.queryParams.subscribe((queryParam) =>
-    queryParam && queryParam.modifyVmResources ? this.openEditVmResourcesDialog(queryParam.modifyVmResources, queryParam.teamId) : null );
+    queryParam && queryParam.modifyVmResourcesStudent ? this.openEditVmResourcesDialog(queryParam.modifyVmResourcesStudent) : null );
 
     this.route.queryParams.subscribe((queryParam) =>
     queryParam && queryParam.addOwners ? this.openAddOwnersDialog(queryParam.addOwners, queryParam.teamId) : null );
@@ -121,6 +121,7 @@ export class StudentVmsComponent implements OnInit {
 
     }
 
+    // delete? ALE
     openModifyVmResourcesDialog(vm: VmInstanceModel) {
         const dialogRef = this.dialog.open(EditVmResourceSettingsComponent);
 
@@ -138,7 +139,6 @@ export class StudentVmsComponent implements OnInit {
 
   turnOnVM(vm: VmInstanceModel) {
       //  vm.status = VmInstanceStatus.RUNNING;
-      console.log(' sono vm' + vm.name);
       this.courseService.changeVmInstanceStatus(this.team.id, vm, 1).subscribe(
           r => this.getVmInstances()
       );
@@ -163,38 +163,35 @@ export class StudentVmsComponent implements OnInit {
         this.router.navigate([this.router.url.split('?')[0]]);
         return;
       }
-      console.log('blob text', c.text())
+      // console.log('blob size ', c.size)
       const url = URL.createObjectURL(c);
       const dialogRef = this.dialog.open(ViewVmInstanceComponent, {
         data: {
-          type: c.type,
-          vmInstanceUrl: url,
+          imageUrl: url,
         }
       });
       dialogRef.afterClosed().subscribe(() => {
-        URL.revokeObjectURL(url);
         this.router.navigate([this.router.url.split('?')[0]]);
       });
     });
   }
 
-    /**
-     * This method is used to open the dialog to edit vm resources
-     * @param vmId
-     * @param teamId
-     */
-    openEditVmResourcesDialog(vmId: VmInstanceModel, teamId: number) {
-        console.log('sono il team: ' + vmId.name);
-        const dialogRef = this.dialog.open(EditVmResourceSettingsComponent, {
-            width: '60%',
-            data: {
-                t: vmId
-            }
-        });
-        dialogRef.afterClosed().pipe(first()).subscribe(
-            (result) => {
-                if (result) {
-                    console.log('result.ok, ', result.ok);
+  /**
+   * This method is used to open the dialog to edit vm resources
+   * @param vmId
+   * @param teamId
+   */
+  openEditVmResourcesDialog(vmId: number) {
+    const vmInstance = this.vmInstances.find(vm =>  vm.id == vmId);
+    const dialogRef = this.dialog.open(EditVmResourceSettingsComponent, {
+      data: {
+        vmInstance: vmInstance,
+      }
+    });
+    dialogRef.afterClosed().pipe(first()).subscribe(
+      (result) => {
+        if (result) {
+            console.log('result.ok, ', result.ok);
             console.log('result.newTeam, ', result.newTeam);
         }
         this.router.navigate([this.router.url.split('?')[0]]);

@@ -26,3 +26,8 @@
     width: 100%;
 }
 
+.errors {
+    border: brown;
+    padding-top: 10%;
+}
+

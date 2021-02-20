@@ -52,7 +52,6 @@ import {EditCourseDialogComponent} from './modals/edit-course-dialog/edit-course
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSelectModule} from '@angular/material/select';
 import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-dialog.component';
-import {ToastrModule} from 'ngx-toastr';
 
 import {MatNativeDateModule} from '@angular/material/core';
 import {TeacherAssignmentsComponent} from './teacher/assignments/teacher-assignments.component';
@@ -140,12 +139,6 @@ import { AddOwnersVmInstanceComponent } from './modals/add-owners-vm-instance/ad
         MatBadgeModule,
         MatDatepickerModule,
         PdfViewerModule,
-        ToastrModule.forRoot({
-            preventDuplicates: true,
-            timeOut: 3000,
-            progressBar: true,
-
-        }),
         MatGridListModule,
     ],
     exports:[

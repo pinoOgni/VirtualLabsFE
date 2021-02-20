@@ -20,20 +20,22 @@ export class AuthGuard implements CanActivate {
     private authService: AuthService
   ) { }
 
+  /**
+   * If the user is not logged in, the login form is opened. 
+   * If the user is logged in then the available url is opened
+   * @param childRoute 
+   * @param state 
+   */
   canActivate(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-
-    //if the user is not logged, the login form is opened,
-    //if the user is logged the url is available
     return this.checkLogin(state, childRoute);
   }
 
   checkLogin(state: RouterStateSnapshot, route: ActivatedRouteSnapshot): boolean {
-    console.log('checkLogin 1')
     const currentUser = this.authService.currentUserValue;
-    //control if the user is logged
+    // control if the user is logged
     if (!currentUser) {
-      //in this case the user is not logged, so we need to redirect
-      //it will open a login-dialog
+      // in this case the user is not logged, so we need to redirect
+      // it will open a login-dialog
       this.router.navigate(['/home'], {
         queryParams: { returnedUrl: state.url, doLogin: true },
       });
@@ -47,10 +49,7 @@ export class AuthGuard implements CanActivate {
       });
       return false;
     }
-    console.log('checkLogin 3')
-    if (
-      route.data.roles &&
-      !currentUser.roles.some((r) => route.data.roles.includes(r))) {
+    if (route.data.roles && !currentUser.roles.some((r) => route.data.roles.includes(r))) {
       // role not authorised so redirect to home page
       console.log('User', currentUser.username , 'route', state.url);
       this.router.navigate(['/home']);

@@ -1,7 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Team} from '../../models/team.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {VmInstanceModel} from '../../models/vm-instance-model';
+import { VmInstanceModel } from 'src/app/models/vm-instance-model';
 
 @Component({
   selector: 'app-edit-vm-resource-settings',
@@ -10,12 +11,13 @@ import {VmInstanceModel} from '../../models/vm-instance-model';
 })
 export class EditVmResourceSettingsComponent implements OnInit {
   editResourcesForm: FormGroup;
-  team: VmInstanceModel;
+  team: Team;
+  vmInstance: VmInstanceModel;
 
   constructor(
       @Inject(MAT_DIALOG_DATA)
       public data: {
-        t: VmInstanceModel
+        vmInstance: VmInstanceModel
       },
       private dialogRef: MatDialogRef<EditVmResourceSettingsComponent>,
       private formBuilder: FormBuilder
@@ -26,12 +28,12 @@ export class EditVmResourceSettingsComponent implements OnInit {
       maxRam: ['', Validators.required],
       maxTotalInstances: ['', Validators.required]
     });
-    this.team = data.t;
-    console.log('sono dialog: ' + this.team.name);
-    this.editResourcesForm.controls.maxVCpu.setValue(this.team.vcpu);
-    this.editResourcesForm.controls.maxDiskSpace.setValue(this.team.disk);
-    this.editResourcesForm.controls.maxRam.setValue(this.team.memory);
-    //  this.editResourcesForm.controls.maxTotalInstances.setValue(this.team.maxVmInstance);
+    this.vmInstance = data.vmInstance;
+
+    this.editResourcesForm.controls.maxVCpu.setValue(this.team.vcpuMAX);
+    this.editResourcesForm.controls.maxDiskSpace.setValue(this.team.diskMAX);
+    this.editResourcesForm.controls.maxRam.setValue(this.team.memoryMAX);
+    this.editResourcesForm.controls.maxTotalInstances.setValue(this.team.maxVmInstance);
   }
 
   ngOnInit(): void {

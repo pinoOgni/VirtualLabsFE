@@ -48,8 +48,6 @@ export class TeacherAssignmentsContComponent implements OnInit {
     this.courseService.getAssignmentsOfCourse(this.courseService.currentCourseIdSubject.value)
       .pipe(first()).subscribe(assignments => {
       this.assignments = assignments;
-      console.log(assignments);
-      console.log(this.assignments);
       this.route.queryParams.subscribe((queryParam) =>
           queryParam && queryParam.teacherContentAssignment ? this.openViewContentAssignmentDialog(queryParam.teacherContentAssignment) : null);
     });
@@ -85,7 +83,6 @@ export class TeacherAssignmentsContComponent implements OnInit {
         this.router.navigate([this.router.url.split('?')[0]]);
         return;
       }
-      console.log('blob text', c.text())
       const url = URL.createObjectURL(c);
       const dialogRef = this.dialog.open(ViewContentAssignmentComponent, {
         // height: '60%',

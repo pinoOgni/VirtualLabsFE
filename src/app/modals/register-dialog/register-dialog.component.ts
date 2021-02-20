@@ -6,6 +6,7 @@ import {AuthService} from '../../auth/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import { first } from 'rxjs/operators';
 import { InputFile } from 'src/app/models/input-file.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -59,9 +60,7 @@ export class RegisterDialogComponent {
           this.dialogRef.close();
          }
        }, error => {
-         if(error.status===400) {
-           this.serverErrors = error.message;
-         }
+           this.serverErrors = (error as HttpErrorResponse).error.message;
        });
      }
   

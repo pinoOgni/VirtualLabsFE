@@ -22,7 +22,6 @@ export class ScoreDialogComponent {
     public dialogRef: MatDialogRef<ScoreDialogComponent>, @Inject(MAT_DIALOG_DATA) public data) {
       this.assignmentId = data.assignmentId;
       this.studentId = data.studentId;
-      console.log('constructor scoredialog ', this.assignmentId, ',,,,,,', data.assignmentId)
       this.scoreForm = this.formBuilder.group({
         score: [Validators.required]
       })
@@ -35,7 +34,6 @@ export class ScoreDialogComponent {
     const scoreFormData = new FormData();
 
     scoreFormData.append('score',this.scoreForm.get('score').value)
-    console.log('onsubmit score dialog ', this.assignmentId)
     this.assignmentService.addScoreToHomework(scoreFormData,this.assignmentId,this.studentId).pipe(first()).subscribe((homework) => {
       if (homework) {
         this.dialogRef.close(homework);

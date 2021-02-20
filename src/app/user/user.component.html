@@ -4,7 +4,11 @@
       <h1 class="display-5 text-capitalize">{{ student.email}}</h1>
 </div>
 
-
+<div *ngIf="teacher;" class="center">
+      <img src="data:image/png;base64,{{teacher.avatar}}" alt="Avatar" class="avatar">
+      <h1 class="display-5 text-capitalize">{{ teacher.firstName }} {{ teacher.lastName }}</h1>
+      <h1 class="display-5 text-capitalize">{{ teacher.email}}</h1>
+</div>
 
 
 

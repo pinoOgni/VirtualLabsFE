@@ -117,14 +117,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
     const studentInfo = JSON.parse(localStorage.getItem('currentUser'));
     console.log('setEnrolledAvailableStudents, ', JSON.parse(localStorage.getItem('currentUser')))
     this.currentStudent = students.find((student) => student.id === studentInfo.username);
-    /**
-     * Put in the data source fot the students, all students but not the logged student
-     */
-    console.log('800A ', students);
-    console.log('800A ', this.currentStudent);
     this.dataSourceStudents.data = students.filter((student) => student.id !== this.currentStudent.id);
-
-    //this.dataSourceStudents.data = students.filter((student) => student.id !== this.currentStudent.id);
   }
 
   /**
@@ -187,11 +180,11 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
 
 
 
+  errors: string;
 
   constructor(private authService: AuthService, public spinnerService: SpinnerService) { }
 
   ngOnInit(): void {
-     // ALE
         this.studentControl.valueChanges
         .pipe(
             takeUntil(this.destroy$), // Emits the values emitted by the source Observable until a notifier Observable emits a value.
@@ -271,12 +264,13 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
   createTeam() {
     console.log('createTeam')
     if (this.selectedStudents.length + 1 < this.currentCourse.min) {
-      console.log('error number of student for the team is low')
+      console.log('error number of student for the team is low');
+      this.errors = 'The number of students must respect the minimum and maximum of this course';
       return;
     }
     this.selectedStudents.push(this.currentStudent);
     let deadline: Date;
-    //if there is no selectedDate create new one
+    // if there is no selectedDate create new one
     if (!this.selectedDate) {
       deadline = new Date();
     } else {
@@ -284,7 +278,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
     }
     deadline.setDate(deadline.getDate() + 1); //+1 for this date
     if ( this.selectedStudents.length && this.teamNameControl.valid && deadline >= new Date()) {
-      //emit the proposal of team to the container so it can use the createTeam of the service
+      // emit the proposal of team to the container so it can use the createTeam of the service
       this.createTeamEvent.emit(
           new ProposalOfTeam(
               this.teamNameControl.value,
@@ -358,7 +352,7 @@ canAcceptOrReject(proposalInfo: ProposalInfo): boolean {
 }
 
 
-
+  // delete?
   displayFnDelectedStudents(selectedStudents: string[]): string {
     let temp = '';
     selectedStudents.forEach((student) => (temp += ' ' + student + '\n'));
