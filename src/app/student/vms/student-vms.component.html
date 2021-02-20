@@ -9,10 +9,10 @@
         <b>
             <div>
                 <p>Team's maximum resources:</p><br>
-                <p>Maximum Running Instances allowed: {{team.runningVmInstance}} Instances</p>
+                <p>Maximum Running Instances allowed: {{team.maxVmInstance}} Instances</p>
                 <p>Maximum vCPUs allowed: {{team.vcpuMAX}}</p>
                 <p>Maximum Memory allowed: {{team.memoryMAX}} MB</p>
-                <p>Maximum Disk Space allowes: {{team.diskMAX}} MB</p>
+                <p>Maximum Disk Space allowed: {{team.diskMAX}} MB</p>
             </div>
             <div>
                 <p>Team's VM Instances:</p>
@@ -47,7 +47,7 @@
                                         <button (click)="turnOnVM(vm)" mat-raised-button> Turn
                                             On VM
                                         </button>
-                                        <button [queryParams]="{ modifyVmResources: vm.id, teamId: team.id }"
+                                        <button [queryParams]="{ modifyVmResources: vm , teamId: team.id }"
                                                 [routerLink]="" color="primary" mat-raised-button>
                                             Modify Resources
                                         </button>

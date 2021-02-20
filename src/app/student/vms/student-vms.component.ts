@@ -107,12 +107,14 @@ export class StudentVmsComponent implements OnInit {
     isOwner(tId: number, vmId: number): boolean {
         let out = false;
 
-        this.ownerIds.get(vmId).forEach(
-            id => {
-                if (this.studentUsername === id) {
-                    out = true;
-                }
-            });
+        if (this.ownerIds !== undefined && this.ownerIds !== null) {
+            this.ownerIds.get(vmId).forEach(
+                id => {
+                    if (this.studentUsername === id) {
+                        out = true;
+                    }
+                });
+        }
 
         return out;
 
@@ -136,6 +138,7 @@ export class StudentVmsComponent implements OnInit {
 
   turnOnVM(vm: VmInstanceModel) {
       //  vm.status = VmInstanceStatus.RUNNING;
+      console.log(' sono vm' + vm.name);
       this.courseService.changeVmInstanceStatus(this.team.id, vm, 1).subscribe(
           r => this.getVmInstances()
       );
@@ -175,19 +178,23 @@ export class StudentVmsComponent implements OnInit {
     });
   }
 
-  /**
-   * This method is used to open the dialog to edit vm resources
-   * @param vmId
-   * @param teamId
-   */
-  openEditVmResourcesDialog(vmId: number, teamId: number) {
-    const dialogRef = this.dialog.open(EditVmResourceSettingsComponent, {
-      width: '60%',
-    });
-    dialogRef.afterClosed().pipe(first()).subscribe(
-      (result) => {
-        if (result) {
-            console.log('result.ok, ', result.ok);
+    /**
+     * This method is used to open the dialog to edit vm resources
+     * @param vmId
+     * @param teamId
+     */
+    openEditVmResourcesDialog(vmId: VmInstanceModel, teamId: number) {
+        console.log('sono il team: ' + vmId.name);
+        const dialogRef = this.dialog.open(EditVmResourceSettingsComponent, {
+            width: '60%',
+            data: {
+                t: vmId
+            }
+        });
+        dialogRef.afterClosed().pipe(first()).subscribe(
+            (result) => {
+                if (result) {
+                    console.log('result.ok, ', result.ok);
             console.log('result.newTeam, ', result.newTeam);
         }
         this.router.navigate([this.router.url.split('?')[0]]);
