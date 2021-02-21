@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>Create new VM Instance:</h2>
+<mat-dialog-content class="md-dialog-container">
+
+    <form (ngSubmit)="submit()" [formGroup]="editResourcesForm">
+
+        <mat-label for="vmName">VM Instance Name:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="vmName" id="vmName" matInput name="vmName" required
+                   type="text">
+
+        </mat-form-field>
+
+        <mat-label for="maxVCpu">Maximum vCPUs:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="maxVCpu" id="maxVCpu" matInput name="maxVCpu" required
+                   type="text">
+
+        </mat-form-field>
+        <br>
+
+        <mat-label for="maxDiskSpace">Maximum Disk Space:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="maxDiskSpace" id="maxDiskSpace" matInput name="maxDiskSpace"
+                   required
+                   type="text">
+
+        </mat-form-field>
+        <br>
+        <mat-label for="maxRam">Maximum RAM:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="maxRam" id="maxRam" matInput name="maxRam" required
+                   type="text">
+
+        </mat-form-field>
+        <br>
+
+
+        <mat-dialog-actions class="example-button-row">
+            <button [disabled]="!editResourcesForm.valid" color="primary" mat-raised-button type="submit">Create
+            </button>
+            <button [mat-dialog-close]="false" mat-raised-button type="reset">Cancel</button>
+        </mat-dialog-actions>
+        <br>
+    </form>
+</mat-dialog-content>
