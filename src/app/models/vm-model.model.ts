@@ -7,25 +7,14 @@
 export class VmModel {
     id: number;
     name: string;
-    courseId: number;
-    vcpus: number;
-    diskSpace: number;
-    ramSize: number;
+    configuration: string;
 
     constructor(
-        id: number,
         name: string,
-        courseId: number,
-        vcpus: number,
-        diskSpace: number,
-        ramSize: number
+        configuration: string
     ) {
-        this.id = id;
         this.name = name;
-        this.courseId = courseId;
-        this.vcpus = vcpus;
-        this.diskSpace = diskSpace;
-        this.ramSize = ramSize;
+        this.configuration = configuration;
     }
 
     static toString(model: VmModel): string {

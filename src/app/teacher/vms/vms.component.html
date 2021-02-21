@@ -65,15 +65,15 @@
                         vCPUs: {{vm.vcpu}}<br>
                         Disk Size: {{vm.memory}} MB<br>
                         Memory Size: {{vm.disk}} MB<br>
-                        <div *ngIf="(getVmCreator(this.team.id, vm.id) | async) as student">
+                        <div *ngIf="(this.creators.get( vm.id)) as student">
                             Created by: {{student.firstName}} {{student.lastName}} {{student.id}}
 
                         </div>
-                        <p *ngIf="vm.status === 'RUNNING'">
-                            <!-- todo che devo fare? --->
-                            <button color="primary" mat-raised-button> Open VM Instance</button>
-                            <br>
-                        </p>
+                    <p *ngIf="isRunning(vm)">
+                        <!-- todo che devo fare? --->
+                        <button color="primary" mat-raised-button> Open VM Instance</button>
+                        <br>
+                    </p>
                     </b>
                 </div>
 

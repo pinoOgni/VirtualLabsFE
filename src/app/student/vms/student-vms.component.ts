@@ -57,9 +57,7 @@ export class StudentVmsComponent implements OnInit {
     ngOnInit(): void {
         this.ownerIds = new Map<number, string[]>();
         this.vmInstancesCreators = new Map<number, Student>();
-        this.authService.getCurrentUserserObservable().subscribe(
-            u => this.studentUsername = u.username
-        );
+        this.studentUsername = this.authService.currentUserValue.username;
         this.currentRunningInstance = 0;
         this.currentUsedDiskSpace = 0;
         this.currentUsedVcpus = 0;

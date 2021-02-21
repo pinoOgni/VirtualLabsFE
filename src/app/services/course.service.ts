@@ -10,7 +10,6 @@ import {Teacher} from '../models/teacher.model';
 import {Assignment} from '../models/assignment.model';
 import {Team} from '../models/team.model';
 import {VmInstanceModel} from '../models/vm-instance-model';
-import {TeamStatus} from '../models/team-status';
 import {AssignmentHomeworkStudent} from '../models/assignment-homework-student.model';
 import {Homework} from '../models/homework.model';
 import {AuthService} from '../auth/auth.service';
@@ -427,50 +426,15 @@ export class CourseService {
   }
 
   public getTeamsOfCourse(courseId: number = this.currentCourseIdSubject.value): Observable<Team[]> {
-    const url = `${environment.base_url_course}/${courseId}/teams`;
-    console.log('url vale' + url);
-    /*return this.httpClient.get<Team[]>(url)
-        .pipe(tap(() =>
-                console.log(`getTeamsOfCourse ok ${courseId}`)
-            ),
-            catchError(this.handleError<any>(`getTeamsOfCourse(${courseId})`, []))
-        );*/
-    return of([
-      new Team(
-          'Gli Argonauti del Fosso dell\'Agonia Bianca',
-          2,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          TeamStatus.ACTIVE
-      ),
-      new Team(
-          'New Team1',
-          3,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          TeamStatus.ACTIVE
-      ),
-      new Team(
-          'New Team2',
-          4,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          TeamStatus.ACTIVE
-      )
+      const url = `${environment.base_url_course}/${courseId}/teams`;
 
-    ]);
+      return this.httpClient.get<Team[]>(url)
+          .pipe(tap(() =>
+                  console.log(`getTeamsOfCourse ok ${courseId}`)
+              ),
+              catchError(this.handleError<any>(`getTeamsOfCourse(${courseId})`, []))
+          );
+
   }
 
 
@@ -485,8 +449,16 @@ export class CourseService {
   }
 
     updateTeamVmResources(id: number, editedTeam: Team): Observable<Team> {
-        // aspettare ad hamza che faccia l'endpoint POST
-        return of(editedTeam);
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
+        const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${editedTeam.id}`;
+        return this.httpClient.put<Team>(url, editedTeam, httpOptions)
+            .pipe(tap(() =>
+                    console.log(`getVmInstanceOwners`)
+                ),
+                catchError(this.handleError<Team>(`getVmInstanceOwners`))
+            );
     }
 
     getVmInstanceCreator(teamId: number, vmInstanceId: number): Observable<Student> {

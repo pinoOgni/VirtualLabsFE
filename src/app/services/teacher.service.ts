@@ -5,7 +5,7 @@ import {Observable, of} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {Course} from '../models/course.model';
 import {AuthService} from '../auth/auth.service';
-import { Teacher } from '../models/teacher.model';
+import {Teacher} from '../models/teacher.model';
 
 @Injectable({
   providedIn: 'root'
@@ -64,8 +64,11 @@ export class TeacherService {
   // ALE
   // TODO spostare in courseService
   update(course: Course): Observable<Course> {
-    console.log('sto updatando: ' +  course.id + ' nome: ' + course.name);
-    return this.httpClient.put<Course>(this.base_URL + 'courses/' + course.id, course, this.httpOptions).pipe(
+    const httpOptions = {
+      headers: new HttpHeaders({'Content-Type': 'application/json'})
+    };
+    console.log('sto updaando: ' + course.id + ' nome: ' + course.name);
+    return this.httpClient.put<Course>(this.base_URL + 'courses/', course, httpOptions).pipe(
         catchError(this.handleError<any>('updateCourse'))
     );
 
@@ -91,7 +94,11 @@ export class TeacherService {
 
   
   addCourse(newCourse: Course): Observable<Course> {
-    return this.httpClient.post<Course>(this.base_URL + 'courses/', newCourse, this.httpOptions).pipe(
+    const httpOptions = {
+      headers: new HttpHeaders({'Content-Type': 'application/json'})
+    };
+    console.log('mi è arrivato ' + newCourse);
+    return this.httpClient.post<Course>(this.base_URL + 'courses/', newCourse, httpOptions).pipe(
         catchError(this.handleError<any>('addCourse'))
     );
   }

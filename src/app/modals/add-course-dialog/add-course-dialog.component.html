@@ -53,13 +53,6 @@
         <br>
 
         <h3 mat-dialog-title> Virtual Machines Default resources: </h3>
-        <mat-form-field class="md-form-dialog-container">
-
-            <input autocomplete="on" formControlName="vmModelName" id="vmModelName" matInput name="vmModelName"
-                   placeholder="VM Model Name" required
-                   type="text">
-
-        </mat-form-field>
 
         <br>
         <mat-form-field class="md-form-dialog-container">
@@ -90,9 +83,44 @@
                    type="text">
 
         </mat-form-field>
-
         <br>
+        <mat-form-field class="md-form-dialog-container">
 
+            <input autocomplete="on" formControlName="vmModelInstances" id="vmModelInstances" matInput
+                   name="vmModelInstances"
+                   placeholder="Maximum Instances"
+                   required
+                   type="text">
+
+        </mat-form-field>
+        <br>
+        <mat-form-field class="md-form-dialog-container">
+
+            <input autocomplete="on" formControlName="vmModelMaxRunningInstances" id="vmModelMaxRunningInstances"
+                   matInput name="vmModelMaxRunningInstances"
+                   placeholder="Maximum  Running Instances"
+                   required
+                   type="text">
+
+        </mat-form-field>
+        <br>
+        <h3 mat-dialog-title> Virtual Machine Model: </h3>
+        <mat-label for="vmModelName">VM model name:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="vmModelName" id="vmModelName" matInput name="vmModelName" required
+                   type="text">
+
+        </mat-form-field>
+
+        <mat-label for="vmModelConfiguration">VM model configuration:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="vmModelConfiguration" id="vmModelConfiguration" matInput
+                   name="vmModelConfiguration" required
+                   type="text">
+
+        </mat-form-field>
 
         <mat-dialog-actions class="example-button-row">
             <button [disabled]="!editCourseForm.valid" color="primary" mat-raised-button type="submit">Add</button>
