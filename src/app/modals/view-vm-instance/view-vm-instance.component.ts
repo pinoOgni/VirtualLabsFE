@@ -19,16 +19,4 @@ export class ViewVmInstanceComponent  {
     
 }
 
-
-downloadAssignmentFile() {
-  const a: any = document.createElement('a');
-  a.href = this.data.assignmentUrl;
-  a.download = 'ciao.png';
-  document.body.appendChild(a);
-  a.style = 'display: none';
-  a.click();
-  a.remove();
-}
-
-
 }
