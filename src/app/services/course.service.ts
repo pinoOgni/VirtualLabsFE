@@ -474,7 +474,6 @@ export class CourseService {
             );
     }
 
-
     getVmInstanceOwners(tId: number, vmId: number): Observable<Student[]> {
         // "/{courseId}/teams/{tid}/vmInstances/{vmid}/getOwners"
         const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${tId}/vmInstances/${vmId}/owners`;
@@ -511,7 +510,6 @@ export class CourseService {
                 catchError(this.handleError<boolean>(`deleteVm`))
             );
     }
-
 
     /**
      * This method is used to display the content of a vm instance

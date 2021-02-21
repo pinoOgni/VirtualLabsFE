@@ -197,7 +197,6 @@ export class StudentVmsComponent implements OnInit {
         this.router.navigate([this.router.url.split('?')[0]]);
         return;
       }
-      // console.log('blob size ', c.size)
       const url = URL.createObjectURL(c);
       const dialogRef = this.dialog.open(ViewVmInstanceComponent, {
         data: {
