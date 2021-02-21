@@ -534,9 +534,9 @@ export class CourseService {
         const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${tId}/vmInstances/${vm.id}`;
         return this.httpClient.delete<boolean>(url)
             .pipe(tap(() =>
-                    console.log(`changeVmInstanceStatus`)
+                    console.log(`deleteVm`)
                 ),
-                catchError(this.handleError<boolean>(`changeVmInstanceStatus`))
+                catchError(this.handleError<boolean>(`deleteVm`))
             );
     }
 

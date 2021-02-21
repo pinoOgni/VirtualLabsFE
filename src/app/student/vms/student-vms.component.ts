@@ -12,6 +12,7 @@ import {ViewVmInstanceComponent} from 'src/app/modals/view-vm-instance/view-vm-i
 import {AddOwnersVmInstanceComponent} from 'src/app/modals/add-owners-vm-instance/add-owners-vm-instance.component';
 import {EditStudentVmInstanceDialogComponent} from '../../modals/edit-student-vm-instance-dialog/edit-student-vm-instance-dialog.component';
 import {CreateNewVMInstanceDialogComponent} from '../../modals/create-new-vminstance-dialog/create-new-vminstance-dialog.component';
+import {ConfirmationDialogComponent} from '../../modals/confirmation-dialog/confirmation-dialog.component';
 
 
 @Component({
@@ -48,6 +49,9 @@ export class StudentVmsComponent implements OnInit {
 
       this.route.queryParams.subscribe((queryParam) =>
           queryParam && queryParam.addVmInstance ? this.openAddNewVmInstanceDialog() : null);
+
+      this.route.queryParams.subscribe((queryParam) =>
+          queryParam && queryParam.deleteVmInstance ? this.openConfirmationDialog(queryParam.toBeDeleted) : null);
   }
 
     ngOnInit(): void {
@@ -178,9 +182,7 @@ export class StudentVmsComponent implements OnInit {
       );
   }
 
-  deleteVM(vm: VmInstanceModel) {
-    this.courseService.deleteVmInstance(this.team.id, vm);
-  }
+
 
   isVmRunning(vm: VmInstanceModel): boolean {
     return vm.status === VmInstanceStatus.RUNNING;
@@ -262,6 +264,7 @@ export class StudentVmsComponent implements OnInit {
                       result => {
                           // ALE Non so cosa vuoi farti ritornare
                           if (result === undefined) {
+                              this.router.navigate([this.router.url.split('?')[0]]);
                               return;
                           }
                           if (result.ok) {
@@ -293,6 +296,7 @@ export class StudentVmsComponent implements OnInit {
         dialogRef.afterClosed().subscribe(
             result => {
                 if (result === undefined) {
+                    this.router.navigate([this.router.url.split('?')[0]]);
                     return;
                 }
 
@@ -308,5 +312,25 @@ export class StudentVmsComponent implements OnInit {
         );
 
         return;
+    }
+
+    private openConfirmationDialog(toBeDeleted: number) {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+        dialogRef.afterClosed().subscribe(
+            result => {
+                if (result === undefined) {
+                    this.router.navigate([this.router.url.split('?')[0]]);
+                    return;
+                }
+                if (result.confirmed) {
+                    const id = Number(toBeDeleted);
+                    const tbd = this.vmInstances.find(x => x.id === id);
+                    this.courseService.deleteVmInstance(this.team.id, tbd).subscribe(
+                        s => this.getVmInstances()
+                    );
+                }
+                this.router.navigate([this.router.url.split('?')[0]]);
+            }
+        );
     }
 }

@@ -53,16 +53,19 @@
                                             </button>
                                             <button [queryParams]="{ modifyVmResourcesStudent: vm.id }"
                                                     [routerLink]="" color="primary" mat-raised-button>
-                                            Modify Resources
-                                        </button>
-                                        <button (click)="deleteVM(vm)" *ngIf="!isVmRunning(vm)" mat-raised-button>
-                                            Delete VM
-                                        </button>
-                                        <button [queryParams]="{ addOwners: vm.id, teamId: team.id }" [routerLink]=""
-                                                color="primary" mat-raised-button>
-                                            Add Owners
-                                        </button>
-                                    </ng-template>
+                                                Modify Resources
+                                            </button>
+                                            <button *ngIf="!isVmRunning(vm)"
+                                                    [queryParams]="{ deleteVmInstance: true, toBeDeleted: vm.id }"
+                                                    [routerLink]="" mat-raised-button>
+                                                Delete VM
+                                            </button>
+                                            <button [queryParams]="{ addOwners: vm.id, teamId: team.id }"
+                                                    [routerLink]=""
+                                                    color="primary" mat-raised-button>
+                                                Add Owners
+                                            </button>
+                                        </ng-template>
 
                                 </div>
                                     <!--<ng-template #elseblock2>
