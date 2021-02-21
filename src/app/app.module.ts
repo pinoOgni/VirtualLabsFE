@@ -71,6 +71,7 @@ import {UserComponent} from './user/user.component';
 import {ViewVmInstanceComponent} from './modals/view-vm-instance/view-vm-instance.component';
 import {AddOwnersVmInstanceComponent} from './modals/add-owners-vm-instance/add-owners-vm-instance.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {CreateNewVMInstanceDialogComponent} from './modals/create-new-vminstance-dialog/create-new-vminstance-dialog.component';
 
 @NgModule({
     declarations: [
@@ -109,6 +110,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
         UserComponent,
         ViewVmInstanceComponent,
         AddOwnersVmInstanceComponent,
+        CreateNewVMInstanceDialogComponent,
     ],
     imports: [
         MatNativeDateModule,

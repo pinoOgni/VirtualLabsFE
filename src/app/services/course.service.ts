@@ -589,7 +589,6 @@ export class CourseService {
         output.forEach(
             o => {
                 url = `${url}${o},`;
-                console.log(' sono o ' + o);
             }
         );
         console.log('sono url' + url);
@@ -599,6 +598,20 @@ export class CourseService {
                 tap(() => console.log('createAssignment ok')),
                 catchError(this.handleError<Assignment>(`createAssignment error`)
                 )
+            );
+
+    }
+
+    addNewVmInstance(teamId: number, newVm: VmInstanceModel, courseId: number = this.currentCourseIdSubject.value): Observable<VmInstanceModel> {
+        const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances`;
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
+        return this.httpClient.post<VmInstanceModel>(url, newVm, httpOptions)
+            .pipe(tap(() =>
+                    console.log(`addNewVmInstance`)
+                ),
+                catchError(this.handleError<VmInstanceModel>(`addNewVmInstance`))
             );
 
     }

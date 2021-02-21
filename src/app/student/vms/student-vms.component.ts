@@ -11,6 +11,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ViewVmInstanceComponent} from 'src/app/modals/view-vm-instance/view-vm-instance.component';
 import {AddOwnersVmInstanceComponent} from 'src/app/modals/add-owners-vm-instance/add-owners-vm-instance.component';
 import {EditStudentVmInstanceDialogComponent} from '../../modals/edit-student-vm-instance-dialog/edit-student-vm-instance-dialog.component';
+import {CreateNewVMInstanceDialogComponent} from '../../modals/create-new-vminstance-dialog/create-new-vminstance-dialog.component';
 
 
 @Component({
@@ -37,13 +38,16 @@ export class StudentVmsComponent implements OnInit {
      * Subscribe to all query params for the dialogs
      */
     this.route.queryParams.subscribe((queryParam) =>
-    queryParam && queryParam.openVmInstance ? this.openVmInstanceContentDialog(queryParam.openVmInstance, queryParam.teamId) : null );
+        queryParam && queryParam.openVmInstance ? this.openVmInstanceContentDialog(queryParam.openVmInstance, queryParam.teamId) : null);
 
-    this.route.queryParams.subscribe((queryParam) =>
-    queryParam && queryParam.modifyVmResourcesStudent ? this.openEditVmResourcesDialog(queryParam.modifyVmResourcesStudent) : null );
+      this.route.queryParams.subscribe((queryParam) =>
+          queryParam && queryParam.modifyVmResourcesStudent ? this.openEditVmResourcesDialog(queryParam.modifyVmResourcesStudent) : null);
 
-    this.route.queryParams.subscribe((queryParam) =>
-    queryParam && queryParam.addOwners ? this.openAddOwnersDialog(queryParam.addOwners, queryParam.teamId) : null );
+      this.route.queryParams.subscribe((queryParam) =>
+          queryParam && queryParam.addOwners ? this.openAddOwnersDialog(queryParam.addOwners, queryParam.teamId) : null);
+
+      this.route.queryParams.subscribe((queryParam) =>
+          queryParam && queryParam.addVmInstance ? this.openAddNewVmInstanceDialog() : null);
   }
 
     ngOnInit(): void {
@@ -283,4 +287,26 @@ export class StudentVmsComponent implements OnInit {
   }
 
 
+    private openAddNewVmInstanceDialog() {
+        const dialogRef = this.dialog.open(CreateNewVMInstanceDialogComponent);
+
+        dialogRef.afterClosed().subscribe(
+            result => {
+                if (result === undefined) {
+                    return;
+                }
+
+                if (result.ok) {
+                    const newVm = result.newVmInstance;
+                    this.courseService.addNewVmInstance(this.team.id, newVm).subscribe(
+                        result1 => this.getVmInstances()
+                    );
+                }
+
+                this.router.navigate([this.router.url.split('?')[0]]);
+            }
+        );
+
+        return;
+    }
 }

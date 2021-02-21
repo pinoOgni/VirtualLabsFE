@@ -18,12 +18,13 @@ export class VmInstanceModel {
 
     status: VmInstanceStatus;
 
-    constructor(id: number, name: string, vcpu: number, disk: number, memory: number, status: VmInstanceStatus) {
-        this.id = id;
+
+    constructor(name: string, vcpu: number, disk: number, memory: number) {
+        //   this.id = id;
         this.name = name;
         this.vcpu = vcpu;
         this.disk = disk;
         this.memory = memory;
-        this.status = status;
+        //    this.status = status;
     }
 }

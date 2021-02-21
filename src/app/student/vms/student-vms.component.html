@@ -13,6 +13,10 @@
                 <p>Maximum vCPUs allowed: {{team.vcpuMAX}}</p>
                 <p>Maximum Memory allowed: {{team.memoryMAX}} MB</p>
                 <p>Maximum Disk Space allowed: {{team.diskMAX}} MB</p>
+
+                <button [queryParams]="{ addVmInstance: true }" [routerLink]="" color="primary" mat-raised-button>Create
+                    new VM Instance
+                </button>
             </div>
             <div>
                 <p>Team's VM Instances:</p>
@@ -35,20 +39,20 @@
                             vCPUs: {{vm.vcpu}}<br>
                             Disk Size: {{vm.memory}} MB<br>
                             Memory Size: {{vm.disk}} MB<br>
-                            <div *ngIf="vmInstancesCreators.get(vm.id) as student">
-                                Created by: {{student.firstName}} {{student.lastName}}  {{student.id}}
-                                <div *ngIf="isOwner(team.id,vm.id)">
-
-                                    <button (click)="turnOffVM(vm)" *ngIf="isVmRunning(vm); else elseblock1"
-                                            mat-raised-button>
-                                        Turn Off VM
-                                    </button>
-                                    <ng-template #elseblock1>
-                                        <button (click)="turnOnVM(vm)" mat-raised-button> Turn
-                                            On VM
+                                <div *ngIf="vmInstancesCreators.get(vm.id) as student">
+                                    Created by: {{student.firstName}} {{student.lastName}}  {{student.id}}
+                                    <div *ngIf="isOwner(team.id,vm.id)">
+                                        <!--                                    else elseblock2"-->
+                                        <button (click)="turnOffVM(vm)" *ngIf="isVmRunning(vm); else elseblock1"
+                                                mat-raised-button>
+                                            Turn Off VM
                                         </button>
-                                        <button [queryParams]="{ modifyVmResourcesStudent: vm.id }"
-                                                [routerLink]="" color="primary" mat-raised-button>
+                                        <ng-template #elseblock1>
+                                            <button (click)="turnOnVM(vm)" mat-raised-button> Turn
+                                                On VM
+                                            </button>
+                                            <button [queryParams]="{ modifyVmResourcesStudent: vm.id }"
+                                                    [routerLink]="" color="primary" mat-raised-button>
                                             Modify Resources
                                         </button>
                                         <button (click)="deleteVM(vm)" *ngIf="!isVmRunning(vm)" mat-raised-button>
@@ -61,8 +65,20 @@
                                     </ng-template>
 
                                 </div>
+                                    <!--<ng-template #elseblock2>
+                                        <button (click)="turnOffVM(vm)" *ngIf="isVmRunning(vm); else elseblock3"
+                                                mat-raised-button>
+                                            Turn Off VM
+                                        </button>
+                                        <ng-template #elseblock3>
+                                            <button (click)="turnOnVM(vm)" mat-raised-button> Turn
+                                                On VM
+                                            </button>
 
-                            </div>
+                                        </ng-template>
+                                    </ng-template>-->
+
+                                </div>
                             <p *ngIf="isVmRunning(vm)">
                                 <!-- todo che devo fare? --->
                                 <button mat-raised-button color="primary" [routerLink]="" [queryParams]="{ openVmInstance: vm.id, teamId: team.id }">
