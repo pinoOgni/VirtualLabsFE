@@ -22,7 +22,6 @@ export class VmsContComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('sono un ciumbolombolo');
     this.teams = this.courseService.getTeamsOfCourse();
 
   }

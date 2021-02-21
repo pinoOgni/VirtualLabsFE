@@ -1,8 +1,8 @@
-<h2 mat-dialog-title>Edit VM Resources:</h2>
+<h2 mat-dialog-title>Edit Team's Maximum Resources</h2>
 <mat-dialog-content class="md-dialog-container">
-    <div>VM Instance Name: {{vmInstance.name}}</div>
+    <div>Team Name: {{team.name}}</div>
     <form (ngSubmit)="submit()" [formGroup]="editResourcesForm">
-        <h3 mat-dialog-title>Current VM Resources:</h3>
+        <h3 mat-dialog-title>Team Resources:</h3>
         <mat-label for="maxVCpu">Maximum vCPUs:</mat-label>
         <mat-form-field class="md-form-dialog-container" floatLabel="never">
 
@@ -30,7 +30,16 @@
         </mat-form-field>
         <br>
 
+        <mat-label for="maxTotalInstances">Maximum number of instances:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
 
+            <input autocomplete="on" formControlName="maxTotalInstances" id="maxTotalInstances" matInput
+                   name="maxTotalInstances" required
+                   type="text">
+
+        </mat-form-field>
+
+        <br>
 
         <mat-dialog-actions class="example-button-row">
             <button [disabled]="!editResourcesForm.valid" color="primary" mat-raised-button type="submit">Edit</button>
