@@ -207,7 +207,7 @@ export class AppComponent implements OnDestroy {
                 }
                 if (result.confirmed === true) {
                     this.teacherService.deleteCourse(course).subscribe(
-                        result => {
+                        result1 => {
                             this.refillCourses();
                         }
                     );
