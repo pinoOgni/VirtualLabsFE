@@ -61,6 +61,8 @@ export class AppComponent implements OnDestroy {
                 this.openDialogLogin();
             } else if (params.doRegister) {
                 this.openDialogRegister();
+            } else if(params.deleteCourse) {
+                this.openDialogDeleteCourse(params.deleteCourse);
             }
         });
         /**
@@ -198,21 +200,23 @@ export class AppComponent implements OnDestroy {
         );
     }
 
-    openDialogDeleteCourse(course: Course): void {
+    openDialogDeleteCourse(courseId: number): void {
         const dialogRef = this.dialog.open(ConfirmationDialogComponent);
         dialogRef.afterClosed().subscribe(
             result => {
                 if (result === undefined) {
+                    this.router.navigate(['/home']);
                     return;
+                    
                 }
                 if (result.confirmed === true) {
-                    this.teacherService.deleteCourse(course).subscribe(
+                    this.teacherService.deleteCourse(courseId).subscribe(
                         result1 => {
                             this.refillCourses();
                         }
                     );
                 }
-
+                this.router.navigate(['/home']);
             }
         );
 

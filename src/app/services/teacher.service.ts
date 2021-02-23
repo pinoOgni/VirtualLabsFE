@@ -87,12 +87,12 @@ export class TeacherService {
   }
 
 
-  deleteCourse(course: Course): Observable<Course> {
-    const url = `${environment.base_url_course}/${course.id}`;
+  deleteCourse(courseId: number): Observable<Course> {
+    const url = `${environment.base_url_course}/${courseId}`;
     const httpOptions = {
       headers: new HttpHeaders({'Content-Type': 'application/json'})
     };
-    console.log('sto per deletare: ' + course.id + ' all url ' + url);
+    console.log('sto per deletare: ' + courseId + ' all url ' + url);
     return this.httpClient.delete<any>(url).pipe(
         catchError(this.handleError<any>('deleteCourse')));
   }

@@ -47,7 +47,7 @@
           </button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="openDialogEditCourse(course)">Edit</button>
-            <button (click)="openDialogDeleteCourse(course)" mat-menu-item>Delete</button>
+            <button [queryParams]="{ deleteCourse: course.id }" routerLink="home" color="primary" mat-menu-item> Delete </button>
           </mat-menu>
         </mat-list-item>
       </mat-nav-list>
