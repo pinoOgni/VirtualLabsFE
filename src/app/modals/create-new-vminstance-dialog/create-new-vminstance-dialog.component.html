@@ -1,8 +1,16 @@
-<h2 mat-dialog-title>Edit VM Resources:</h2>
+<h2 mat-dialog-title>Create new VM Instance:</h2>
 <mat-dialog-content class="md-dialog-container">
-    <div>VM Instance Name: {{vmInstance.name}}</div>
+
     <form (ngSubmit)="submit()" [formGroup]="editResourcesForm">
-        <h3 mat-dialog-title>Current VM Resources:</h3>
+
+        <mat-label for="vmName">VM Instance Name:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="vmName" id="vmName" matInput name="vmName" required
+                   type="text">
+
+        </mat-form-field>
+
         <mat-label for="maxVCpu">Maximum vCPUs:</mat-label>
         <mat-form-field class="md-form-dialog-container" floatLabel="never">
 
@@ -32,7 +40,8 @@
 
 
         <mat-dialog-actions class="example-button-row">
-            <button [disabled]="!editResourcesForm.valid" color="primary" mat-raised-button type="submit">Edit</button>
+            <button [disabled]="!editResourcesForm.valid" color="primary" mat-raised-button type="submit">Create
+            </button>
             <button [mat-dialog-close]="false" mat-raised-button type="reset">Cancel</button>
         </mat-dialog-actions>
         <br>

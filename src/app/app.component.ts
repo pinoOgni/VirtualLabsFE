@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from './modals/login-dialog/login-dialog.component';
 import {AuthService} from './auth/auth.service';
@@ -122,9 +122,11 @@ export class AppComponent implements OnDestroy {
 
 
     public openDialogEditCourse(course: Course): void {
+
+
         const dialogRef = this.dialog.open(EditCourseDialogComponent, {
             data: {
-                editedCourse: course
+                editedCourse: course,
             }
         });
         dialogRef.afterClosed().subscribe(
@@ -134,6 +136,7 @@ export class AppComponent implements OnDestroy {
                 }
                 if (result.logged) {
                     const editedCourse = result.editedCourse;
+
                     const newCourse = new Course(
                         course.id,
                         editedCourse.acronym,
@@ -143,15 +146,19 @@ export class AppComponent implements OnDestroy {
                         editedCourse.enabled,
                         editedCourse.vcpu,
                         editedCourse.disk,
-                        editedCourse.memory);
+                        editedCourse.memory,
+                        editedCourse.maxVmInstance,
+                        editedCourse.maxRunningVmInstance);
                     this.teacherService.update(newCourse).subscribe(
-                        result => {
+                        result1 => {
                             this.refillCourses();
                         }
                     );
                 }
             }
         );
+
+
     }
 
     public openDialogAddCourse() {
@@ -174,11 +181,16 @@ export class AppComponent implements OnDestroy {
                         nCourse.enabled,
                         nCourse.vcpu,
                         nCourse.disk,
-                        nCourse.memory
+                        nCourse.memory,
+                        nCourse.instances,
+                        nCourse.runningInstances
                     );
                     this.teacherService.addCourse(newCourse).subscribe(
-                        result => {
-                            this.refillCourses();
+                        result1 => {
+                            const vm = result.newVmModel;
+                            this.vmModelsService.addVmModel(result1.id, vm).subscribe(
+                                x => this.refillCourses()
+                            );
                         }
                     );
                 }
@@ -195,7 +207,7 @@ export class AppComponent implements OnDestroy {
                 }
                 if (result.confirmed === true) {
                     this.teacherService.deleteCourse(course).subscribe(
-                        result => {
+                        result1 => {
                             this.refillCourses();
                         }
                     );

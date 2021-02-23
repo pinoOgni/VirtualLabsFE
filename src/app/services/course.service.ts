@@ -10,10 +10,10 @@ import {Teacher} from '../models/teacher.model';
 import {Assignment} from '../models/assignment.model';
 import {Team} from '../models/team.model';
 import {VmInstanceModel} from '../models/vm-instance-model';
-import {TeamStatus} from '../models/team-status';
 import {AssignmentHomeworkStudent} from '../models/assignment-homework-student.model';
 import {Homework} from '../models/homework.model';
 import {AuthService} from '../auth/auth.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
     providedIn: 'root'
@@ -32,10 +32,10 @@ export class CourseService {
   public course: BehaviorSubject<Course>;
   public currentCourseIdSubject: BehaviorSubject<number>;
 
-  constructor(private authService: AuthService, private httpClient: HttpClient) {
-    this.course = new BehaviorSubject<Course>(null);
-    this.currentCourseIdSubject = new BehaviorSubject<number>(null);
-  }
+    constructor(private authService: AuthService, private httpClient: HttpClient, private snackBar: MatSnackBar) {
+        this.course = new BehaviorSubject<Course>(null);
+        this.currentCourseIdSubject = new BehaviorSubject<number>(null);
+    }
 
   /**
    * metodo enrollStudentsToCourseWithCSV per aggiungere degli studenti al corso dato un ID con csv. Prende un FORM e un courseId.
@@ -426,50 +426,15 @@ export class CourseService {
   }
 
   public getTeamsOfCourse(courseId: number = this.currentCourseIdSubject.value): Observable<Team[]> {
-    const url = `${environment.base_url_course}/${courseId}/teams`;
-    console.log('url vale' + url);
-    /*return this.httpClient.get<Team[]>(url)
-        .pipe(tap(() =>
-                console.log(`getTeamsOfCourse ok ${courseId}`)
-            ),
-            catchError(this.handleError<any>(`getTeamsOfCourse(${courseId})`, []))
-        );*/
-    return of([
-      new Team(
-          'Gli Argonauti del Fosso dell\'Agonia Bianca',
-          2,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          TeamStatus.ACTIVE
-      ),
-      new Team(
-          'New Team1',
-          3,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          TeamStatus.ACTIVE
-      ),
-      new Team(
-          'New Team2',
-          4,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          TeamStatus.ACTIVE
-      )
+      const url = `${environment.base_url_course}/${courseId}/teams`;
 
-    ]);
+      return this.httpClient.get<Team[]>(url)
+          .pipe(tap(() =>
+                  console.log(`getTeamsOfCourse ok ${courseId}`)
+              ),
+              catchError(this.handleError<any>(`getTeamsOfCourse(${courseId})`, []))
+          );
+
   }
 
 
@@ -484,8 +449,16 @@ export class CourseService {
   }
 
     updateTeamVmResources(id: number, editedTeam: Team): Observable<Team> {
-        // aspettare ad hamza che faccia l'endpoint POST
-        return of(editedTeam);
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
+        const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${editedTeam.id}`;
+        return this.httpClient.put<Team>(url, editedTeam, httpOptions)
+            .pipe(tap(() =>
+                    console.log(`getVmInstanceOwners`)
+                ),
+                catchError(this.handleError<Team>(`getVmInstanceOwners`))
+            );
     }
 
     getVmInstanceCreator(teamId: number, vmInstanceId: number): Observable<Student> {
@@ -532,9 +505,9 @@ export class CourseService {
         const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${tId}/vmInstances/${vm.id}`;
         return this.httpClient.delete<boolean>(url)
             .pipe(tap(() =>
-                    console.log(`changeVmInstanceStatus`)
+                    console.log(`deleteVm`)
                 ),
-                catchError(this.handleError<boolean>(`changeVmInstanceStatus`))
+                catchError(this.handleError<boolean>(`deleteVm`))
             );
     }
 
@@ -542,18 +515,76 @@ export class CourseService {
      * This method is used to display the content of a vm instance
      * It can be running or stopped (2 different images)
      * @param teamId 
-     * @param vmId 
-     * @param courseId 
+     * @param vmId
+     * @param courseId
      */
-  getContentVmInstance(teamId: number, vmId: number, courseId: number = this.currentCourseIdSubject.value): Observable<Blob> {
-    const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances/${vmId}/show`
-    return this.httpClient.get(url, {
-      responseType: 'blob', //Blob object containing the binary data. document:
-    }).pipe(
-      tap(() => console.log(`getContentVmInstance ok ${vmId}`)),
-      catchError(this.handleError<any>(`getContentVmInstance error ${vmId}`))
-    );
-  } 
-}   
+    getContentVmInstance(teamId: number, vmId: number, courseId: number = this.currentCourseIdSubject.value): Observable<Blob> {
+        const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances/${vmId}/show`;
+        return this.httpClient.get(url, {
+            responseType: 'blob', //Blob object containing the binary data. document:
+        }).pipe(
+            tap(() => console.log(`getContentVmInstance ok ${vmId}`)),
+            catchError(this.handleError<any>(`getContentVmInstance error ${vmId}`))
+        );
+    }
+
+    changeVmInstanceResources(teamId: number, newVmInstance: VmInstanceModel, courseId: number = this.currentCourseIdSubject.value) {
+        const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances/${newVmInstance.id}/`;
+        return this.httpClient.put(url, newVmInstance).pipe(
+            tap(() => console.log(`changeVMInstanceResources `)),
+            catchError((operation = 'operation') => {
+                this.snackBar.open('Not Enough Resources', '', {
+                    duration: 2000,
+                });
+                // alert();
+                return of([]);
+            })
+        );
+    }
+
+    getStudentsOfTeam(teamId: number, courseId: number = this.currentCourseIdSubject.value): Observable<Student[]> {
+        const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/students`;
+        return this.httpClient.get(url).pipe(
+            tap(() => console.log(`getStudentsOfTeam`)),
+            catchError(this.handleError<any>(`getStudentsOfTeam`))
+        );
+    }
+
+    addOwnersToVmInstance(teamId: number, vmId: number, output: string[], courseId: number = this.currentCourseIdSubject.value) {
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
+
+        let url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances/${vmId}/owners?studentIds=`;
+        output.forEach(
+            o => {
+                url = `${url}${o},`;
+            }
+        );
+        console.log('sono url' + url);
+
+        return this.httpClient.post<boolean>(url, httpOptions)
+            .pipe(
+                tap(() => console.log('createAssignment ok')),
+                catchError(this.handleError<Assignment>(`createAssignment error`)
+                )
+            );
+
+    }
+
+    addNewVmInstance(teamId: number, newVm: VmInstanceModel, courseId: number = this.currentCourseIdSubject.value): Observable<VmInstanceModel> {
+        const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances`;
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
+        return this.httpClient.post<VmInstanceModel>(url, newVm, httpOptions)
+            .pipe(tap(() =>
+                    console.log(`addNewVmInstance`)
+                ),
+                catchError(this.handleError<VmInstanceModel>(`addNewVmInstance`))
+            );
+
+    }
+}
 
 

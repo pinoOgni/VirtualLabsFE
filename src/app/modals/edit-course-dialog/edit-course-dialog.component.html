@@ -50,16 +50,10 @@
         <br>
 
         <h3 mat-dialog-title> Virtual Machines Default resources: </h3>
-        <mat-label for="vmModelName">VM model name:</mat-label>
-        <mat-form-field class="md-form-dialog-container" floatLabel="never">
 
-            <input autocomplete="on" formControlName="vmModelName" id="vmModelName" matInput name="vmModelName" required
-                   type="text">
-
-        </mat-form-field>
 
         <br>
-        <mat-label for="vmModelVcpu">VM Model vCPUs number:</mat-label>
+        <mat-label for="vmModelVcpu">Maximum vCPUs number:</mat-label>
         <mat-form-field class="md-form-dialog-container" floatLabel="never">
 
             <input autocomplete="on" formControlName="vmModelVcpu" id="vmModelVcpu" matInput name="vmModelVcpu"
@@ -69,7 +63,7 @@
         </mat-form-field>
 
         <br>
-        <mat-label for="vmModelDisk">VM Model Disk Space:</mat-label>
+        <mat-label for="vmModelDisk">Maximum Disk Space:</mat-label>
         <mat-form-field class="md-form-dialog-container" floatLabel="never">
 
             <input autocomplete="on" formControlName="vmModelDisk" id="vmModelDisk" matInput
@@ -79,7 +73,7 @@
         </mat-form-field>
 
         <br>
-        <mat-label for="vmModelMemory">VM Model RAM size:</mat-label>
+        <mat-label for="vmModelMemory">Maximum RAM size:</mat-label>
         <mat-form-field class="md-form-dialog-container" floatLabel="never">
 
             <input autocomplete="on" formControlName="vmModelMemory" id="vmModelMemory" matInput name="vmModelMemory"
@@ -89,6 +83,47 @@
         </mat-form-field>
 
         <br>
+        <br>
+        <mat-form-field class="md-form-dialog-container">
+
+            <input autocomplete="on" formControlName="vmModelMaxInstances" id="vmModelMaxInstances" matInput
+                   name="vmModelMaxInstances"
+                   placeholder="Maximum Instances"
+                   required
+                   type="text">
+
+        </mat-form-field>
+        <br>
+        <mat-form-field class="md-form-dialog-container">
+
+            <input autocomplete="on" formControlName="vmModelMaxRunningInstances" id="vmModelMaxRunningInstances"
+                   matInput name="vmModelMaxRunningInstances"
+                   placeholder="Maximum  Running Instances"
+                   required
+                   type="text">
+
+        </mat-form-field>
+        <br>
+        <!--<h3 mat-dialog-title> Virtual Machine Model: </h3>
+        <mat-label for="vmModelName">VM model name:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="vmModelName" id="vmModelName" matInput name="vmModelName" required
+                   type="text">
+
+        </mat-form-field>
+
+        <mat-label for="vmModelConfiguration">VM model configuration:</mat-label>
+        <mat-form-field class="md-form-dialog-container" floatLabel="never">
+
+            <input autocomplete="on" formControlName="vmModelConfiguration" id="vmModelConfiguration" matInput name="vmModelConfiguration" required
+                   type="text">
+
+        </mat-form-field>
+        vmModelName: ['', Validators.required],
+            vmModelConfiguration: ['', Validators.required]
+
+        -->
 
 
         <mat-dialog-actions class="example-button-row">

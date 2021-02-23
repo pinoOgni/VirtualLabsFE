@@ -1,1 +1,25 @@
-<p>add-owners-vm-instance works!</p>
+<div><h3> Select new Owners:</h3></div>
+<div *ngIf="students.length > 0; else elseblock">
+    <mat-list>
+
+        <div *ngFor="let stud of students">
+            <mat-checkbox (change)="check($event,stud)"
+                          [checked]="stud.checked">{{stud.student.firstName}}  {{stud.student.lastName}}  {{stud.student.id}}</mat-checkbox>
+        </div>
+    </mat-list>
+    <br>
+    <div>
+        <button (click)="confirm()" color="primary" mat-raised-button>Confirm</button>
+    </div>
+    <br>
+    <div>
+        <button (click)="cancel()" color="primary" mat-raised-button>Cancel</button>
+    </div>
+</div>
+
+<ng-template #elseblock>
+    <div>
+        <p>Currently all team members are owners of this instance!</p>
+        <button (click)="cancel()" color="primary" mat-raised-button>Cancel</button>
+    </div>
+</ng-template>

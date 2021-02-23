@@ -66,10 +66,12 @@ import {NewHomeworkVersionDialogComponent} from './modals/new-homework-version-d
 import {MatGridListModule} from '@angular/material/grid-list';
 import {StudentNoTeamVmsComponent} from './student/vms/student-no-team-vms/student-no-team-vms.component';
 import {EditStudentVmInstanceDialogComponent} from './modals/edit-student-vm-instance-dialog/edit-student-vm-instance-dialog.component';
-import { TeamMembersDialogComponent } from './modals/team-members-dialog/team-members-dialog.component';
-import { UserComponent } from './user/user.component';
-import { ViewVmInstanceComponent } from './modals/view-vm-instance/view-vm-instance.component';
-import { AddOwnersVmInstanceComponent } from './modals/add-owners-vm-instance/add-owners-vm-instance.component';
+import {TeamMembersDialogComponent} from './modals/team-members-dialog/team-members-dialog.component';
+import {UserComponent} from './user/user.component';
+import {ViewVmInstanceComponent} from './modals/view-vm-instance/view-vm-instance.component';
+import {AddOwnersVmInstanceComponent} from './modals/add-owners-vm-instance/add-owners-vm-instance.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {CreateNewVMInstanceDialogComponent} from './modals/create-new-vminstance-dialog/create-new-vminstance-dialog.component';
 
 @NgModule({
     declarations: [
@@ -108,6 +110,7 @@ import { AddOwnersVmInstanceComponent } from './modals/add-owners-vm-instance/ad
         UserComponent,
         ViewVmInstanceComponent,
         AddOwnersVmInstanceComponent,
+        CreateNewVMInstanceDialogComponent,
     ],
     imports: [
         MatNativeDateModule,
@@ -140,6 +143,7 @@ import { AddOwnersVmInstanceComponent } from './modals/add-owners-vm-instance/ad
         MatDatepickerModule,
         PdfViewerModule,
         MatGridListModule,
+        MatSnackBarModule
     ],
     exports:[
         MatDatepickerModule,

@@ -10,6 +10,7 @@ import {environment} from '../../environments/environment';
 })
 export class VmModelsService {
   base_URL = environment.base_URL;
+  coursesUrl = environment.base_url_course;
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
@@ -27,25 +28,13 @@ export class VmModelsService {
 
   getVmModelByCourseId(courseId: number): Observable<VmModel> {
     const url = `${this.base_URL}/vmModels/`;
-    // ale
-    // const headers = new HttpHeaders({courseId: number(courseId)});
-    /*// const header: HttpHeaders = new HttpHeaders({courseId: number(courseId)});
-     console.log(headers.get('courseId'));
-     return this.http.get<VmModel>(url, {headers})
-         .pipe(
-             catchError(this.handleError<VmModel>('query'))
-         );*/
-    return of(new VmModel(1, 'vmModel', 1, 3, 500, 500));
+    return this.http.get<VmModel>(url)
+        .pipe(
+            catchError(this.handleError<VmModel>('getVmModel'))
+        );
+
   }
 
-  update(updatedVmModel: VmModel): Observable<VmModel> {
-
-    return of(updatedVmModel);
-  }
-
-  addVmModel(newVmModel: VmModel): Observable<VmModel> {
-    return of(newVmModel);
-  }
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
@@ -60,4 +49,13 @@ export class VmModelsService {
   }
 
 
+  addVmModel(courseId: number, vmModel: VmModel): Observable<VmModel> {
+    const url = `${this.coursesUrl}/${courseId}/vmModel`;
+    const httpOptions = {
+      headers: new HttpHeaders({'Content-Type': 'application/json'})
+    };
+    return this.http.post<VmModel>(url, vmModel, httpOptions).pipe(
+        catchError(this.handleError<VmModel>('updateVmModel'))
+    );
+  }
 }
