@@ -27,7 +27,6 @@ export class ViewContentAssignmentComponent {
     } else if(this.fileType === 'pdf') {
       this.assignmentUrl = data.assignmentUrl;
     } else {
-      console.log('800A ', data)
       this.assignmentUrl = this.sanitizer.bypassSecurityTrustUrl(data.assignmentUrl)
     }
 

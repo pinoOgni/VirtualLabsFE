@@ -52,7 +52,7 @@ import {EditCourseDialogComponent} from './modals/edit-course-dialog/edit-course
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSelectModule} from '@angular/material/select';
 import {AddCourseDialogComponent} from './modals/add-course-dialog/add-course-dialog.component';
-
+import {ConfirmationDialogComponent} from './modals/confirmation-dialog/confirmation-dialog.component'
 import {MatNativeDateModule} from '@angular/material/core';
 import {TeacherAssignmentsComponent} from './teacher/assignments/teacher-assignments.component';
 import {CreateAssignmentComponent} from './modals/create-assignment/create-assignment.component';
@@ -91,6 +91,7 @@ import {CreateNewVMInstanceDialogComponent} from './modals/create-new-vminstance
     StudentAssignmentsContComponent,
     StudentAssignmentsComponent,
     StudentVmsContComponent,
+    
         StudentTeamContComponent,
         TeacherStudentsContComponent,
         EditCourseDialogComponent,
@@ -107,6 +108,7 @@ import {CreateNewVMInstanceDialogComponent} from './modals/create-new-vminstance
         StudentNoTeamVmsComponent,
         EditStudentVmInstanceDialogComponent,
         TeamMembersDialogComponent,
+        ConfirmationDialogComponent,
         UserComponent,
         ViewVmInstanceComponent,
         AddOwnersVmInstanceComponent,

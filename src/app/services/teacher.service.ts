@@ -11,23 +11,8 @@ import {Teacher} from '../models/teacher.model';
   providedIn: 'root'
 })
 export class TeacherService {
-  base_URL = environment.base_URL;
-
-  httpOptions = {
-    headers: new HttpHeaders({'Content-Type': 'application/json'})
-  };
-
 
   constructor(private httpClient: HttpClient, private authService: AuthService) { }
-
-
-  /**
-   * TODO
-   * searchingTeachersInCourseByName: metodo per cercare i teacher in un corso. Ritorna Observable<Teacher[]>
-   * searchingTeachersByName: metodo per cercare gli teacher. Ritorna un Observable<Teacher[]>
-   * uploadTeacherAssignment: metodo per caricare l'assignment di uno teacher. Ritorna un Observable<Upload>
-   */
-
 
   /**
    * This method return a teacher given a teacherId
@@ -42,7 +27,6 @@ export class TeacherService {
     );
 
   }
-
 
 
   /**
@@ -61,14 +45,13 @@ export class TeacherService {
       );
   }
 
+  /**
+   * This method is used to update a course
+   * @param course 
+   */
   // ALE
-  // TODO spostare in courseService
   update(course: Course): Observable<Course> {
-    const httpOptions = {
-      headers: new HttpHeaders({'Content-Type': 'application/json'})
-    };
-    console.log('sto updaando: ' + course.id + ' nome: ' + course.name);
-    return this.httpClient.put<Course>(this.base_URL + 'courses/', course, httpOptions).pipe(
+    return this.httpClient.put<Course>(environment.base_url_course, course, environment.http_options).pipe(
         catchError(this.handleError<any>('updateCourse'))
     );
 
@@ -86,24 +69,24 @@ export class TeacherService {
     };
   }
 
-
-  deleteCourse(courseId: number): Observable<Course> {
+  /**
+   * Method used to cancel a course
+   * @param courseId 
+   */
+  deleteCourse(courseId: number) {
     const url = `${environment.base_url_course}/${courseId}`;
-    const httpOptions = {
-      headers: new HttpHeaders({'Content-Type': 'application/json'})
-    };
     console.log('sto per deletare: ' + courseId + ' all url ' + url);
     return this.httpClient.delete<any>(url).pipe(
         catchError(this.handleError<any>('deleteCourse')));
   }
 
-  
+  /**
+   * Method used to add a course
+   * @param newCourse 
+   */
   addCourse(newCourse: Course): Observable<Course> {
-    const httpOptions = {
-      headers: new HttpHeaders({'Content-Type': 'application/json'})
-    };
     console.log('mi è arrivato ' + newCourse);
-    return this.httpClient.post<Course>(this.base_URL + 'courses/', newCourse, httpOptions).pipe(
+    return this.httpClient.post<Course>(environment.base_url_course, newCourse, environment.http_options).pipe(
         catchError(this.handleError<any>('addCourse'))
     );
   }

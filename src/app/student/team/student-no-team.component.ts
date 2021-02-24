@@ -115,7 +115,6 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   @Input() set setEnrolledAvailableStudents(students: Student[]) {
     const studentInfo = JSON.parse(localStorage.getItem('currentUser'));
-    console.log('setEnrolledAvailableStudents, ', JSON.parse(localStorage.getItem('currentUser')))
     this.currentStudent = students.find((student) => student.id === studentInfo.username);
     this.dataSourceStudents.data = students.filter((student) => student.id !== this.currentStudent.id);
   }
@@ -220,7 +219,6 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
    * @param student 
    */
   displayFn(student: Student): string {
-    console.log('displayFn student.id', student ? Student.toString(student) : '');
     return student ? Student.toString(student) : '';
   }
 
@@ -262,9 +260,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
    * is used to create a proposal of team
    */
   createTeam() {
-    console.log('createTeam')
     if (this.selectedStudents.length + 1 < this.currentCourse.min) {
-      console.log('error number of student for the team is low');
       this.errors = 'The number of students must respect the minimum and maximum of this course';
       return;
     }
@@ -286,7 +282,7 @@ export class StudentNoTeamComponent implements OnInit, OnDestroy, AfterViewInit 
               this.selectedStudents.map(x => x.id)
           )
       );
-      this.teamNameControl.setValue('');
+      this.teamNameControl.reset();
       this.selectedStudents = [];
     }
   }

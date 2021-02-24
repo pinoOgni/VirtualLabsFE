@@ -6,6 +6,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {Student} from '../../models/student.model';
 import {Observable} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
+import { first } from 'rxjs/operators';
+import { ViewVmInstanceComponent } from 'src/app/modals/view-vm-instance/view-vm-instance.component';
 
 
 @Component({
@@ -30,8 +32,10 @@ export class VmsComponent implements OnInit {
         this.usedMemory = 0;
         this.runningInstances = 0;
         this.creators = new Map<number, Student>();
-
-
+        
+        this.route.queryParams.subscribe((queryParam) => {
+          queryParam && queryParam.openVmInstanceTeacher ? this.openVmInstanceContentDialog(queryParam.openVmInstanceTeacher, queryParam.teamId) : null;
+        });
     }
 
   ngOnInit(): void {
@@ -51,6 +55,30 @@ export class VmsComponent implements OnInit {
       );
   }
 
+   /**
+   * This method is used to create dialog to see the VM instance
+   * @param vmId
+   * @param teamId
+   */
+  openVmInstanceContentDialog(vmId: number, teamId: number) {
+    this.courseService.getContentVmInstance(teamId,vmId).pipe(first()).subscribe(c => {
+      if (!c) {
+        this.router.navigate([this.router.url.split('?')[0]]);
+        return;
+      }
+      const url = URL.createObjectURL(c);
+      const dialogRef = this.dialog.open(ViewVmInstanceComponent, {
+        data: {
+          type: c.type,
+          vmInstanceUrl: url,
+        }
+      });
+      dialogRef.afterClosed().subscribe(() => {
+        URL.revokeObjectURL(url);
+        this.router.navigate([this.router.url.split('?')[0]]);
+      });
+    });
+  }
 
 
   private calculateUsedResources(): void {

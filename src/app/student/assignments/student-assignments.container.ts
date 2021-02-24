@@ -83,7 +83,6 @@ export class StudentAssignmentsContComponent {
         this.router.navigate([this.router.url.split('?')[0]]);
         return;
       }
-      console.log('blob text', c.text())
       const url = URL.createObjectURL(c);
       const dialogRef = this.dialog.open(ViewContentAssignmentComponent, {
         data: {
@@ -112,7 +111,6 @@ export class StudentAssignmentsContComponent {
    */
   openViewContentHomeworkVersionDialog(versionId: number, assignmentId: number) {
     const assignment = this.assignmentHomeworks.find(a => a.assignment_id == assignmentId);
-    console.log('viewContentHomeworkVersion ', assignment)
     this.assignmentService.getContentHomeworkVersion(assignmentId, this.authService.currentUserValue.username, versionId)
       .pipe(first()).subscribe(content => {
         if (!content) {

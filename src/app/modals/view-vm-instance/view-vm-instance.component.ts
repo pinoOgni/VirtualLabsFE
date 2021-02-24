@@ -13,9 +13,6 @@ export class ViewVmInstanceComponent  {
 
   constructor(public dialogRef: MatDialogRef<ViewVmInstanceComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private sanitizer: DomSanitizer) { 
     this.fileType = data.type.split('/')[1]
-    console.log('type ', this.fileType);
-    console.log('suca ', data)
-    console.log('suca ', data.vmInstanceUrl)
     this.vmInstanceUrl = this.sanitizer.bypassSecurityTrustUrl(data.vmInstanceUrl);
     
 }

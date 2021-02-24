@@ -1,5 +1,11 @@
-<h1> Welcome on VirtualLabs </h1>
+<div *ngIf="currentUser; else notLogged">
+    <h1> Welcome on VirtualLabs </h1>
+    <h2> You can select one of the courses on the left and then select the tab that interests you most.</h2>
 
-<h2> Log in or register!</h2>
+</div>
+<ng-template #notLogged>
+    <img src="assets/home.png">
+</ng-template>
+
 
 

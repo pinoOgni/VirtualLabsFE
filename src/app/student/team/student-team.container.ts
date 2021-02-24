@@ -100,7 +100,6 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
       .asObservable()
       .pipe(takeUntil(this.destroy$))
       .subscribe(course => {
-        console.log('Setting the course')
         this.currentCourse = course;
       }
       );
@@ -121,7 +120,6 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
       .subscribe((team) => {
         this.team = team;
         if (team != null) {
-          console.log('student-team-contatiner currentTeamSubject ', team.name)
           this.teamService.getMembersOfTeam(team.id).pipe(first())
             .subscribe((members) => (this.membersOfTeam = members));
         }
@@ -166,7 +164,6 @@ export class StudentTeamContComponent implements OnInit, OnDestroy {
 
   openViewMembersTeamDialog(proposalInfoId: number, teamName: string, typeProposal: string) {
     let proposalInfo
-    console.log('openViewMembersTeamDialog ', typeProposal)
     if (typeProposal === 'received') {
       proposalInfo = this.proposalsInfoReceived.find(p => p.id == proposalInfoId);
     } else if (typeProposal === 'sent') {

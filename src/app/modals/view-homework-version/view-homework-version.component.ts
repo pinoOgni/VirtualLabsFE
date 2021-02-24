@@ -40,14 +40,12 @@ export class ViewHomeworkVersionComponent {
         review: '',
       });
 
-    console.log('constructor ViewHomeworkVersionComponent')
     this.studentService.getStudent(data.studentId).subscribe(
       s => this.student = s
     );
     this.assignmentService.getHomeworkVersionsOfStudent(this.assignmentId, this.studentId).pipe(first())
     .subscribe(
       homeworkVersions => {
-        console.log('ciao ', homeworkVersions);
         this.homeworkVersionDataSource.data = homeworkVersions.sort(HomeworkVersion.compareHomeworkVersion)
       }
         );
@@ -74,7 +72,6 @@ export class ViewHomeworkVersionComponent {
  * @param student 
  */
   displayFn(student: Student): string {
-    console.log('displayFn student.id', student ? Student.toString(student) : '');
     return student ? Student.toString(student) : '';
   }
 

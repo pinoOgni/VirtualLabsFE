@@ -82,7 +82,6 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
    * this is used to set the enrolledStudents, taken from the container
    */
   @Input() set enrolledStudents(enrolledStudents: Student[]) {
-    console.log('set enrolledStudents', enrolledStudents)
     this.dataSource.data = enrolledStudents;
   }
 
@@ -116,6 +115,9 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
     this.destroy$.unsubscribe();
   }
 
+  /**
+   * This method is used to enroll students with CSV
+   */
   addStudentsWithCsv() {
     const formData = new FormData();
     const fileInput: InputFile = this.addStudentsCsvControl.value;
@@ -149,7 +151,6 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    console.log('On after view init, students component');
   }
 
   /** 
@@ -161,6 +162,10 @@ export class TeacherStudentsComponent implements OnInit, AfterViewInit, OnDestro
       this.selection.select(...this.getDataFirstPage())
   }
 
+  /**
+   * This method is used to get only the data
+   * of the first page
+   */
   getDataFirstPage() {
     return this.dataSource._pageData(
       this.dataSource._orderData(this.dataSource.filteredData)

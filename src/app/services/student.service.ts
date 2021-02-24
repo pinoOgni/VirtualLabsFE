@@ -19,20 +19,33 @@ export class StudentService {
   constructor(private httpClient: HttpClient, private authService: AuthService, private courseService: CourseService) {
   }
 
+  /**
+   * Name of the current team
+   */
   teamName: string;
+
+  /**
+   * Name of the current creator
+   */
   creator: string;
+
+  /**
+   * List of team members with name, surname, id and status
+   */
   membersWithState: string[];
+
+  /**
+   * expiration of a team (actually a team proposal)
+   */
   deadline: string;
+
   isValid: boolean;
+
+  /**
+   * token of a student?
+   */
   token: string;
 
-/*
-  //test 
-  exampleProposals: Proposal[] = [
-    { teamName: 'Vendetta', creator: 'Pino', membersWithState: ['Leo Tolo 1', 'Hamza Rh 4'], deadline: '14-12-2022', isValid: true, token: 'bbbbbbb' },
-    { teamName: 'Argonauti', creator: 'ALALA', membersWithState: ['Ale Pag 1', 'Jack Am 4'], deadline: '14-12-2021', isValid: true, token: 'aaaaaa' }
-  ]
-   */
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
@@ -48,7 +61,7 @@ export class StudentService {
 
 
   /**
-   * This methdo return a student given a studentId
+   * This method returns a student given a studentId
    * @param studentId 
    */
   getStudent(studentId: string): Observable<Student> {
@@ -160,14 +173,6 @@ export class StudentService {
       );
   }
 
-
-
-
-
-
-
-
-
   /**
    * Retrieve all the courses taken by the student
    * @param studentId the id of the student
@@ -183,7 +188,6 @@ export class StudentService {
         )
       );
   }
-
 
 
 

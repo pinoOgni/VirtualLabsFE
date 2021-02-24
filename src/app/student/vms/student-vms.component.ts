@@ -39,7 +39,7 @@ export class StudentVmsComponent implements OnInit {
      * Subscribe to all query params for the dialogs
      */
     this.route.queryParams.subscribe((queryParam) =>
-        queryParam && queryParam.openVmInstance ? this.openVmInstanceContentDialog(queryParam.openVmInstance, queryParam.teamId) : null);
+        queryParam && queryParam.openVmInstanceStudent ? this.openVmInstanceContentDialog(queryParam.openVmInstanceStudent, queryParam.teamId) : null);
 
       this.route.queryParams.subscribe((queryParam) =>
           queryParam && queryParam.modifyVmResourcesStudent ? this.openEditVmResourcesDialog(queryParam.modifyVmResourcesStudent) : null);
@@ -167,7 +167,6 @@ export class StudentVmsComponent implements OnInit {
         //   vm.status = VmInstanceStatus.SUSPENDED;
         this.courseService.changeVmInstanceStatus(this.team.id, vm, 0).subscribe(
             r => {
-                console.log('mi è arrivato' + r.status);
                 this.getVmInstances();
             }
         );
@@ -197,7 +196,6 @@ export class StudentVmsComponent implements OnInit {
         this.router.navigate([this.router.url.split('?')[0]]);
         return;
       }
-      console.log('size ', c.size)
       const url = URL.createObjectURL(c);
       const dialogRef = this.dialog.open(ViewVmInstanceComponent, {
         data: {
@@ -206,6 +204,7 @@ export class StudentVmsComponent implements OnInit {
         }
       });
       dialogRef.afterClosed().subscribe(() => {
+        URL.revokeObjectURL(url);
         this.router.navigate([this.router.url.split('?')[0]]);
       });
     });
@@ -276,7 +275,6 @@ export class StudentVmsComponent implements OnInit {
                                   }
                               );
                           }
-                          console.log('cirirombolo');
                           toBeShowed = [];
                           this.router.navigate([this.router.url.split('?')[0]]);
                       }
