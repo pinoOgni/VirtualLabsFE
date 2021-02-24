@@ -111,7 +111,6 @@ export class StudentAssignmentsComponent {
    * @param assignmentId 
    */
   newHomeworkVersion(assignmentId: number) {
-    console.log('newHomeworkVersion')
     const dialogRef = this.dialog.open(NewHomeworkVersionDialogComponent, {
       width: '60%',
         data: { 

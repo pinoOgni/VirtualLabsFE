@@ -35,7 +35,6 @@ export class ErrorInterceptor implements HttpInterceptor {
    * @param next 
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('interceptor error');
     return next.handle(request).pipe(catchError(err => {
       console.log('error status', err.status);
       const currentUser = this.authService.currentUserValue;

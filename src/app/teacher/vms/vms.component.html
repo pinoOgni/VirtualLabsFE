@@ -70,8 +70,9 @@
 
                     </div>
                     <p *ngIf="isRunning(vm)">
-                        <!-- todo che devo fare? --->
-                        <button color="primary" mat-raised-button> Open VM Instance</button>
+                        <button mat-raised-button color="primary" [routerLink]="" [queryParams]="{ openVmInstanceTeacher: vm.id, teamId: team.id }">
+                            Open VM Instance
+                        </button>
                         <br>
                     </p>
                     </b>

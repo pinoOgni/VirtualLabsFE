@@ -35,7 +35,6 @@ export class StudentComponent implements OnDestroy, OnInit {
      */
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.courseService.setNextCourse(params.courseId);
-      console.log('setNextCourse ', params.courseId)
       this.teamService.getTeamOfStudent()
         .pipe(first()).subscribe(team => {
           team ? this.teamService.currentTeamSubject.next(team) : this.teamService.currentTeamSubject.next(null)

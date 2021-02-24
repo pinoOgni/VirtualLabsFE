@@ -11,7 +11,7 @@ import {CourseService} from '../../services/course.service';
     selector: 'app-student-vms-cont',
     templateUrl: './student-vms.container.html'
 })
-export class StudentVmsContComponent implements OnInit, OnDestroy {
+export class StudentVmsContComponent implements OnDestroy {
     team$: Observable<Team>;
     team: Team;
     vmInstances: Observable<VmInstanceModel[]>;
@@ -28,21 +28,14 @@ export class StudentVmsContComponent implements OnInit, OnDestroy {
             .subscribe((team) => {
                     this.team = team;
                     if (team !== null) {
-
                         // this.vmInstances = this.courseService.getVmInstancesOfTeam(team.id);
                     }
-
-
                 }
             );
 
 
     }
 
-  ngOnInit() {
-//    this.team  = this.teamService.getTeamOfStudent();
-
-  }
 
   ngOnDestroy() {
     this.destroy$.next(true);
@@ -60,7 +53,6 @@ export class StudentVmsContComponent implements OnInit, OnDestroy {
                   output = (team !== null);
               }
           );
-      console.log('pelopelo sono output ' + output);
       return output;
   }
 

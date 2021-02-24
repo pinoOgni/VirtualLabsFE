@@ -20,29 +20,21 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class CourseService {
 
-    /**
-     exampleAssignmentHomeworkStudent: AssignmentHomeworkStudent[] = [
-     {assignment_id: 13, name: 'assignment 100', releaseDate: '1717171717', expiryDate: '1782372831',
-    currentStatus: HomeworkStatus.REVIEWED, score: 30 },
-    {assignment_id: 15, name: 'assignment 111', releaseDate: '1313131313', expiryDate: '51515151515',
-    currentStatus: HomeworkStatus.SCORED, score: 28 }
-  ]
- */
-
+  /**
+   * It represents the current course, in this way, 
+   * all components can refer to this value to have the course always updated.
+   */
   public course: BehaviorSubject<Course>;
+
+  /**
+   * Represents the id of a course, all components refer to this value to be always updated.
+   */
   public currentCourseIdSubject: BehaviorSubject<number>;
 
     constructor(private authService: AuthService, private httpClient: HttpClient, private snackBar: MatSnackBar) {
         this.course = new BehaviorSubject<Course>(null);
         this.currentCourseIdSubject = new BehaviorSubject<number>(null);
     }
-
-  /**
-   * metodo enrollStudentsToCourseWithCSV per aggiungere degli studenti al corso dato un ID con csv. Prende un FORM e un courseId.
-   * metodo updateCourse per aggiornare un corso. Ritorna un Observable<Course>. FORM COURSE.
-   * getVmsOfCourse per ottenere tutte le VM di questo corso. Prende un courseId. Ritorna un Observable<TeacherVmInfo>
-   */
-
 
   /**
    * This method is used to retrieve all assignments and homeworks of an assignment
@@ -181,6 +173,11 @@ export class CourseService {
       );
   }
 
+  /**
+   * Simple method of handling errors
+   * @param operation 
+   * @param result 
+   */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
@@ -193,11 +190,13 @@ export class CourseService {
     };
   }
 
-
+  /**
+   * Method that is used to set the course and in this way is made available to everyone
+   * @param courseId 
+   */
   setNextCourse(courseId: number) {
     this.currentCourseIdSubject.next(courseId);
     if (courseId == null) {
-      console.log('setNextcourse !courseId')
       this.course.next(null);
       return;
     }
@@ -243,7 +242,6 @@ export class CourseService {
    */
   getEnrolledStudents(courseId: number = this.currentCourseIdSubject.value): Observable<Student[]> {
     const url = `${environment.base_url_course}/${courseId}/enrolled`;
-    console.log('getEnrolledStudents course-service ', url)
     return this.httpClient
       .get<Student[]>(url).pipe(tap(() =>
           console.log(`getEnrolledStudents ok ${courseId}`)
@@ -425,6 +423,10 @@ export class CourseService {
     ));
   }
 
+  /**
+   * Method used to get all the teams of a course
+   * @param courseId 
+   */
   public getTeamsOfCourse(courseId: number = this.currentCourseIdSubject.value): Observable<Team[]> {
       const url = `${environment.base_url_course}/${courseId}/teams`;
 
@@ -437,7 +439,10 @@ export class CourseService {
 
   }
 
-
+  /**
+   * Method used to get all the vm instances of a team
+   * @param teamId 
+   */
   getVmInstancesOfTeam(teamId: number): Observable<VmInstanceModel[]> {
       const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${teamId}/vmInstances`;
       return this.httpClient.get<VmInstanceModel[]>(url)
@@ -448,6 +453,11 @@ export class CourseService {
           );
   }
 
+  /**
+   * Method used to update the resources of a team
+   * @param id 
+   * @param editedTeam 
+   */
     updateTeamVmResources(id: number, editedTeam: Team): Observable<Team> {
         const httpOptions = {
             headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -461,10 +471,12 @@ export class CourseService {
             );
     }
 
+    /**
+     * Method used to return the creator of a vm instance
+     * @param teamId 
+     * @param vmInstanceId 
+     */
     getVmInstanceCreator(teamId: number, vmInstanceId: number): Observable<Student> {
-        // {courseId}/teams/{tid}/vmInstances/{vmid}/getCreator  ----> FARE LA GET
-        // const prova = new Student('260005', 'alex.pagano@studenti.polito.it', 'Alessandro', 'Pagano', 'A');
-        // return of(prova);
         const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${teamId}/vmInstances/${vmInstanceId}/creator`;
         return this.httpClient.get<Student>(url)
             .pipe(tap(() =>
@@ -474,10 +486,13 @@ export class CourseService {
             );
     }
 
+    /**
+     * Method used to return all owners of a vm instance
+     * @param tId 
+     * @param vmId 
+     */
     getVmInstanceOwners(tId: number, vmId: number): Observable<Student[]> {
-        // "/{courseId}/teams/{tid}/vmInstances/{vmid}/getOwners"
         const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${tId}/vmInstances/${vmId}/owners`;
-        console.log(' vmInstanceOwners: ' + url);
         return this.httpClient.get<Student[]>(url)
             .pipe(tap(() =>
                     console.log(`getVmInstanceOwners`)
@@ -487,13 +502,16 @@ export class CourseService {
 
     }
 
+    /**
+     * Method used to change the state of a vm instance
+     * @param tId 
+     * @param vm 
+     * @param newStatus 
+     */
     changeVmInstanceStatus(tId: number, vm: VmInstanceModel, newStatus: number) {
-        const httpOptions = {
-            headers: new HttpHeaders({'Content-Type': 'application/json'})
-        };
         const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${tId}/vmInstances/${vm.id}/command`;
 
-        return this.httpClient.post<VmInstanceModel>(url, newStatus, httpOptions)
+        return this.httpClient.post<VmInstanceModel>(url, newStatus, environment.http_options)
             .pipe(tap(() =>
                     console.log(`changeVmInstanceStatus`)
                 ),
@@ -501,6 +519,11 @@ export class CourseService {
             );
     }
 
+    /**
+     * Method used to delete a vm instance
+     * @param tId 
+     * @param vm 
+     */
     deleteVmInstance(tId: number, vm: VmInstanceModel): Observable<boolean> {
         const url = `${environment.base_url_course}/${this.currentCourseIdSubject.value}/teams/${tId}/vmInstances/${vm.id}`;
         return this.httpClient.delete<boolean>(url)
@@ -528,6 +551,12 @@ export class CourseService {
         );
     }
 
+    /**
+     * Method used to change the resources of a vm instance
+     * @param teamId 
+     * @param newVmInstance 
+     * @param courseId 
+     */
     changeVmInstanceResources(teamId: number, newVmInstance: VmInstanceModel, courseId: number = this.currentCourseIdSubject.value) {
         const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances/${newVmInstance.id}/`;
         return this.httpClient.put(url, newVmInstance).pipe(
@@ -542,6 +571,11 @@ export class CourseService {
         );
     }
 
+    /**
+     * Method used to return students to a team
+     * @param teamId 
+     * @param courseId 
+     */
     getStudentsOfTeam(teamId: number, courseId: number = this.currentCourseIdSubject.value): Observable<Student[]> {
         const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/students`;
         return this.httpClient.get(url).pipe(
@@ -550,20 +584,22 @@ export class CourseService {
         );
     }
 
+    /**
+     * Method used to add owners to a vm instance
+     * @param teamId 
+     * @param vmId 
+     * @param output 
+     * @param courseId 
+     */
     addOwnersToVmInstance(teamId: number, vmId: number, output: string[], courseId: number = this.currentCourseIdSubject.value) {
-        const httpOptions = {
-            headers: new HttpHeaders({'Content-Type': 'application/json'})
-        };
-
         let url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances/${vmId}/owners?studentIds=`;
         output.forEach(
             o => {
                 url = `${url}${o},`;
             }
         );
-        console.log('sono url' + url);
 
-        return this.httpClient.post<boolean>(url, httpOptions)
+        return this.httpClient.post<boolean>(url, environment.http_options)
             .pipe(
                 tap(() => console.log('createAssignment ok')),
                 catchError(this.handleError<Assignment>(`createAssignment error`)
@@ -572,12 +608,15 @@ export class CourseService {
 
     }
 
+    /**
+     * Method used to add a new vm instance
+     * @param teamId 
+     * @param newVm 
+     * @param courseId 
+     */
     addNewVmInstance(teamId: number, newVm: VmInstanceModel, courseId: number = this.currentCourseIdSubject.value): Observable<VmInstanceModel> {
         const url = `${environment.base_url_course}/${courseId}/teams/${teamId}/vmInstances`;
-        const httpOptions = {
-            headers: new HttpHeaders({'Content-Type': 'application/json'})
-        };
-        return this.httpClient.post<VmInstanceModel>(url, newVm, httpOptions)
+        return this.httpClient.post<VmInstanceModel>(url, newVm, environment.http_options)
             .pipe(tap(() =>
                     console.log(`addNewVmInstance`)
                 ),

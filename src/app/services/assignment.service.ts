@@ -39,7 +39,6 @@ export class AssignmentService {
    */
   getHomeworksOfAssignment(assignmentId: number,courseId: number = this.courseService.currentCourseIdSubject.value): Observable<Homework[]> {
      const url = `${environment.base_url_course}/${courseId}/assignment/${assignmentId}/homeworks`
-     console.log(url)
     return this.httpClient.get<Homework[]>(url)
         .pipe(
           tap((homeworks) => console.log(`getHomeworksOfAssignments ok ${assignmentId}, homeworks, ${homeworks}`)),
@@ -100,11 +99,10 @@ export class AssignmentService {
    */
   getContentHomeworkVersion(assignmetId: number, studentId: string, versionId: number, courseId = this.courseService.currentCourseIdSubject.value): Observable<Blob> {
     const url = `${environment.base_url_course}/${courseId}/assignment/${assignmetId}/homework/${studentId}/version/${versionId}/content`
-    console.log('getContentHomeworkversion ', url)
     return this.httpClient.get(url, {
       responseType: 'blob',
     }).pipe(
-        tap(() => console.log(`rgetContentHomeworkVersion ${versionId}`)),
+        tap(() => console.log(`getContentHomeworkVersion ${versionId}`)),
         catchError(this.handleError<any>(`getContentHomeworkVersion error ${versionId}`))
     );
   }

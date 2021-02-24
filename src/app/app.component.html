@@ -25,7 +25,7 @@
     <h3>{{course != null ? course.name : ''}} </h3>
   </mat-toolbar-row>
   <mat-toolbar-row>
-    <button (click)="openDialogAddCourse()" *ngIf="currentUser.roles[0] === 'ROLE_TEACHER'" mat-raised-button>
+    <button [queryParams]="{ addCourse: true}" routerLink="home" color="primary" *ngIf="currentUser.roles[0] === 'ROLE_TEACHER'" mat-raised-button>
       Add new Course
       <mat-icon>add</mat-icon>
     </button>
@@ -46,8 +46,8 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="openDialogEditCourse(course)">Edit</button>
-            <button (click)="openDialogDeleteCourse(course)" mat-menu-item>Delete</button>
+            <button [queryParams]="{ editCourse: course.id }" routerLink="home" color="primary" mat-menu-item> Edit </button>
+            <button [queryParams]="{ deleteCourse: course.id }" routerLink="home" color="primary" mat-menu-item> Delete </button>
           </mat-menu>
         </mat-list-item>
       </mat-nav-list>

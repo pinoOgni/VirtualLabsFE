@@ -22,7 +22,7 @@ export class ConfirmationDialogComponent implements OnInit {
   }
 
   confirmDelete() {
-    console.log('popipopi');
+    console.log('confirmDelete ConfirmationDialogComponent');
     this.dialogRef.close(
         {
           confirmed: true

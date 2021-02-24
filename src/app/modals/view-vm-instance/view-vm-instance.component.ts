@@ -8,14 +8,12 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   styleUrls: ['./view-vm-instance.component.css']
 })
 export class ViewVmInstanceComponent  {
-
-  image: string | ArrayBuffer;
-  imageUrl: SafeUrl;
-
+  vmInstanceUrl: SafeUrl;
+  fileType: string;
 
   constructor(public dialogRef: MatDialogRef<ViewVmInstanceComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private sanitizer: DomSanitizer) { 
-    
-    this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(data.imageUrl);
+    this.fileType = data.type.split('/')[1]
+    this.vmInstanceUrl = this.sanitizer.bypassSecurityTrustUrl(data.vmInstanceUrl);
     
 }
 
