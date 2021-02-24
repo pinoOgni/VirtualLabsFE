@@ -1,11 +1,13 @@
-<div *ngIf="currentUser; else notLogged">
-    <h1> Welcome on VirtualLabs </h1>
-    <h2> You can select one of the courses on the left and then select the tab that interests you most.</h2>
-
+<div class="center">
+    <div *ngIf="currentUser; else notLogged">
+        <h1> Welcome on VirtualLabs </h1>
+        <h2> You can select one of the courses on the left and then select the tab that interests you most.</h2>
+    
+    </div>
+    <ng-template #notLogged>
+        <img src="assets/home.png" style="height: 90vh;">
+    </ng-template>
 </div>
-<ng-template #notLogged>
-    <img src="assets/home.png">
-</ng-template>
 
 
 

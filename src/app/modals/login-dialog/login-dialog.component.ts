@@ -46,8 +46,6 @@ export class LoginDialogComponent implements OnInit {
         if (response) {
           this.close(true);
         }
-      }, error => {
-        this.serverErrors = (error as HttpErrorResponse).error.message;
       });
     }
   }

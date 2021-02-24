@@ -16,13 +16,28 @@ import { ViewVmInstanceComponent } from 'src/app/modals/view-vm-instance/view-vm
     styleUrls: ['./vms.component.css']
 })
 export class VmsComponent implements OnInit {
+
+    /**
+     * Current team
+     */
     @Input() team: Team;
+
+    /**
+     * List of vm instance model
+     */
     vmsInstances: VmInstanceModel[];
+
+    /**
+     * Resources
+     */
     usedVcpu: number;
     usedDisk: number;
     usedMemory: number;
     runningInstances: number;
 
+    /**
+     * List of creators
+     */
     creators: Map<number, Student>;
 
 
@@ -33,9 +48,6 @@ export class VmsComponent implements OnInit {
         this.runningInstances = 0;
         this.creators = new Map<number, Student>();
         
-        this.route.queryParams.subscribe((queryParam) => {
-          queryParam && queryParam.openVmInstanceTeacher ? this.openVmInstanceContentDialog(queryParam.openVmInstanceTeacher, queryParam.teamId) : null;
-        });
     }
 
   ngOnInit(): void {
@@ -55,32 +67,11 @@ export class VmsComponent implements OnInit {
       );
   }
 
-   /**
-   * This method is used to create dialog to see the VM instance
-   * @param vmId
-   * @param teamId
+
+  /**
+   * This method calculates the amount of resources currently used by the
+   * running vm instances
    */
-  openVmInstanceContentDialog(vmId: number, teamId: number) {
-    this.courseService.getContentVmInstance(teamId,vmId).pipe(first()).subscribe(c => {
-      if (!c) {
-        this.router.navigate([this.router.url.split('?')[0]]);
-        return;
-      }
-      const url = URL.createObjectURL(c);
-      const dialogRef = this.dialog.open(ViewVmInstanceComponent, {
-        data: {
-          type: c.type,
-          vmInstanceUrl: url,
-        }
-      });
-      dialogRef.afterClosed().subscribe(() => {
-        URL.revokeObjectURL(url);
-        this.router.navigate([this.router.url.split('?')[0]]);
-      });
-    });
-  }
-
-
   private calculateUsedResources(): void {
     this.usedVcpu = 0;
     this.usedDisk = 0;
@@ -99,10 +90,20 @@ export class VmsComponent implements OnInit {
 
   }
 
+
+  /**
+   * This method is used to recover the creator of the vm instance
+   * @param teamId 
+   * @param vmInstanceId 
+   */
     getVmCreator(teamId: number, vmInstanceId: number): Observable<Student> {
         return this.courseService.getVmInstanceCreator(teamId, vmInstanceId);
     }
 
+    /**
+     * This method is used to check if the vm instance is running
+     * @param vm 
+     */
     isRunning(vm: VmInstanceModel) {
         return vm.status === VmInstanceStatus.RUNNING;
     }

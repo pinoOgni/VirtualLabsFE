@@ -49,6 +49,7 @@ export class EditCourseDialogComponent implements OnInit {
         this.editCourseForm.controls.vmModelMemory.setValue(data.editedCourse.memory);
         this.editCourseForm.controls.vmModelMaxInstances.setValue(data.editedCourse.maxVmInstance);
         this.editCourseForm.controls.vmModelMaxRunningInstances.setValue(data.editedCourse.maxRunningVmInstance);
+        
 
 
     }
@@ -85,7 +86,7 @@ export class EditCourseDialogComponent implements OnInit {
             this.model.memory = Number(this.editCourseForm.controls.vmModelMemory.value);
             this.model.instances = Number(this.editCourseForm.controls.vmModelMaxInstances.value);
             this.model.runningInstances = Number(this.editCourseForm.controls.vmModelMaxRunningInstances.value);
-
+            console.log('CIAO ', this.model)
             this.dialogRef.close(
                 {
                     logged: true,

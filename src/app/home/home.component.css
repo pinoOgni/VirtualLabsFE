@@ -1,0 +1,9 @@
+.center {
+    display: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .all-width {
+    width: 100%;
+  }
