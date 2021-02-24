@@ -33,12 +33,12 @@
                                 </ng-template>
 
 
-                            Virtual Machine name: {{vm.name}} <br>
-                            Virtual Machine ID: {{vm.id}} <br>
-                            Status: {{vm.status}}<br>
-                            vCPUs: {{vm.vcpu}}<br>
-                            Disk Size: {{vm.memory}} MB<br>
-                            Memory Size: {{vm.disk}} MB<br>
+                                Virtual Machine name: {{vm.name}} <br>
+                                Virtual Machine ID: {{vm.id}} <br>
+                                Status: {{vm.status}}<br>
+                                vCPUs: {{vm.vcpu}}<br>
+                                Disk Size: {{vm.disk}} MB<br>
+                                Memory Size: {{vm.memory}} MB<br>
                                 <div *ngIf="vmInstancesCreators.get(vm.id) as student">
                                     Created by: {{student.firstName}} {{student.lastName}}  {{student.id}}
                                     <div *ngIf="isOwner(team.id,vm.id)">
