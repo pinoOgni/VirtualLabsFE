@@ -40,3 +40,12 @@ nav a.active {
 .mat-divider {
     border-top-width: 16px;
 }
+
+
+.no-scrollbar {
+  overflow: hidden;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}

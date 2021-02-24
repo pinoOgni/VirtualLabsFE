@@ -7,9 +7,10 @@ import {Observable} from 'rxjs';
 import {VmInstanceModel} from '../../models/vm-instance-model';
 import {VmModelsService} from '../../services/vm-models.service';
 import {EditVmResourceSettingsComponent} from '../../modals/edit-vm-resource-settings/edit-vm-resource-settings.component';
-import {filter, flatMap} from 'rxjs/operators';
+import {filter, first, flatMap} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
+import { ViewVmInstanceComponent } from 'src/app/modals/view-vm-instance/view-vm-instance.component';
 
 
 @Component({
@@ -23,6 +24,12 @@ export class VmsContComponent implements OnInit {
     teams: Observable<Team[]>;
 
     constructor(private router: Router, private route: ActivatedRoute, private dialog: MatDialog, private vmModelService: VmModelsService, private teamService: TeamService, private courseService: CourseService, private teacherService: TeacherService) {
+
+        this.route.queryParams.subscribe((queryParam) => {
+            console.log('subscribe', queryParam.openVmInstanceTeacher)
+            queryParam && queryParam.openVmInstanceTeacher ? this.openVmInstanceContentDialog(queryParam.openVmInstanceTeacher, queryParam.teamId) : null;
+          });
+
 
         this.route.queryParams.subscribe((queryParam) =>
             queryParam && queryParam.modifyVmResourcesTeacher ? this.openEditVmResourcesDialog(queryParam.modifyVmResourcesTeacher) : null);
@@ -77,6 +84,34 @@ export class VmsContComponent implements OnInit {
     private refreshTeams() {
         this.teams = this.courseService.getTeamsOfCourse();
     }
+
+
+
+
+   /**
+   * This method is used to create dialog to see the VM instance
+   * @param vmId
+   * @param teamId
+   */
+  openVmInstanceContentDialog(vmId: number, teamId: number) {
+    this.courseService.getContentVmInstance(teamId,vmId).pipe(first()).subscribe(c => {
+      if (!c) {
+        this.router.navigate([this.router.url.split('?')[0]]);
+        return;
+      }
+      const url = URL.createObjectURL(c);
+      const dialogRef = this.dialog.open(ViewVmInstanceComponent, {
+        data: {
+          type: c.type,
+          vmInstanceUrl: url,
+        }
+      });
+      dialogRef.afterClosed().subscribe(() => {
+        URL.revokeObjectURL(url);
+        this.router.navigate([this.router.url.split('?')[0]]);
+      });
+    });
+  }
 }
 
 

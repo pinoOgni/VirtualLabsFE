@@ -2,12 +2,6 @@
     margin: 2em;
 }
 
-.teamLogo {
-    background-image: url('../../../assets/teamLogo.jpg');
-    background-size: cover;
-
-}
-
 .mat-grid-tile {
     border: solid 2px #000;
 }

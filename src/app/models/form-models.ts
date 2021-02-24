@@ -3,15 +3,6 @@ export interface LoginModel {
   password: string;
 }
 
-export interface RegisterModel {
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  password2: string;
-  id: string;
-}
-
 export interface EditCourseModel{
   acronym: string;
   name: string;
@@ -24,9 +15,4 @@ export interface EditCourseModel{
   instances: number;
   runningInstances: number;
 
-}
-
-
-export interface CourseModel{
-  //tutto il corso
 }

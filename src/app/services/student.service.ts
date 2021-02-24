@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { Proposal } from '../models/proposal.model';
 import { AuthService } from '../auth/auth.service';
 import { CourseService } from './course.service';
+import { ErrorService } from '../helpers/error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class StudentService {
 
   base_URL = environment.base_URL;
 
-  constructor(private httpClient: HttpClient, private authService: AuthService, private courseService: CourseService) {
+  constructor(private errorService: ErrorService, private httpClient: HttpClient, private authService: AuthService, private courseService: CourseService) {
   }
 
   /**
@@ -39,26 +40,6 @@ export class StudentService {
    */
   deadline: string;
 
-  isValid: boolean;
-
-  /**
-   * token of a student?
-   */
-  token: string;
-
-
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-
-      console.error(error); // log to console instead
-
-      console.log(`${operation} failed: ${error.message}`);
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
-  }
-
 
   /**
    * This method returns a student given a studentId
@@ -69,7 +50,7 @@ export class StudentService {
     return this.httpClient.get<Student>(url).pipe(tap(() =>
       console.log(`getStudent ${studentId}`)
     ),
-      catchError(this.handleError<any>(`getStudent error ${studentId}`))
+      catchError((err, caught) => this.errorService.handleError<any>(err, caught))
     );
 
   }
@@ -100,8 +81,7 @@ export class StudentService {
           console.log(`searchingAvailableStudentsInCourseByName  ${s.length} for criteria ${name}`
           )
         ),
-        catchError(this.handleError<Student[]>(`searchingAvailableStudentsInCourseByName error ${name})`, [])
-        )
+        catchError((err, caught) => this.errorService.handleError<any>(err, caught))
       );
   }
 
@@ -126,9 +106,7 @@ export class StudentService {
       .pipe(tap((s) =>
         console.log(`searchingStudentsByName ${s.length} for critera: ${name} `)
       ),
-        catchError(
-          this.handleError<Student[]>(`searchingStudentsByName error ${name}`, [])
-        )
+        catchError((err, caught) => this.errorService.handleError<any>(err, caught))
       );
   }
 
@@ -147,8 +125,7 @@ export class StudentService {
         tap(() =>
           console.log(`getProposalsReceivedInCourse ok studentId ${studentId}, course ${courseId}`)
         ),
-        catchError(
-          this.handleError<Proposal[]>(`getProposalsReceivedInCourse error studentId ${studentId}, course ${courseId})`, []))
+        catchError((err, caught) => this.errorService.handleError<any>(err, caught))
       );
   }
 
@@ -168,8 +145,7 @@ export class StudentService {
         tap(() =>
           console.log(`getProposalsSentInCourse ok studentId ${studentId}, course ${courseId}`)
         ),
-        catchError(
-          this.handleError<Proposal[]>(`getProposalsSentInCourse error studentId ${studentId}, course ${courseId})`, []))
+        catchError((err, caught) => this.errorService.handleError<any>(err, caught))
       );
   }
 
@@ -183,9 +159,7 @@ export class StudentService {
       .pipe(
         tap(() =>
           console.log(`getCoursesOfStudentById ok studentId ${studentId}`)),
-        catchError(
-          this.handleError<Course[]>(`getCoursesOfStudentById error studentId ${studentId}`)
-        )
+        catchError((err, caught) => this.errorService.handleError<any>(err, caught))
       );
   }
 

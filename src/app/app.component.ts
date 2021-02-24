@@ -203,19 +203,20 @@ export class AppComponent implements OnDestroy {
                                     editedCourse.name,
                                     editedCourse.min,
                                     editedCourse.max,
-                                    editedCourse.enabled,
+                                    editedCourse.enabled, 
                                     editedCourse.vcpu,
                                     editedCourse.disk,
                                     editedCourse.memory,
-                                    editedCourse.maxVmInstance,
-                                    editedCourse.maxRunningVmInstance);
-                                this.teacherService.update(newCourse).subscribe(
+                                    editedCourse.instances,
+                                    editedCourse.runningInstances);
+                                this.teacherService.updateCourse(newCourse).subscribe(
                                     result1 => {
                                         this.refillCourses();
                                     }
                                 );
                                 this.router.navigate([this.router.url.split('?')[0]]);
                             }
+                            this.router.navigate([this.router.url.split('?')[0]]);
                         }
                     );
                 }

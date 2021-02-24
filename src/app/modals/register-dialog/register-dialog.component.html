@@ -49,9 +49,6 @@
             <button color="primary" type="submit" [disabled]="!registerForm.valid" mat-raised-button>Register</button>
             <button type="reset" mat-raised-button [mat-dialog-close]="false">Cancel</button>
         </mat-dialog-actions>
-
-        
         <br/>
-        <mat-error *ngIf="serverErrors">{{serverErrors}}</mat-error>
     </form>
 </mat-dialog-content>

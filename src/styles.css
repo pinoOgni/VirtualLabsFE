@@ -22,3 +22,9 @@ body {
 .mat-list .mat-list-item.right .mat-list-item-content {
     justify-content: flex-end;
 }
+
+
+.alert-snackbar {
+    background-color: darkred;
+    text-align: center;
+  }

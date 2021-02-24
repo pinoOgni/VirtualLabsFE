@@ -11,14 +11,15 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { LoginModel, RegisterModel } from '../models/form-models';
-import { map } from 'rxjs/operators';
+import { LoginModel } from '../models/form-models';
+import { catchError, map, tap } from 'rxjs/operators';
 // @ts-ignore
 import * as moment from 'moment';
 // @ts-ignore
 import * as jwt_decode from 'jwt-decode';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../models/user.model';
+import { ErrorService } from '../helpers/error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,9 +31,6 @@ import { User } from '../models/user.model';
  * and out of the app
  */
 export class AuthService {
-
-  base_URL = environment.base_URL;
-
 
   /**
    * Angular components can subscribe() to the public currentUser: 
@@ -65,7 +63,7 @@ export class AuthService {
    * can only be done via the authentication service.
    * @param httpClient 
    */
-  constructor(private httpClient: HttpClient) {
+  constructor(private errorService: ErrorService, private httpClient: HttpClient) {
     let user = JSON.parse(localStorage.getItem('currentUser'));
     if (user && moment().isBefore(User.getAccessTokenExpireTime(user.token))) {
       localStorage.removeItem('currentUser');
@@ -94,10 +92,9 @@ export class AuthService {
    * @param model 
    */
   login(model: LoginModel) {
-    console.log('login before post')
     return this.httpClient.post<User>(environment.login_url, model, environment.http_options)
       .pipe(
-        map((authResult) => {
+        tap((authResult) => {
           // jwt response, I'm logged; jwt is a json with a key 'token' asfajscbiasoc.acnasicansocas.coacoasbnsoc
           const user = new User(
             JSON.parse(atob(authResult.token.split('.')[1])).sub, //user
@@ -106,8 +103,8 @@ export class AuthService {
           );
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.currentUserSubject.next(user);
-          return authResult;
-        })
+        }),
+        catchError((err,caught) =>  this.errorService.handleError<any>(err,caught))
       );
   }
   /**
@@ -126,10 +123,10 @@ export class AuthService {
    */
   register(registerForm: FormData) {
     return this.httpClient.post(environment.register_url, registerForm).pipe(
-      map((result) => {
+      tap((result) => {
         console.log('result register ', result)
-        return result;
-      })
+      }),
+      catchError((err,caught) =>  this.errorService.handleError<any>(err,caught))
     );
   }
 

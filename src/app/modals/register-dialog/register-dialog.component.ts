@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { RegisterModel } from '../../models/form-models';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {AuthService} from '../../auth/auth.service';
@@ -59,8 +58,6 @@ export class RegisterDialogComponent {
          if (response){
           this.dialogRef.close();
          }
-       }, error => {
-           this.serverErrors = (error as HttpErrorResponse).error.message;
        });
      }
   
