@@ -1,5 +1,8 @@
-This is the VirtualLabs frontend repository. For the backend part refer to
-VirtualLabs to [VirtualLabsBE](https://github.com/letol/VirtualLabsBE) is the project of the Internet Applications course of the academic year 2019/2020.
+# VirtualLabsFE
+VirtualLabs is the project of the Internet Applications course of the academic year 2019/2020.
+
+This is the VirtualLabs frontend repository. For the backend part refer to [VirtualLabsBE](https://github.com/letol/VirtualLabsBE).
+
 
 ## Developers
 
@@ -12,7 +15,7 @@ VirtualLabs to [VirtualLabsBE](https://github.com/letol/VirtualLabsBE) is the pr
 * [Leonardo Tolomei](https://github.com/letol)
 
 
-## Application launch
+## Application launch: Frontend
 
 1. In the **VirtualLabsFE** folder
 2. Give the following commands (to download among other things also the json-server and the json server-auth)
@@ -31,6 +34,11 @@ ng serve --open # or npm start
 npx json-server-auth virtuallabs.json -r virtuallabs_routes.json
 ``
 4. Open a browser at **https://localhost:4200/**
+
+
+## Application launch: Backend
+
+Please refer to [VirtualLabsBE](https://github.com/letol/VirtualLabsBE) to use the docker
 
 
 
@@ -53,6 +61,26 @@ Here is what a teacher can do:
 
 * in the "assignments" tab you can create an assignment for that course, view the list of homeworks made by students, see the history of homeworks and divide them by status (unread, read, delivered, etc ...). Finally, it can carry out one or more reviews and can also assign a vote.
 
+
+## Database
+
+A student logs in with his institutional email then sxxxxxx@studenti.polito.it, a teacher with dxxxxxx@polito.it
+
+###  Students:
+
+| Id      | Password |
+| ------- | -------- |
+| s111111 | ps1 |
+| s222222 | ps2 |
+| s333333 | ps3 |
+| s444444 | ps4 |
+
+### Docenti:
+
+| Id      | Password |
+| ------- | -------- |
+| d111111 | pd1 |
+| d222222 | pd2 |
 
 
 
