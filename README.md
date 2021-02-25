@@ -1,5 +1,5 @@
 This is the VirtualLabs frontend repository. For the backend part refer to
-VirtualLabs is the project of the Internet Applications course of the academic year 2019/2020.
+VirtualLabs to [VirtualLabsBE](https://github.com/letol/VirtualLabsBE) is the project of the Internet Applications course of the academic year 2019/2020.
 
 ## Developers
 
