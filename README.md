@@ -49,19 +49,6 @@ Please refer to [VirtualLabsBE](https://github.com/letol/VirtualLabsBE) to use t
 * Frontend: Angular
 * Backend: Java Spring, the database was made using the MariaDB docker
 
-VirtualLabs is a web application that is used to help teachers and students manage virtual laboratories. In order to use VirtualLabs you must be a student or teacher with an institutional email.
-
-Here is what a teacher can do:
-
-* create, edit, add a course. In the modification of a course he can add one or more teachers, modify the resources of the VMs that each team can have, the minimum and maximum number of students per team
-
-* in the "students" tab you can add and remove one or more students, either choosing from a list or using a csv file
-
-* in the "vms" tab you can see all the teams, in particular the vm of each team and if a vm is running it can also run it, simultaneously with a student.
-
-* in the "assignments" tab you can create an assignment for that course, view the list of homeworks made by students, see the history of homeworks and divide them by status (unread, read, delivered, etc ...). Finally, it can carry out one or more reviews and can also assign a vote.
-
-
 ## Database
 
 A student logs in with his institutional email then sxxxxxx@studenti.polito.it, a teacher with dxxxxxx@polito.it
@@ -82,6 +69,19 @@ A student logs in with his institutional email then sxxxxxx@studenti.polito.it, 
 | d111111 | pd1 |
 | d222222 | pd2 |
 
+## Application
+
+VirtualLabs is a web application that is used to help teachers and students manage virtual laboratories. In order to use VirtualLabs you must be a student or teacher with an institutional email.
+
+Here is what a teacher can do:
+
+* create, edit, add a course. In the modification of a course he can add one or more teachers, modify the resources of the VMs that each team can have, the minimum and maximum number of students per team
+
+* in the "students" tab you can add and remove one or more students, either choosing from a list or using a csv file
+
+* in the "vms" tab you can see all the teams, in particular the vm of each team and if a vm is running it can also run it, simultaneously with a student.
+
+* in the "assignments" tab you can create an assignment for that course, view the list of homeworks made by students, see the history of homeworks and divide them by status (unread, read, delivered, etc ...). Finally, it can carry out one or more reviews and can also assign a vote.
 
 
 Here is what a student can do:
